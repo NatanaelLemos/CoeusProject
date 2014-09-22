@@ -1,0 +1,16 @@
+﻿@using Kendo.Mvc.UI
+@{
+    ViewBag.Title = "Home Page";
+    CoeusProject.Models.Usuario loggedInUser = CoeusProject.Facade.AccountFacade.GetLoggedInUser();
+
+    if (loggedInUser == null)
+    { 
+        Response.Redirect(Url.Action("Login","Account"));
+    }
+}
+
+@if(loggedInUser != null)
+{ 
+    @Html.Partial("_LeftPartial", loggedInUser)
+    @Html.Partial("_RightPartial", loggedInUser)
+}

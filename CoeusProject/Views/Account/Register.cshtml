@@ -1,0 +1,115 @@
+﻿@using Kendo.Mvc.UI
+@model CoeusProject.Models.Usuario
+
+@{
+    ViewBag.Title = "Registre-se";
+}
+
+@section styles{
+    <link type="text/css" rel="stylesheet" href="~/Content/register.css" />
+}
+
+@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @id = "frmRegister" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
+    @Html.HiddenFor(m => m.NmFoto)
+
+    <div class="divScrollable">
+        <header style="margin-top: 5%">
+            <a href='@Url.Action("Index","Home")' style="font-size: 26px">Coeus Project</a>
+        </header>
+
+        <div class="divInline">
+            <div>
+                @Html.LabelFor(m => m.TxEmail, new { @class = "labelInline" })
+                @Html.TextBoxFor(m => m.TxEmail, new { @class = "k-textbox inputInline" })
+                @Html.ValidationMessageFor(m => m.TxEmail)
+            </div>
+
+            <div>
+                @Html.LabelFor(m => m.NmPessoa, new { @class = "labelInline" })
+                @Html.TextBoxFor(m => m.NmPessoa, new { @class = "k-textbox inputInline" })
+                @Html.ValidationMessageFor(m => m.NmPessoa)
+            </div>
+            <div>
+                @Html.LabelFor(m => m.SnPessoa, new { @class = "labelInline" })
+                @Html.TextBoxFor(m => m.SnPessoa, new { @class = "k-textbox inputInline" })
+                @Html.ValidationMessageFor(m => m.SnPessoa)
+            </div>
+
+            <div>
+                @Html.LabelFor(m => m.PwUsuario, new { @class = "labelInline" })
+                @Html.PasswordFor(m => m.PwUsuario, new { @class = "k-textbox inputInline" })
+            </div>
+            <div>
+                @Html.Label("Confirma Senha", new { @class = "labelInline" })
+                @Html.Password("ConfirmPwUsuario", null, new { @class = "k-textbox inputInline" })
+            </div>
+            <div>
+                @Html.Label("Foto", new { @class = "labelInline" })
+                @(Html.Kendo().Upload()
+                    .Name("file")
+                    .Multiple(false)
+                    .Async(async => async
+                        .SaveUrl(Url.Action("SaveFile", "File"))
+                        .AutoUpload(true)
+                    )
+                    .Events(e => e
+                        .Select("Foto_Select")
+                        .Upload("Foto_Upload")
+                        .Success("Foto_Success")
+                    )
+                )
+            </div>
+            <div>
+                @(Html.Kendo().Button().Name("btnRegister").Content("Registrar"))
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        var extension = "";
+
+        function Foto_Select(e) {
+            if (e.files[0].extension != ".png" && e.files[0].extension != ".jpg" && e.files[0].extension != ".bmp") {
+                e.preventDefault();
+                kendoAlert('Apenas imagens nos formatos png, jpg ou bmp são aceitas');
+            }
+        }
+
+        function Foto_Upload(e) {
+            e.data = { nmFile: '@Model.NmFoto' };
+        }
+
+        function Foto_Success(e) {
+            extension = e.files[0].extension;
+        }
+
+        $(document).ready(function () {
+            $('#btnRegister').click(function (e) {
+                e.preventDefault();
+
+                var pwUsuario = $('#PwUsuario').val();
+                var confirmPwUsuario = $('#ConfirmPwUsuario').val();
+
+                if (pwUsuario != confirmPwUsuario) {
+                    kendoAlert('Senhas não conferem');
+                    return;
+                }
+
+                $('#NmFoto').val($('#NmFoto').val() + extension);
+                $('#btnRegister').data('kendoButton').enable(false);
+
+                $.ajaxPost('@Url.Action("Register", "Account")', {
+                    usuario: $('#frmRegister').serializeObject()
+                }, $('#frmRegister'));
+
+                $('#btnRegister').data('kendoButton').enable();
+                $('#NmFoto').val($('#NmFoto').val().replace(extension, ''));
+            });
+        });
+    </script>
+}

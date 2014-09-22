@@ -1,0 +1,120 @@
+﻿@using Kendo.Mvc.UI
+@{
+    Layout = null;
+}
+
+<style>
+    .showUser {
+        float: left;
+        width: 220px;
+        height: 80px;
+        margin: 0;
+        padding: 5px;
+        cursor: pointer;
+    }
+
+        .showUser img {
+            float: left;
+            width: 80px;
+            height: 80px;
+        }
+
+        .showUser h3 {
+            margin: 0;
+            padding: 5px 0 0 5px;
+            font-size: .9em;
+            overflow: hidden;
+            font-weight: normal;
+            float: left;
+            max-width: 100px;
+        }
+
+    .searchUser {
+        display: inline-block;
+        height: 80px;
+    }
+
+        .searchUser > img {
+            float: left;
+            width: 80px;
+        }
+
+        .searchUser > span {
+            display: inline-block;
+        }
+</style>
+
+<script type="text/x-kendo-tmpl" id="tmplUser">
+    <div class="showUser">
+        <img src="/User_Data/#=NmFoto#" alt="#=NmPessoa# image" />
+        <h3>#=NmPessoa#</h3>
+    </div>
+</script>
+
+<script type="text/x-kendo-tmpl" id="tmplSearchUser">
+    <div class="searchUser">
+        <span class='k-state-default'>
+            <img src='/User_Data/#=NmFoto#' alt='#=NmPessoa#' />
+        </span>
+        <span class='k-state-default'>
+            <h3>#=NmPessoa#</h3>
+            <p>#=TxEmail#</p>
+        </span>
+    </div>
+</script>
+
+<script>
+    var lstSelectedUsers = [];
+
+    function lstFindUsers_Change(e) {
+        var a = e;
+        var b = a;
+    }
+
+    function cmbNmPessoa_AdditionalData(e) {
+        return {
+            nmPessoa: $('#cmbNmPessoa').data('kendoComboBox').text()
+        };
+    }
+
+    function cmbNmPessoa_Select(e) {
+        var dataItem = this.dataItem(e.item.index());
+        lstSelectedUsers.push({
+            IdUsuario: dataItem.IdUsuario,
+            NmPessoa: dataItem.NmPessoa,
+            NmFoto: dataItem.NmFoto
+        });
+        
+        BindLstUsers();
+    }
+
+    function BindLstUsers() {
+        var dataSource = new kendo.data.DataSource({data: lstSelectedUsers});
+        $('#lstUsers').data('kendoListView').setDataSource(dataSource);
+    }
+</script>
+
+@(Html.Kendo().ComboBox().Name("cmbNmPessoa")
+    .DataTextField("NmPessoa")
+    .DataValueField("IdPessoa")
+    .TemplateId("tmplSearchUser")
+    .Suggest(true)
+    .MinLength(2)
+    .Height(400)
+    .DataSource(ds => ds.Read(read => read.Action("GetUserWhereNmPessoaStartsWith", "Grupo")
+        .Data("cmbNmPessoa_AdditionalData")).ServerFiltering(true))
+    .Filter(FilterType.StartsWith)
+    .AutoBind(false)
+    .Events(e => e.Select("cmbNmPessoa_Select"))
+    .HtmlAttributes(new { @placeholder = "Buscar por nome ou e-mail", @style = "width: 90%" })
+    .TemplateId("tmplSearchUser")
+)
+
+Pessoas No Chat
+@(Html.Kendo().ListView(new List<dynamic>()).Name("lstUsers")
+    .ClientTemplateId("tmplUser")
+    .TagName("div")
+    .DataSource(ds => ds.Custom().PageSize(6))
+    .Pageable()
+    .Selectable(select => select.Mode(ListViewSelectionMode.Single))
+)

@@ -1,0 +1,707 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Edmx Version="3.0" xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <Runtime>
+    <ConceptualModels>
+      <Schema Namespace="CoeusProject.Models" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Artigo" customannotation:ClrType="CoeusProject.Models.Artigo, CoeusProject, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+          <Key>
+            <PropertyRef Name="IdArtigo" />
+          </Key>
+          <Property Name="IdArtigo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TxArtigo" Type="String" MaxLength="50000" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="IdObjeto" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Objeto" Relationship="Self.Artigo_Objeto" FromRole="Artigo_Objeto_Source" ToRole="Artigo_Objeto_Target" />
+        </EntityType>
+        <EntityType Name="Objeto" customannotation:ClrType="CoeusProject.Models.Objeto, CoeusProject, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+          <Key>
+            <PropertyRef Name="IdObjeto" />
+          </Key>
+          <Property Name="IdObjeto" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NmObjeto" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="TxDescricao" Type="String" MaxLength="2048" FixedLength="false" Unicode="true" />
+          <Property Name="IdUsuario" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Usuario" Relationship="Self.Objeto_Usuario" FromRole="Objeto_Usuario_Source" ToRole="Objeto_Usuario_Target" />
+        </EntityType>
+        <EntityType Name="Usuario" customannotation:ClrType="CoeusProject.Models.Usuario, CoeusProject, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+          <Key>
+            <PropertyRef Name="IdUsuario" />
+          </Key>
+          <Property Name="IdUsuario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TxEmail" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PwUsuario" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="NmPessoa" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Avaliacao" customannotation:ClrType="CoeusProject.Models.Avaliacao, CoeusProject, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+          <Key>
+            <PropertyRef Name="IdAvaliacao" />
+          </Key>
+          <Property Name="IdAvaliacao" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NoAvaliacao" Type="Int32" Nullable="false" />
+          <Property Name="IdUsuario" Type="Int32" Nullable="false" />
+          <Property Name="IdObjeto" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Objeto" Relationship="Self.Avaliacao_Objeto" FromRole="Avaliacao_Objeto_Source" ToRole="Avaliacao_Objeto_Target" />
+          <NavigationProperty Name="Usuario" Relationship="Self.Avaliacao_Usuario" FromRole="Avaliacao_Usuario_Source" ToRole="Avaliacao_Usuario_Target" />
+        </EntityType>
+        <EntityType Name="Grupo" customannotation:ClrType="CoeusProject.Models.Grupo, CoeusProject, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+          <Key>
+            <PropertyRef Name="IdGrupo" />
+          </Key>
+          <Property Name="IdGrupo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NmGrupo" Type="String" MaxLength="512" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="NidObjeto" Type="Int32" />
+          <NavigationProperty Name="Objeto" Relationship="Self.Grupo_Objeto" FromRole="Grupo_Objeto_Source" ToRole="Grupo_Objeto_Target" />
+        </EntityType>
+        <EntityType Name="Imagem" customannotation:ClrType="CoeusProject.Models.Imagem, CoeusProject, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+          <Key>
+            <PropertyRef Name="IdImagem" />
+          </Key>
+          <Property Name="IdImagem" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TxUrl" Type="String" MaxLength="4096" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="IdArtigo" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Artigo" Relationship="Self.Imagem_Artigo" FromRole="Imagem_Artigo_Source" ToRole="Imagem_Artigo_Target" />
+        </EntityType>
+        <EntityType Name="Mensagem" customannotation:ClrType="CoeusProject.Models.Mensagem, CoeusProject, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+          <Key>
+            <PropertyRef Name="IdMensagem" />
+          </Key>
+          <Property Name="IdMensagem" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TxMensagem" Type="String" MaxLength="4096" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="IdUsuario" Type="Int32" Nullable="false" />
+          <Property Name="IdGrupo" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Grupo" Relationship="Self.Mensagem_Grupo" FromRole="Mensagem_Grupo_Source" ToRole="Mensagem_Grupo_Target" />
+          <NavigationProperty Name="Usuario" Relationship="Self.Mensagem_Usuario" FromRole="Mensagem_Usuario_Source" ToRole="Mensagem_Usuario_Target" />
+        </EntityType>
+        <EntityType Name="Som" customannotation:ClrType="CoeusProject.Models.Som, CoeusProject, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+          <Key>
+            <PropertyRef Name="IdSom" />
+          </Key>
+          <Property Name="IdSom" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TxUrl" Type="String" MaxLength="4096" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="IdObjeto" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Objeto" Relationship="Self.Som_Objeto" FromRole="Som_Objeto_Source" ToRole="Som_Objeto_Target" />
+        </EntityType>
+        <EntityType Name="Tema" customannotation:ClrType="CoeusProject.Models.Tema, CoeusProject, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+          <Key>
+            <PropertyRef Name="IdTema" />
+          </Key>
+          <Property Name="IdTema" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NmTema" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Video" customannotation:ClrType="CoeusProject.Models.Video, CoeusProject, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+          <Key>
+            <PropertyRef Name="IdVideo" />
+          </Key>
+          <Property Name="IdVideo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TxUrl" Type="String" MaxLength="4096" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="IdObjeto" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Objeto" Relationship="Self.Video_Objeto" FromRole="Video_Objeto_Source" ToRole="Video_Objeto_Target" />
+        </EntityType>
+        <Association Name="Objeto_Usuario">
+          <End Role="Objeto_Usuario_Source" Type="Self.Objeto" Multiplicity="*" />
+          <End Role="Objeto_Usuario_Target" Type="Self.Usuario" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <ReferentialConstraint>
+            <Principal Role="Objeto_Usuario_Target">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Objeto_Usuario_Source">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Artigo_Objeto">
+          <End Role="Artigo_Objeto_Source" Type="Self.Artigo" Multiplicity="*" />
+          <End Role="Artigo_Objeto_Target" Type="Self.Objeto" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <ReferentialConstraint>
+            <Principal Role="Artigo_Objeto_Target">
+              <PropertyRef Name="IdObjeto" />
+            </Principal>
+            <Dependent Role="Artigo_Objeto_Source">
+              <PropertyRef Name="IdObjeto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Avaliacao_Objeto">
+          <End Role="Avaliacao_Objeto_Source" Type="Self.Avaliacao" Multiplicity="*" />
+          <End Role="Avaliacao_Objeto_Target" Type="Self.Objeto" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <ReferentialConstraint>
+            <Principal Role="Avaliacao_Objeto_Target">
+              <PropertyRef Name="IdObjeto" />
+            </Principal>
+            <Dependent Role="Avaliacao_Objeto_Source">
+              <PropertyRef Name="IdObjeto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Avaliacao_Usuario">
+          <End Role="Avaliacao_Usuario_Source" Type="Self.Avaliacao" Multiplicity="*" />
+          <End Role="Avaliacao_Usuario_Target" Type="Self.Usuario" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <ReferentialConstraint>
+            <Principal Role="Avaliacao_Usuario_Target">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Avaliacao_Usuario_Source">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Grupo_Objeto">
+          <End Role="Grupo_Objeto_Source" Type="Self.Grupo" Multiplicity="*" />
+          <End Role="Grupo_Objeto_Target" Type="Self.Objeto" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Grupo_Objeto_Target">
+              <PropertyRef Name="IdObjeto" />
+            </Principal>
+            <Dependent Role="Grupo_Objeto_Source">
+              <PropertyRef Name="NidObjeto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Imagem_Artigo">
+          <End Role="Imagem_Artigo_Source" Type="Self.Imagem" Multiplicity="*" />
+          <End Role="Imagem_Artigo_Target" Type="Self.Artigo" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <ReferentialConstraint>
+            <Principal Role="Imagem_Artigo_Target">
+              <PropertyRef Name="IdArtigo" />
+            </Principal>
+            <Dependent Role="Imagem_Artigo_Source">
+              <PropertyRef Name="IdArtigo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Mensagem_Grupo">
+          <End Role="Mensagem_Grupo_Source" Type="Self.Mensagem" Multiplicity="*" />
+          <End Role="Mensagem_Grupo_Target" Type="Self.Grupo" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <ReferentialConstraint>
+            <Principal Role="Mensagem_Grupo_Target">
+              <PropertyRef Name="IdGrupo" />
+            </Principal>
+            <Dependent Role="Mensagem_Grupo_Source">
+              <PropertyRef Name="IdGrupo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Mensagem_Usuario">
+          <End Role="Mensagem_Usuario_Source" Type="Self.Mensagem" Multiplicity="*" />
+          <End Role="Mensagem_Usuario_Target" Type="Self.Usuario" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <ReferentialConstraint>
+            <Principal Role="Mensagem_Usuario_Target">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Mensagem_Usuario_Source">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Som_Objeto">
+          <End Role="Som_Objeto_Source" Type="Self.Som" Multiplicity="*" />
+          <End Role="Som_Objeto_Target" Type="Self.Objeto" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <ReferentialConstraint>
+            <Principal Role="Som_Objeto_Target">
+              <PropertyRef Name="IdObjeto" />
+            </Principal>
+            <Dependent Role="Som_Objeto_Source">
+              <PropertyRef Name="IdObjeto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Video_Objeto">
+          <End Role="Video_Objeto_Source" Type="Self.Video" Multiplicity="*" />
+          <End Role="Video_Objeto_Target" Type="Self.Objeto" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <ReferentialConstraint>
+            <Principal Role="Video_Objeto_Target">
+              <PropertyRef Name="IdObjeto" />
+            </Principal>
+            <Dependent Role="Video_Objeto_Source">
+              <PropertyRef Name="IdObjeto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CoeusProjectContext" customannotation:UseClrTypes="true">
+          <EntitySet Name="Artigos" EntityType="Self.Artigo" />
+          <EntitySet Name="Objetos" EntityType="Self.Objeto" />
+          <EntitySet Name="Usuarios" EntityType="Self.Usuario" />
+          <EntitySet Name="Avaliacoes" EntityType="Self.Avaliacao" />
+          <EntitySet Name="Grupos" EntityType="Self.Grupo" />
+          <EntitySet Name="Imagens" EntityType="Self.Imagem" />
+          <EntitySet Name="Mensagens" EntityType="Self.Mensagem" />
+          <EntitySet Name="Sons" EntityType="Self.Som" />
+          <EntitySet Name="Temas" EntityType="Self.Tema" />
+          <EntitySet Name="Videos" EntityType="Self.Video" />
+          <AssociationSet Name="Objeto_Usuario" Association="Self.Objeto_Usuario">
+            <End Role="Objeto_Usuario_Source" EntitySet="Objetos" />
+            <End Role="Objeto_Usuario_Target" EntitySet="Usuarios" />
+          </AssociationSet>
+          <AssociationSet Name="Artigo_Objeto" Association="Self.Artigo_Objeto">
+            <End Role="Artigo_Objeto_Source" EntitySet="Artigos" />
+            <End Role="Artigo_Objeto_Target" EntitySet="Objetos" />
+          </AssociationSet>
+          <AssociationSet Name="Avaliacao_Objeto" Association="Self.Avaliacao_Objeto">
+            <End Role="Avaliacao_Objeto_Source" EntitySet="Avaliacoes" />
+            <End Role="Avaliacao_Objeto_Target" EntitySet="Objetos" />
+          </AssociationSet>
+          <AssociationSet Name="Avaliacao_Usuario" Association="Self.Avaliacao_Usuario">
+            <End Role="Avaliacao_Usuario_Source" EntitySet="Avaliacoes" />
+            <End Role="Avaliacao_Usuario_Target" EntitySet="Usuarios" />
+          </AssociationSet>
+          <AssociationSet Name="Grupo_Objeto" Association="Self.Grupo_Objeto">
+            <End Role="Grupo_Objeto_Source" EntitySet="Grupos" />
+            <End Role="Grupo_Objeto_Target" EntitySet="Objetos" />
+          </AssociationSet>
+          <AssociationSet Name="Imagem_Artigo" Association="Self.Imagem_Artigo">
+            <End Role="Imagem_Artigo_Source" EntitySet="Imagens" />
+            <End Role="Imagem_Artigo_Target" EntitySet="Artigos" />
+          </AssociationSet>
+          <AssociationSet Name="Mensagem_Grupo" Association="Self.Mensagem_Grupo">
+            <End Role="Mensagem_Grupo_Source" EntitySet="Mensagens" />
+            <End Role="Mensagem_Grupo_Target" EntitySet="Grupos" />
+          </AssociationSet>
+          <AssociationSet Name="Mensagem_Usuario" Association="Self.Mensagem_Usuario">
+            <End Role="Mensagem_Usuario_Source" EntitySet="Mensagens" />
+            <End Role="Mensagem_Usuario_Target" EntitySet="Usuarios" />
+          </AssociationSet>
+          <AssociationSet Name="Som_Objeto" Association="Self.Som_Objeto">
+            <End Role="Som_Objeto_Source" EntitySet="Sons" />
+            <End Role="Som_Objeto_Target" EntitySet="Objetos" />
+          </AssociationSet>
+          <AssociationSet Name="Video_Objeto" Association="Self.Video_Objeto">
+            <End Role="Video_Objeto_Source" EntitySet="Videos" />
+            <End Role="Video_Objeto_Target" EntitySet="Objetos" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </ConceptualModels>
+    <Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CodeFirstDatabase" CdmEntityContainer="CoeusProjectContext">
+          <EntitySetMapping Name="Artigos">
+            <EntityTypeMapping TypeName="CoeusProject.Models.Artigo">
+              <MappingFragment StoreEntitySet="Artigo">
+                <ScalarProperty Name="IdArtigo" ColumnName="IdArtigo" />
+                <ScalarProperty Name="TxArtigo" ColumnName="TxArtigo" />
+                <ScalarProperty Name="IdObjeto" ColumnName="IdObjeto" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Objetos">
+            <EntityTypeMapping TypeName="CoeusProject.Models.Objeto">
+              <MappingFragment StoreEntitySet="Objeto">
+                <ScalarProperty Name="IdObjeto" ColumnName="IdObjeto" />
+                <ScalarProperty Name="NmObjeto" ColumnName="NmObjeto" />
+                <ScalarProperty Name="TxDescricao" ColumnName="TxDescricao" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Usuarios">
+            <EntityTypeMapping TypeName="CoeusProject.Models.Usuario">
+              <MappingFragment StoreEntitySet="Usuario">
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="TxEmail" ColumnName="TxEmail" />
+                <ScalarProperty Name="PwUsuario" ColumnName="PwUsuario" />
+                <ScalarProperty Name="NmPessoa" ColumnName="NmPessoa" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Avaliacoes">
+            <EntityTypeMapping TypeName="CoeusProject.Models.Avaliacao">
+              <MappingFragment StoreEntitySet="Avaliacao">
+                <ScalarProperty Name="IdAvaliacao" ColumnName="IdAvaliacao" />
+                <ScalarProperty Name="NoAvaliacao" ColumnName="NoAvaliacao" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="IdObjeto" ColumnName="IdObjeto" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Grupos">
+            <EntityTypeMapping TypeName="CoeusProject.Models.Grupo">
+              <MappingFragment StoreEntitySet="Grupo">
+                <ScalarProperty Name="IdGrupo" ColumnName="IdGrupo" />
+                <ScalarProperty Name="NmGrupo" ColumnName="NmGrupo" />
+                <ScalarProperty Name="NidObjeto" ColumnName="NidObjeto" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Imagens">
+            <EntityTypeMapping TypeName="CoeusProject.Models.Imagem">
+              <MappingFragment StoreEntitySet="Imagem">
+                <ScalarProperty Name="IdImagem" ColumnName="IdImagem" />
+                <ScalarProperty Name="TxUrl" ColumnName="TxUrl" />
+                <ScalarProperty Name="IdArtigo" ColumnName="IdArtigo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Mensagens">
+            <EntityTypeMapping TypeName="CoeusProject.Models.Mensagem">
+              <MappingFragment StoreEntitySet="Mensagem">
+                <ScalarProperty Name="IdMensagem" ColumnName="IdMensagem" />
+                <ScalarProperty Name="TxMensagem" ColumnName="TxMensagem" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="IdGrupo" ColumnName="IdGrupo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sons">
+            <EntityTypeMapping TypeName="CoeusProject.Models.Som">
+              <MappingFragment StoreEntitySet="Som">
+                <ScalarProperty Name="IdSom" ColumnName="IdSom" />
+                <ScalarProperty Name="TxUrl" ColumnName="TxUrl" />
+                <ScalarProperty Name="IdObjeto" ColumnName="IdObjeto" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Temas">
+            <EntityTypeMapping TypeName="CoeusProject.Models.Tema">
+              <MappingFragment StoreEntitySet="Tema">
+                <ScalarProperty Name="IdTema" ColumnName="IdTema" />
+                <ScalarProperty Name="NmTema" ColumnName="NmTema" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Videos">
+            <EntityTypeMapping TypeName="CoeusProject.Models.Video">
+              <MappingFragment StoreEntitySet="Video">
+                <ScalarProperty Name="IdVideo" ColumnName="IdVideo" />
+                <ScalarProperty Name="TxUrl" ColumnName="TxUrl" />
+                <ScalarProperty Name="IdObjeto" ColumnName="IdObjeto" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </Mappings>
+    <StorageModels>
+      <Schema Namespace="CodeFirstDatabaseSchema" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Artigo">
+          <Key>
+            <PropertyRef Name="IdArtigo" />
+          </Key>
+          <Property Name="IdArtigo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TxArtigo" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="IdObjeto" Type="int" customannotation:Index="{ Name: IX_IdObjeto, Order: 0 }" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Objeto">
+          <Key>
+            <PropertyRef Name="IdObjeto" />
+          </Key>
+          <Property Name="IdObjeto" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NmObjeto" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="TxDescricao" Type="nvarchar" MaxLength="2048" Nullable="true" />
+          <Property Name="IdUsuario" Type="int" customannotation:Index="{ Name: IX_IdUsuario, Order: 0 }" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Usuario">
+          <Key>
+            <PropertyRef Name="IdUsuario" />
+          </Key>
+          <Property Name="IdUsuario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TxEmail" Type="nvarchar" MaxLength="1024" Nullable="false" />
+          <Property Name="PwUsuario" Type="nvarchar" MaxLength="1024" Nullable="false" />
+          <Property Name="NmPessoa" Type="nvarchar" MaxLength="1024" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Avaliacao">
+          <Key>
+            <PropertyRef Name="IdAvaliacao" />
+          </Key>
+          <Property Name="IdAvaliacao" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NoAvaliacao" Type="int" Nullable="false" />
+          <Property Name="IdUsuario" Type="int" customannotation:Index="{ Name: IX_IdUsuario, Order: 0 }" Nullable="false" />
+          <Property Name="IdObjeto" Type="int" customannotation:Index="{ Name: IX_IdObjeto, Order: 0 }" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Grupo">
+          <Key>
+            <PropertyRef Name="IdGrupo" />
+          </Key>
+          <Property Name="IdGrupo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NmGrupo" Type="nvarchar" MaxLength="512" Nullable="false" />
+          <Property Name="NidObjeto" Type="int" customannotation:Index="{ Name: IX_NidObjeto, Order: 0 }" Nullable="true" />
+        </EntityType>
+        <EntityType Name="Imagem">
+          <Key>
+            <PropertyRef Name="IdImagem" />
+          </Key>
+          <Property Name="IdImagem" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TxUrl" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="IdArtigo" Type="int" customannotation:Index="{ Name: IX_IdArtigo, Order: 0 }" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Mensagem">
+          <Key>
+            <PropertyRef Name="IdMensagem" />
+          </Key>
+          <Property Name="IdMensagem" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TxMensagem" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="IdUsuario" Type="int" customannotation:Index="{ Name: IX_IdUsuario, Order: 0 }" Nullable="false" />
+          <Property Name="IdGrupo" Type="int" customannotation:Index="{ Name: IX_IdGrupo, Order: 0 }" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Som">
+          <Key>
+            <PropertyRef Name="IdSom" />
+          </Key>
+          <Property Name="IdSom" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TxUrl" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="IdObjeto" Type="int" customannotation:Index="{ Name: IX_IdObjeto, Order: 0 }" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Tema">
+          <Key>
+            <PropertyRef Name="IdTema" />
+          </Key>
+          <Property Name="IdTema" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NmTema" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Video">
+          <Key>
+            <PropertyRef Name="IdVideo" />
+          </Key>
+          <Property Name="IdVideo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TxUrl" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="IdObjeto" Type="int" customannotation:Index="{ Name: IX_IdObjeto, Order: 0 }" Nullable="false" />
+        </EntityType>
+        <Association Name="Objeto_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Objeto" Type="Self.Objeto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Objeto">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Artigo_Objeto">
+          <End Role="Objeto" Type="Self.Objeto" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Artigo" Type="Self.Artigo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Objeto">
+              <PropertyRef Name="IdObjeto" />
+            </Principal>
+            <Dependent Role="Artigo">
+              <PropertyRef Name="IdObjeto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Avaliacao_Objeto">
+          <End Role="Objeto" Type="Self.Objeto" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Avaliacao" Type="Self.Avaliacao" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Objeto">
+              <PropertyRef Name="IdObjeto" />
+            </Principal>
+            <Dependent Role="Avaliacao">
+              <PropertyRef Name="IdObjeto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Avaliacao_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Avaliacao" Type="Self.Avaliacao" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Avaliacao">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Grupo_Objeto">
+          <End Role="Objeto" Type="Self.Objeto" Multiplicity="0..1" />
+          <End Role="Grupo" Type="Self.Grupo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Objeto">
+              <PropertyRef Name="IdObjeto" />
+            </Principal>
+            <Dependent Role="Grupo">
+              <PropertyRef Name="NidObjeto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Imagem_Artigo">
+          <End Role="Artigo" Type="Self.Artigo" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Imagem" Type="Self.Imagem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Artigo">
+              <PropertyRef Name="IdArtigo" />
+            </Principal>
+            <Dependent Role="Imagem">
+              <PropertyRef Name="IdArtigo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Mensagem_Grupo">
+          <End Role="Grupo" Type="Self.Grupo" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Mensagem" Type="Self.Mensagem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Grupo">
+              <PropertyRef Name="IdGrupo" />
+            </Principal>
+            <Dependent Role="Mensagem">
+              <PropertyRef Name="IdGrupo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Mensagem_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Mensagem" Type="Self.Mensagem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Mensagem">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Som_Objeto">
+          <End Role="Objeto" Type="Self.Objeto" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Som" Type="Self.Som" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Objeto">
+              <PropertyRef Name="IdObjeto" />
+            </Principal>
+            <Dependent Role="Som">
+              <PropertyRef Name="IdObjeto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Video_Objeto">
+          <End Role="Objeto" Type="Self.Objeto" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Video" Type="Self.Video" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Objeto">
+              <PropertyRef Name="IdObjeto" />
+            </Principal>
+            <Dependent Role="Video">
+              <PropertyRef Name="IdObjeto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CodeFirstDatabase">
+          <EntitySet Name="Artigo" EntityType="Self.Artigo" Schema="dbo" Table="Artigo" />
+          <EntitySet Name="Objeto" EntityType="Self.Objeto" Schema="dbo" Table="Objeto" />
+          <EntitySet Name="Usuario" EntityType="Self.Usuario" Schema="dbo" Table="Usuario" />
+          <EntitySet Name="Avaliacao" EntityType="Self.Avaliacao" Schema="dbo" Table="Avaliacao" />
+          <EntitySet Name="Grupo" EntityType="Self.Grupo" Schema="dbo" Table="Grupo" />
+          <EntitySet Name="Imagem" EntityType="Self.Imagem" Schema="dbo" Table="Imagem" />
+          <EntitySet Name="Mensagem" EntityType="Self.Mensagem" Schema="dbo" Table="Mensagem" />
+          <EntitySet Name="Som" EntityType="Self.Som" Schema="dbo" Table="Som" />
+          <EntitySet Name="Tema" EntityType="Self.Tema" Schema="dbo" Table="Tema" />
+          <EntitySet Name="Video" EntityType="Self.Video" Schema="dbo" Table="Video" />
+          <AssociationSet Name="Objeto_Usuario" Association="Self.Objeto_Usuario">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Objeto" EntitySet="Objeto" />
+          </AssociationSet>
+          <AssociationSet Name="Artigo_Objeto" Association="Self.Artigo_Objeto">
+            <End Role="Objeto" EntitySet="Objeto" />
+            <End Role="Artigo" EntitySet="Artigo" />
+          </AssociationSet>
+          <AssociationSet Name="Avaliacao_Objeto" Association="Self.Avaliacao_Objeto">
+            <End Role="Objeto" EntitySet="Objeto" />
+            <End Role="Avaliacao" EntitySet="Avaliacao" />
+          </AssociationSet>
+          <AssociationSet Name="Avaliacao_Usuario" Association="Self.Avaliacao_Usuario">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Avaliacao" EntitySet="Avaliacao" />
+          </AssociationSet>
+          <AssociationSet Name="Grupo_Objeto" Association="Self.Grupo_Objeto">
+            <End Role="Objeto" EntitySet="Objeto" />
+            <End Role="Grupo" EntitySet="Grupo" />
+          </AssociationSet>
+          <AssociationSet Name="Imagem_Artigo" Association="Self.Imagem_Artigo">
+            <End Role="Artigo" EntitySet="Artigo" />
+            <End Role="Imagem" EntitySet="Imagem" />
+          </AssociationSet>
+          <AssociationSet Name="Mensagem_Grupo" Association="Self.Mensagem_Grupo">
+            <End Role="Grupo" EntitySet="Grupo" />
+            <End Role="Mensagem" EntitySet="Mensagem" />
+          </AssociationSet>
+          <AssociationSet Name="Mensagem_Usuario" Association="Self.Mensagem_Usuario">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Mensagem" EntitySet="Mensagem" />
+          </AssociationSet>
+          <AssociationSet Name="Som_Objeto" Association="Self.Som_Objeto">
+            <End Role="Objeto" EntitySet="Objeto" />
+            <End Role="Som" EntitySet="Som" />
+          </AssociationSet>
+          <AssociationSet Name="Video_Objeto" Association="Self.Video_Objeto">
+            <End Role="Objeto" EntitySet="Objeto" />
+            <End Role="Video" EntitySet="Video" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </StorageModels>
+  </Runtime>
+  <Designer>
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="False" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="ProcessDependentTemplatesOnSave" Value="False" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <Diagrams >
+      <Diagram DiagramId="ff86b2af6dd74eba965050c1c6d74907" Name="Diagram1">
+        <EntityTypeShape EntityType="CoeusProject.Models.Artigo" Width="1.5" PointX="10.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CoeusProject.Models.Objeto" Width="1.5" PointX="8.5" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CoeusProject.Models.Usuario" Width="1.5" PointX="8.125" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="CoeusProject.Models.Avaliacao" Width="1.5" PointX="5.875" PointY="3.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="CoeusProject.Models.Grupo" Width="1.5" PointX="3.375" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="CoeusProject.Models.Imagem" Width="1.5" PointX="10.875" PointY="7.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="CoeusProject.Models.Mensagem" Width="1.5" PointX="5.75" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="CoeusProject.Models.Som" Width="1.5" PointX="5.125" PointY="6.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="CoeusProject.Models.Tema" Width="1.5" PointX="10.625" PointY="1.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="CoeusProject.Models.Video" Width="1.5" PointX="8.75" PointY="7.375" IsExpanded="true" />
+        <AssociationConnector Association="CoeusProject.Models.Objeto_Usuario" ManuallyRouted="false" />
+        <AssociationConnector Association="CoeusProject.Models.Artigo_Objeto" ManuallyRouted="false" />
+        <AssociationConnector Association="CoeusProject.Models.Avaliacao_Objeto" ManuallyRouted="false" />
+        <AssociationConnector Association="CoeusProject.Models.Avaliacao_Usuario" ManuallyRouted="false" />
+        <AssociationConnector Association="CoeusProject.Models.Grupo_Objeto" ManuallyRouted="false" />
+        <AssociationConnector Association="CoeusProject.Models.Imagem_Artigo" ManuallyRouted="false" />
+        <AssociationConnector Association="CoeusProject.Models.Mensagem_Grupo" ManuallyRouted="false" />
+        <AssociationConnector Association="CoeusProject.Models.Mensagem_Usuario" ManuallyRouted="false" />
+        <AssociationConnector Association="CoeusProject.Models.Som_Objeto" ManuallyRouted="false" />
+        <AssociationConnector Association="CoeusProject.Models.Video_Objeto" ManuallyRouted="false" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</Edmx>

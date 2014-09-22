@@ -1,0 +1,252 @@
+﻿/*#region Font Declaration*/
+@font-face {
+    font-family: "KoiosFont";
+    src: url("LiberationMono-Regular.ttf") format('truetype');
+}
+
+@font-face {
+    font-family: "KoiosFontBold";
+    src: url("LiberationMono-Bold.ttf") format('truetype');
+}
+/*#endregion*/
+
+/*#region General Attributes*/
+html {
+    height: 100%;
+    font-family: "KoiosFont";
+    font-size: 14px;
+    letter-spacing: 2px;   
+    background: -moz-linear-gradient( #dadada, #eeefef);
+    background: -webkit-linear-gradient( #dadada, #eeefef);
+    background: -ms-linear-gradient( #dadada, #eeefef);
+    background: linear-gradient( #dadada, #eeefef);
+}
+
+body {
+    margin: auto;
+    text-align: center;
+    vertical-align: central;
+    overflow: hidden;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 2%;
+    font-family: "KoiosFontBold";
+    font-size: 26px;
+}
+
+footer {
+    position: absolute;
+    right: 225px;
+    bottom: 0;
+    font-size: 10px;
+}
+
+label {
+    display: block;
+}
+
+a {
+    text-decoration: none;
+    color: #444499;
+}
+
+    a:hover {
+        text-decoration: underline;
+        color: #222277;
+    }
+
+    a:visited {
+        text-decoration: none;
+        color: #444499;
+    }
+
+header a {
+    text-align: left;
+    font-family: "KoiosFontBold";
+    font-size: 18px;
+    letter-spacing: 0.3px;
+    display: inline-block;
+    text-decoration: none;
+    color: black;
+}
+
+button img {
+    vertical-align: middle;
+}
+
+.divScrollable {
+    overflow: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+input[type=text], input[type=password] {
+    display: block;
+    width: 300px;
+    margin: 2% auto 2% auto;
+}
+/*#endregion*/
+
+/*#region divLeftSide*/
+div.divLeftSide {
+    position: fixed;
+    width: 200px;
+    height: 99%;
+    margin: 3px 0 1px 1px;
+    border: 1px solid gray;
+    border-radius: 5px;
+}
+
+.divUser {
+    position: absolute;
+    bottom: 2px;
+    left: 1px;
+    right: 1px;
+}
+
+.divSubmitChat {
+    position: absolute;
+    bottom: 2px;
+}
+/*#endregion*/
+
+/*#region divRightSide*/
+div.divRightSide {
+    float: right;
+    position: fixed;
+    right: 1px;
+    width: 220px;
+    height: 99%;
+    margin: 3px 1px 1px 0;
+    border: 1px solid gray;
+    border-radius: 5px;
+}
+
+#txtSearch {
+    width: 170px;
+    display: inline;
+    margin: 4px 0 0 2px;
+}
+
+.divChat {
+    bottom: 90px;
+    left: 5px;
+    overflow: auto;
+    position: absolute;
+    right: 1px;
+    top: 40px;
+}
+/*#endregion*/
+
+/*#region divContent*/
+.divContent {
+    position: absolute;
+    top: 32px;
+    left: 205px;
+    right: 225px;
+    bottom: 2px;
+    border: 1px solid gray;
+    border-radius: 5px;
+}
+/*#endregion*/
+
+/*#region kendoOverrides*/
+.k-widget.k-tooltip-validation {
+    background-color: transparent;
+    border: 0 none;
+}
+/*endregion*/
+
+.divInline {
+    width: 500px;
+    margin: 0 auto;
+    line-height: 2.1em;
+}
+
+/*input[type=submit] {
+    display: inline-block;
+    float: bottom;
+    width: 250px;
+    margin-top: 10px;
+    height: 37px;
+    margin-bottom: 20px;
+    -moz-transition: all 0.4s;
+    -webkit-transition: all 0.4s;
+    -ms-transition: all 0.4s;
+    transition: all 0.4s;
+    border-radius: 30px;
+    border-color: black;
+    border-style: solid;
+    border-width: 1px;
+    color: black;
+    background: -moz-radial-gradient(top, ellipse, #efefef, #ebe9e9);
+    background: -webkit-radial-gradient(top, ellipse, #efefef, #ebe9e9);
+    background: -ms-radial-gradient(top, ellipse, #efefef, #ebe9e9);
+    background: radial-gradient(top, ellipse, #efefef, #ebe9e9);
+    left: 50%;
+}
+
+    input[type=submit]:hover {
+        color: #333388;
+        background: -moz-radial-gradient(top, ellipse, #eeeeee, #d8d5d5);
+        background: -webkit-radial-gradient(top, ellipse, #eeeeee, #d8d5d5);
+        background: -ms-radial-gradient(top, ellipse, #eeeeee, #d8d5d5);
+        background: radial-gradient(top, ellipse, #eeeeee, #d8d5d5);
+        width: 270px;
+    }
+
+    input[type=submit]:active {
+        border-color: lightgreen;
+        color: lightgreen;
+    }*/
+
+/*
+@media screen and (max-width: 800px) {
+    input[type=text], input[type=password] {
+        width: 60%;
+    }
+
+    input[type=submit] {
+        width: 40%;
+    }
+}
+
+@media print {
+    input {
+        visibility: hidden;
+    }
+}
+*/
+
+/*#region Register*/
+.inputInline {
+    display:inline-block;
+    vertical-align:middle;
+    margin-left:20px;
+    width: 300px;
+}
+
+.labelInline {
+    display:inline-block;
+    float: left;
+    text-align: right;
+    width: 150px;
+}
+
+@media screen and (max-width: 500px) {
+    .inputInline {
+        width: 150px;
+    }
+
+    .labelInline {
+        display: block;
+        text-align: right;
+        width: 100px;
+    }
+}
+/*#endregion*/

@@ -1,0 +1,70 @@
+﻿@using Kendo.Mvc.UI
+@model CoeusProject.Models.Usuario
+
+@{
+    ViewBag.Title = "Acesse sua Conta";
+}
+
+@section styles{
+    <style>
+        .divLoginButton {
+            margin-top: 20px;
+        }
+
+        .k-widget.k-tooltip-validation {
+            margin-top: -100px;
+        }
+    </style>
+}
+
+@using (Html.BeginForm("Login", "Account", FormMethod.Post, new { @id = "frmLogin" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    @Html.Hidden("NmPessoa", "UserLogin")
+    @Html.Hidden("SnPessoa", "UserLogin")
+
+    <div class="divScrollable">
+        <header style="margin-top: 5%">
+            Coeus Project
+        </header>
+
+        <div>
+            @Html.TextBoxFor(m => m.TxEmail, new { @placeholder = "Digite seu e-mail", @class = "k-textbox" })
+            @Html.ValidationMessageFor(m => m.TxEmail)
+        </div>
+
+        <div>
+            @Html.PasswordFor(m => m.PwUsuario, new { @placeholder = "Digite sua senha", @class = "k-textbox" })
+            @Html.ValidationMessageFor(m => m.PwUsuario)
+        </div>
+
+        @Html.CheckBox("flContinuarConectado", true)
+        <label for="flContinuarConectado" style="display: inline">Continuar Conectado</label>
+
+        <div class="divLoginButton">
+            @(Html.Kendo().Button().Name("btnLogin")
+                    .Content("Login"))
+            <br />
+            @Html.ActionLink("Criar uma Conta", "Register")
+        </div>
+    </div>
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#btnLogin').click(function (e) {
+                e.preventDefault();
+                $('#btnLogin').data('kendoButton').enable(false);
+
+                $.ajaxPost('@Url.Action("Login","Account")', {
+                    usuario: $('#frmLogin').serializeObject(),
+                    flContinuarConectado: $('#flContinuarConectado').is(':checked')
+                }, $('#frmLogin'));
+
+                $('#btnLogin').data('kendoButton').enable();
+            });
+        });
+    </script>
+}

@@ -1,0 +1,57 @@
+﻿@using Kendo.Mvc.UI
+@model CoeusProject.Models.Grupo
+@{
+    Layout = null;
+}
+
+@using (Html.BeginForm("Create", "Grupo", FormMethod.Post, new { @id = "frmGrupo", @style = "overflow: hidden" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
+
+    if (Model != null && Model.IdGrupo > 0)
+    {
+        Html.HiddenFor(m => m.IdGrupo);
+    }
+
+    <div class="divInline">
+        <div>
+            @Html.LabelFor(m => m.NmGrupo, new { @class = "labelInline" })
+            @Html.TextBoxFor(m => m.NmGrupo, new { @class = "k-textbox inputInline" })
+            @Html.ValidationMessageFor(m => m.NmGrupo)
+        </div>
+
+        <div id="divUsers">
+            @Html.Partial("_SearchUsersPartial")
+        </div>
+
+        <div id="divActions" class="k-header" style="position: absolute; left: 0; right:0; bottom:0;">
+            @(Html.Kendo().Button()
+                .Name("btnCreate")
+                .Content("<img src='/Images/saveAs.png' alt='Create'/>")
+                .HtmlAttributes(new { @style = "float: left" })
+            )
+
+            @(Html.Kendo().Button()
+                .Name("btnCancel")
+                .Content("<img src='/Images/close.png' alt='Cancel'/>")
+                .HtmlAttributes(new { @style = "float: left" })
+            )
+        </div>
+    </div>
+}
+
+<script>
+    $(document).ready(function () {
+        $('#btnCreate').click(function (e) {
+            e.preventDefault();
+
+
+        });
+
+        $('#btnCancel').click(function (e) {
+            e.preventDefault();
+            $('#wndGroup').data('kendoWindow').close();
+        })
+    })
+</script>
