@@ -15,8 +15,8 @@ namespace CoeusProject.Models
         [StringLength(50, MinimumLength = 1, ErrorMessage = "A descrição do tema deve conter entre 1 e 20 caracteres")]
         public String NmTema { get; set; }
 
-        public virtual IEnumerable<Objeto> Objetos { get; set; }
+        public virtual ICollection<Objeto> Objetos { get; set; }
 
-        public virtual IEnumerable<Usuario> Usuarios { get; set; }
+        public virtual ICollection<Usuario> Usuarios { get; set; }
     }
 }

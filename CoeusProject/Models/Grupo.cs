@@ -18,12 +18,12 @@ namespace CoeusProject.Models
         [StringLength(512, MinimumLength=1, ErrorMessage="O nome do grupo deve conter entre 1 e 100 caracteres")]
         public String NmGrupo { get; set; }
 
-        public virtual IEnumerable<Usuario> Usuarios { get; set; }
+        public virtual ICollection<Usuario> Usuarios { get; set; }
 
-        public virtual IEnumerable<Mensagem> Mensagens { get; set; }
+        public virtual ICollection<Mensagem> Mensagens { get; set; }
 
         [ForeignKey("Objeto")]
-        public Int32? NidObjeto { get; set; }
+        public Int32? IdObjeto { get; set; }
         public virtual Objeto Objeto { get; set; }
     }
 }

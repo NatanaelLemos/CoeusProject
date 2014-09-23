@@ -16,8 +16,7 @@
 
     <div class="divInline">
         <div>
-            @Html.LabelFor(m => m.NmGrupo, new { @class = "labelInline" })
-            @Html.TextBoxFor(m => m.NmGrupo, new { @class = "k-textbox inputInline" })
+            @Html.TextBoxFor(m => m.NmGrupo, new { @class = "k-textbox inputInline", @placeholder = "Nome do grupo", @style = "width: 90%" })
             @Html.ValidationMessageFor(m => m.NmGrupo)
         </div>
 
@@ -46,7 +45,15 @@
         $('#btnCreate').click(function (e) {
             e.preventDefault();
 
-
+            $.ajaxPost('@Url.Action("Create","Grupo")', {
+                nmGrupo: $('#NmGrupo').val(),
+                usuarios: lstSelectedUsers
+            },
+            null,
+            function () {
+                kendoAlert('Grupo criado');
+                $('#wndGroup').data('kendoWindow').close();
+            });
         });
 
         $('#btnCancel').click(function (e) {

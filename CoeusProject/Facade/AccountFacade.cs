@@ -27,7 +27,7 @@ namespace CoeusProject.Facade
             {
                 Int32 idUsuarioInteger = Convert.ToInt32(idUsuario);
                 CoeusProjectContext context = new CoeusProjectContext();
-                Usuario usuario =context.Usuarios.Where(u => u.IdUsuario == idUsuarioInteger).FirstOrDefault();
+                Usuario usuario = context.Usuarios.Where(u => u.IdUsuario == idUsuarioInteger).FirstOrDefault();
 
                 if (usuario == null)
                 {

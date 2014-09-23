@@ -107,14 +107,14 @@
     .AutoBind(false)
     .Events(e => e.Select("cmbNmPessoa_Select"))
     .HtmlAttributes(new { @placeholder = "Buscar por nome ou e-mail", @style = "width: 90%" })
-    .TemplateId("tmplSearchUser")
 )
 
-Pessoas No Chat
-@(Html.Kendo().ListView(new List<dynamic>()).Name("lstUsers")
-    .ClientTemplateId("tmplUser")
-    .TagName("div")
-    .DataSource(ds => ds.Custom().PageSize(6))
-    .Pageable()
-    .Selectable(select => select.Mode(ListViewSelectionMode.Single))
-)
+Pessoas No Grupo
+<div id="divGrupoUsuarios" style="height: 178px; width: 500px; overflow: auto">
+    @(Html.Kendo().ListView(new List<dynamic>()).Name("lstUsers")
+        .ClientTemplateId("tmplUser")
+        .TagName("div")
+        .DataSource(ds => ds.Custom())
+        .Selectable(select => select.Mode(ListViewSelectionMode.Single))
+    )
+</div>

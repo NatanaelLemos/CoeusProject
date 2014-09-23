@@ -42,15 +42,15 @@ namespace CoeusProject.Models
         public String NmFoto { get; set; } 
         #endregion
 
-        public virtual IEnumerable<Grupo> Grupos { get; set; }
+        public virtual ICollection<Grupo> Grupos { get; set; }
 
-        public virtual IEnumerable<Mensagem> Mensagens { get; set; }
+        public virtual ICollection<Mensagem> Mensagens { get; set; }
 
-        public virtual IEnumerable<Objeto> Objetos { get; set; }
+        public virtual ICollection<Objeto> Objetos { get; set; }
 
-        public virtual IEnumerable<Avaliacao> Avaliacoes { get; set; }
+        public virtual ICollection<Avaliacao> Avaliacoes { get; set; }
 
-        public virtual IEnumerable<Tema> Temas { get; set; }
+        public virtual ICollection<Tema> Temas { get; set; }
 
         public Usuario Encrypt()
         {

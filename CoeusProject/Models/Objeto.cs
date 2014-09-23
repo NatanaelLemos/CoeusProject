@@ -35,8 +35,8 @@ namespace CoeusProject.Models
         public Int32? IdArtigo { get; set; }
         public virtual Artigo Artigo { get; set; }
         */
-        public virtual IEnumerable<Avaliacao> Avaliacoes { get; set; }
+        public virtual ICollection<Avaliacao> Avaliacoes { get; set; }
 
-        public virtual IEnumerable<Tema> Temas { get; set; }
+        public virtual ICollection<Tema> Temas { get; set; }
     }
 }

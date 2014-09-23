@@ -6,8 +6,19 @@
 }
 
 <div id="divRightSide" class="divRightSide">
-    @Html.TextBox("txtSearch", "", new { @class="k-textbox", @placeholder="Pesquisar grupo"})
-    @Html.Kendo().Button().Name("btnSearch").Content("<img src='/Images/searchFind.png' alt='Search'/>")
+    @(Html.Kendo().ComboBox().Name("cmbNmGrupo")
+        .DataTextField("NmGrupo")
+        .DataValueField("IdGrupo")
+        .Suggest(true)
+        .MinLength(0)
+        .Height(400)
+        .DataSource(ds => ds.Read(read => read.Action("GetGrupoWhereNmGrupoStartsWith", "Grupo")
+            .Data("cmbNmGrupo_AdditionalData")).ServerFiltering(true))
+        .Filter(FilterType.StartsWith)
+        .AutoBind(true)
+        .Events(e => e.Select("cmbNmGrupo_Select"))
+        .HtmlAttributes(new { @placeholder = "Buscar por grupo", @style = "width: 100%" })
+    )
 
     <div style="height: 100%">
         <div id="chat" class="divChat"></div>
@@ -33,8 +44,8 @@
     .Content(@<text><div id="wndGroupContent"></div></text>)
     .Events(e=>e.Close("wndGroup_Close($(this))"))
     .Visible(false)
-    .Height(300)
-    .Width(500)
+    .Height(330)
+    .Width(600)
 )
 
 <script type="text/javascript">
@@ -51,14 +62,24 @@
 
         $('#btnSendMessage').click(function (e) {
             e.preventDefault();
+            var idGrupo = $('#cmbNmGrupo').data('kendoComboBox').value();
+
+            if (!idGrupo && !parseInt(idGrupo)) {
+                kendoAlert('Para enviar uma mensagem, primeiro selecione um grupo');
+                return;
+            }
+
             $.ajax({
                 url: '@Url.Action("SendMessage","Message")',
                 type: 'POST',
                 data: {
-                    idGroup: 1,
+                    idGroup: idGrupo,
                     txMessage: $('#txtMessage').val()
                 },
-                success: RefreshChat(),
+                success: function (data) {
+                    RefreshChat(idGrupo);
+                    $('#txtMessage').val('');
+                },
                 error: function (error) {
                     kendoAlert(error.statusText);
                 }
@@ -76,5 +97,43 @@
 
     function wndGroup_Close(e) {
         $('#wndGroupContent').html('');
+    }
+
+    function cmbNmGrupo_AdditionalData(e) {
+        return {
+            nmGrupo: $('#cmbNmGrupo').data('kendoComboBox').text()
+        };
+    }
+
+    var chatTmpl = $('<span></span>');
+    var usrTmpl = $('<h3 style="font-size: 7pt; letter-spacing: 1px; text-align: left; font-weight: bold"></h3>');
+
+    function cmbNmGrupo_Select(e) {
+        var dataItem = this.dataItem(e.item.index());
+        RefreshChat(dataItem.IdGrupo);
+    }
+
+    function RefreshChat(idGrupo) {
+        $('#chat').html('');
+
+        $.ajax({
+            url: '@Url.Action("GetGrupoMessages", "Message")',
+            type: 'GET',
+            data: {
+                idGrupo: idGrupo
+            },
+            success: function (data) {
+                data.forEach(function (row) {
+                    var chatRow = chatTmpl.clone().appendTo('#chat');
+                    var usrName = usrTmpl.clone().appendTo(chatRow).html(row.NmPessoa + "(" + row.DtMensagem + "): <br />");
+                    var msg = chatTmpl.clone().appendTo(chatRow).html(row.TxMensagem);
+                });
+
+                $("#chat").scrollTop($("#chat")[0].scrollHeight);
+            },
+            error: function (error) {
+                kendoAlert(error.statusText);
+            }
+        });
     }
 </script>

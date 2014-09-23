@@ -33,10 +33,20 @@ namespace CoeusProject.Facade
             }
             else
             {
-                error = exception.Message;
+                error = GetInnerException(exception);
             }
 
             return error;
+        }
+
+        private static String GetInnerException(Exception ex)
+        {
+            if (ex.InnerException == null)
+            {
+                return ex.Message;
+            }
+
+            return GetInnerException(ex.InnerException);
         }
     }
 }

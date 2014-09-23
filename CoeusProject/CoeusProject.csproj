@@ -175,6 +175,7 @@
     <Compile Include="Controllers\GrupoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MessageController.cs" />
+    <Compile Include="Extensions.cs" />
     <Compile Include="Facade\AccountFacade.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -196,6 +197,18 @@
     <Compile Include="Migrations\201409210310517_Sequence.cs" />
     <Compile Include="Migrations\201409210310517_Sequence.Designer.cs">
       <DependentUpon>201409210310517_Sequence.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201409222302064_ICollection.cs" />
+    <Compile Include="Migrations\201409222302064_ICollection.Designer.cs">
+      <DependentUpon>201409222302064_ICollection.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201409222329114_IdObjeto.cs" />
+    <Compile Include="Migrations\201409222329114_IdObjeto.Designer.cs">
+      <DependentUpon>201409222329114_IdObjeto.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201409222359073_DtMensagem.cs" />
+    <Compile Include="Migrations\201409222359073_DtMensagem.Designer.cs">
+      <DependentUpon>201409222359073_DtMensagem.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Artigo.cs" />
@@ -1770,6 +1783,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201409210310517_Sequence.resx">
       <DependentUpon>201409210310517_Sequence.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201409222302064_ICollection.resx">
+      <DependentUpon>201409222302064_ICollection.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201409222329114_IdObjeto.resx">
+      <DependentUpon>201409222329114_IdObjeto.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201409222359073_DtMensagem.resx">
+      <DependentUpon>201409222359073_DtMensagem.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
