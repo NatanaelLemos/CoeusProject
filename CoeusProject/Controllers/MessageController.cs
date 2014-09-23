@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Data.Entity;
 using CoeusProject.Facade;
+using CoeusProject.Hubs;
 
 namespace CoeusProject.Controllers
 {
@@ -28,6 +29,9 @@ namespace CoeusProject.Controllers
 
                 _context.Mensagens.Add(sentMessage);
                 _context.SaveChanges();
+
+                new Chat().Send(sentMessage);
+
                 return new HttpStatusCodeResult(HttpStatusCode.OK);
             }
             catch (Exception ex)

@@ -49,6 +49,9 @@
 )
 
 <script type="text/javascript">
+    var chatTmpl = $('<span></span>');
+    var usrTmpl = $('<h3 style="font-size: 7pt; letter-spacing: 1px; text-align: left; font-weight: bold"></h3>');
+
     $(document).ready(function () {
         $('#btnGroupAdd').kendoTooltip({
             position: 'top',
@@ -60,32 +63,6 @@
             content: 'Enviar mensagem'
         });
 
-        $('#btnSendMessage').click(function (e) {
-            e.preventDefault();
-            var idGrupo = $('#cmbNmGrupo').data('kendoComboBox').value();
-
-            if (!idGrupo && !parseInt(idGrupo)) {
-                kendoAlert('Para enviar uma mensagem, primeiro selecione um grupo');
-                return;
-            }
-
-            $.ajax({
-                url: '@Url.Action("SendMessage","Message")',
-                type: 'POST',
-                data: {
-                    idGroup: idGrupo,
-                    txMessage: $('#txtMessage').val()
-                },
-                success: function (data) {
-                    RefreshChat(idGrupo);
-                    $('#txtMessage').val('');
-                },
-                error: function (error) {
-                    kendoAlert(error.statusText);
-                }
-            });
-        });
-
         $('#btnGroupAdd').click(function (e) {
             e.preventDefault();
             $('#wndGroupContent').load('@Url.Action("CreatePartial", "Grupo")',
@@ -93,6 +70,42 @@
                     $('#wndGroup').data('kendoWindow').center().open();
                 });
         });
+
+        $.signalR.hub.start().done(function () {
+            $('#btnSendMessage').click(function (e) {
+                e.preventDefault();
+                var idGrupo = $('#cmbNmGrupo').data('kendoComboBox').value();
+
+                if (!idGrupo && !parseInt(idGrupo)) {
+                    kendoAlert('Para enviar uma mensagem, primeiro selecione um grupo');
+                    return;
+                }
+
+                $.ajax({
+                    url: '@Url.Action("SendMessage","Message")',
+                    type: 'POST',
+                    data: {
+                        idGroup: idGrupo,
+                        txMessage: $('#txtMessage').val()
+                    },
+                    success: function (data) {
+                        $('#txtMessage').val('');
+                    },
+                    error: function (error) {
+                        kendoAlert(error.statusText);
+                    }
+                });
+            });
+        });
+
+        var chat = $.connection.chat;
+        chat.client.notify = function (data) {
+            var chatRow = chatTmpl.clone().appendTo('#chat');
+            var usrName = usrTmpl.clone().appendTo(chatRow).html(data.Data.NmPessoa + "(" + data.Data.DtMensagem + "): <br />");
+            var msg = chatTmpl.clone().appendTo(chatRow).html(data.Data.TxMensagem);
+
+            $("#chat").scrollTop($("#chat")[0].scrollHeight);
+        }
     });
 
     function wndGroup_Close(e) {
@@ -104,9 +117,6 @@
             nmGrupo: $('#cmbNmGrupo').data('kendoComboBox').text()
         };
     }
-
-    var chatTmpl = $('<span></span>');
-    var usrTmpl = $('<h3 style="font-size: 7pt; letter-spacing: 1px; text-align: left; font-weight: bold"></h3>');
 
     function cmbNmGrupo_Select(e) {
         var dataItem = this.dataItem(e.item.index());

@@ -25,6 +25,14 @@ namespace CoeusProject
 
             bundles.Add(new ScriptBundle("~/bundles/site")
                 .Include("~/Scripts/jsExtensions.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/signalr").Include(
+                "~/Scripts/jquery.signalR-2.1.2.js"));
+
+    //            <script src="~/Scripts/jquery.signalR-2.0.3.js"></script>
+    //<script src="~/signalr/hubs"></script>
+
+
         }
     }
 }

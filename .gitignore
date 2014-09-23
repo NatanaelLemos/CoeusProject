@@ -154,3 +154,5 @@ $RECYCLE.BIN/
 
 # Mac desktop service store files
 .DS_Store
+CoeusProject/App_Data/CoeusProjectContext-20140914154959.mdf
+CoeusProject/App_Data/CoeusProjectContext-20140914154959_log.ldf
