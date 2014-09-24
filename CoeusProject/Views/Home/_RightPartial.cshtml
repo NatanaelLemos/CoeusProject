@@ -1,9 +1,6 @@
 ﻿@model CoeusProject.Models.Usuario
 @using Kendo.Mvc.UI
-
-@{
-    Layout = null;
-}
+@{Layout = null;}
 
 <div id="divRightSide" class="divRightSide">
     @(Html.Kendo().ComboBox().Name("cmbNmGrupo")
@@ -28,11 +25,13 @@
 
             @(Html.Kendo().Button().Name("btnSendMessage")
                 .Content("<img src='/Images/sendMessage.png' alt='Send Message'/>")
-                .HtmlAttributes(new { @style = "float: right;" }))
+                .HtmlAttributes(new { @style = "float: right;", @type = "button" })
+                .Events(e => e.Click("btnSendMessage_Click")))
 
             @(Html.Kendo().Button().Name("btnGroupAdd")
                 .Content("<img src='/Images/groupAdd.png' alt='Add New Group'/>")
-                .HtmlAttributes(new { @style = "float: right;" }))
+                .HtmlAttributes(new { @style = "float: right;", @type = "button" })
+                .Events(e => e.Click("btnGroupAdd_Click")))
         </div>
     </div>
 </div>
@@ -62,50 +61,6 @@
             position: 'top',
             content: 'Enviar mensagem'
         });
-
-        $('#btnGroupAdd').click(function (e) {
-            e.preventDefault();
-            $('#wndGroupContent').load('@Url.Action("CreatePartial", "Grupo")',
-                {}, function () {
-                    $('#wndGroup').data('kendoWindow').center().open();
-                });
-        });
-
-        $.signalR.hub.start().done(function () {
-            $('#btnSendMessage').click(function (e) {
-                e.preventDefault();
-                var idGrupo = $('#cmbNmGrupo').data('kendoComboBox').value();
-
-                if (!idGrupo && !parseInt(idGrupo)) {
-                    kendoAlert('Para enviar uma mensagem, primeiro selecione um grupo');
-                    return;
-                }
-
-                $.ajax({
-                    url: '@Url.Action("SendMessage","Message")',
-                    type: 'POST',
-                    data: {
-                        idGroup: idGrupo,
-                        txMessage: $('#txtMessage').val()
-                    },
-                    success: function (data) {
-                        $('#txtMessage').val('');
-                    },
-                    error: function (error) {
-                        kendoAlert(error.statusText);
-                    }
-                });
-            });
-        });
-
-        var chat = $.connection.chat;
-        chat.client.notify = function (data) {
-            var chatRow = chatTmpl.clone().appendTo('#chat');
-            var usrName = usrTmpl.clone().appendTo(chatRow).html(data.Data.NmPessoa + "(" + data.Data.DtMensagem + "): <br />");
-            var msg = chatTmpl.clone().appendTo(chatRow).html(data.Data.TxMensagem);
-
-            $("#chat").scrollTop($("#chat")[0].scrollHeight);
-        }
     });
 
     function wndGroup_Close(e) {
@@ -121,6 +76,31 @@
     function cmbNmGrupo_Select(e) {
         var dataItem = this.dataItem(e.item.index());
         RefreshChat(dataItem.IdGrupo);
+    }
+
+    function btnSendMessage_Click(e) {
+        var idGrupo = $('#cmbNmGrupo').data('kendoComboBox').value();
+        var txMessage = $('#txtMessage').val();
+        if (!idGrupo && !parseInt(idGrupo)) {
+            kendoAlert('Para enviar uma mensagem, primeiro selecione um grupo');
+            return;
+        }else if (!txMessage){
+            kendoAlert('É necessário escrever uma mensagem para enviar');
+            return;
+        }
+
+        $.ajaxPost('@Url.Action("SendMessage","Message")', {
+            idGroup: idGrupo,
+            txMessage: txMessage
+        }, null, function (data) {
+            $('#txtMessage').val('');
+        });
+    }
+
+    function btnGroupAdd_Click(e) {
+        $('#wndGroupContent').load('@Url.Action("CreatePartial", "Grupo")', {}, function () {
+            $('#wndGroup').data('kendoWindow').center().open();
+        });
     }
 
     function RefreshChat(idGrupo) {
@@ -140,6 +120,20 @@
                 });
 
                 $("#chat").scrollTop($("#chat")[0].scrollHeight);
+
+                var chat = $.connection.chat;
+
+                chat.client.notify = function (data) {
+                    var chatRow = chatTmpl.clone().appendTo('#chat');
+                    var usrName = usrTmpl.clone().appendTo(chatRow).html(data.Data.NmPessoa + "(" + data.Data.DtMensagem + "): <br />");
+                    var msg = chatTmpl.clone().appendTo(chatRow).html(data.Data.TxMensagem);
+
+                    $("#chat").scrollTop($("#chat")[0].scrollHeight);
+                }
+
+                $.signalR.hub.start().done(function () {
+                    chat.server.join(idGrupo);
+                });
             },
             error: function (error) {
                 kendoAlert(error.statusText);

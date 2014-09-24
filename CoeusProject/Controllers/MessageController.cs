@@ -46,7 +46,8 @@ namespace CoeusProject.Controllers
 
             if (idGrupo > 0)
             {
-                mensagens = _context.Mensagens.Where(m => m.IdGrupo == idGrupo).Include(m => m.Usuario);
+                DateTime lastMsgDate = DateTime.Today.AddMonths(-1);
+                mensagens = _context.Mensagens.Where(m => m.IdGrupo == idGrupo && m.DtMensagem > lastMsgDate).Include(m => m.Usuario);
             }
 
             if (mensagens == null)
@@ -54,7 +55,7 @@ namespace CoeusProject.Controllers
                 return Json("", JsonRequestBehavior.AllowGet);
             }
 
-            return Json(mensagens.ToList().Decrypt().OrderBy(o=>o.DtMensagem).Select(m => new
+            return Json(mensagens.Decrypt().OrderBy(o=>o.DtMensagem).Select(m => new
             {
                 IdMensagem = m.IdMensagem,
                 TxMensagem = m.TxMensagem,

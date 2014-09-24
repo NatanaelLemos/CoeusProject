@@ -4,13 +4,90 @@
     CoeusProject.Models.Usuario loggedInUser = CoeusProject.Facade.AccountFacade.GetLoggedInUser();
 
     if (loggedInUser == null)
-    { 
-        Response.Redirect(Url.Action("Login","Account"));
+    {
+        Response.Redirect(Url.Action("Login", "Account"));
     }
 }
 
-@if(loggedInUser != null)
-{ 
+@if (loggedInUser != null)
+{
     @Html.Partial("_LeftPartial", loggedInUser)
+    <div style="position: absolute; top: 0; bottom: 0; left: 205px; right: 225px">
+        @(Html.Kendo().TabStrip().Name("tbsIndex")
+        .Items(i =>
+        {
+            i.Add().Text("Feed").Selected(true)
+                .Content(@<text>
+        <div class="divContent">
+            aahoajngaknbfdskjfbdfjabsfbafhdfk bah gasbd fahb dfhaklsfhasb fjabsd fhalbsdlabf ls af asdf asfasd as fasd adsfa adfas dfa
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+            <br /> alfh sfasjfva
+        </div>
+                </text>);
+            i.Add().Text("Artigos").Content("artigos");
+            i.Add().Text("Videos").Content("videos");
+        })
+        .HtmlAttributes(new { @style = "height: 100%; background-color: transparent; border: 0 none; background: none" }))
+    </div>
     @Html.Partial("_RightPartial", loggedInUser)
 }

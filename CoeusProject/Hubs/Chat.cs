@@ -1,4 +1,5 @@
-﻿using CoeusProject.Models;
+﻿using CoeusProject.Facade;
+using CoeusProject.Models;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using System;
@@ -31,7 +32,17 @@ namespace CoeusProject.Hubs
             };
 
             var context = GlobalHost.ConnectionManager.GetHubContext<Chat>();
-            context.Clients.All.notify(result);
+            context.Clients.Group(mensagem.IdGrupo.ToString()).notify(result);
+        }
+
+        public void Join(string groupName)
+        {
+            Usuario usuarioLogado = AccountFacade.GetLoggedInUser();
+            foreach(Grupo grupo in usuarioLogado.Grupos)
+            {
+                Groups.Remove(Context.ConnectionId, grupo.IdGrupo.ToString());
+            }
+            Groups.Add(Context.ConnectionId, groupName);
         }
     }
 }
