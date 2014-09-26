@@ -5,10 +5,6 @@
     ViewBag.Title = "Registre-se";
 }
 
-@section styles{
-    <link type="text/css" rel="stylesheet" href="~/Content/register.css" />
-}
-
 @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @id = "frmRegister" }))
 {
     @Html.AntiForgeryToken()

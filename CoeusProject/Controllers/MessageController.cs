@@ -30,6 +30,7 @@ namespace CoeusProject.Controllers
                 _context.Mensagens.Add(sentMessage);
                 _context.SaveChanges();
 
+                sentMessage.Grupo = _context.Grupos.Where(g => g.IdGrupo == sentMessage.IdGrupo).FirstOrDefault();
                 new Chat().Send(sentMessage);
 
                 return new HttpStatusCodeResult(HttpStatusCode.OK);
@@ -46,8 +47,11 @@ namespace CoeusProject.Controllers
 
             if (idGrupo > 0)
             {
-                DateTime lastMsgDate = DateTime.Today.AddMonths(-1);
-                mensagens = _context.Mensagens.Where(m => m.IdGrupo == idGrupo && m.DtMensagem > lastMsgDate).Include(m => m.Usuario);
+                mensagens = _context.Mensagens.Where(m => m.IdGrupo == idGrupo)
+                                              .Include(m => m.Usuario)
+                                              .OrderBy(m=>m.DtMensagem)
+                                              .Skip(Math.Max(0, _context.Mensagens.Count() - 100))
+                                              .Take(100);
             }
 
             if (mensagens == null)

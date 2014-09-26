@@ -13,7 +13,7 @@
             .Data("cmbNmGrupo_AdditionalData")).ServerFiltering(true))
         .Filter(FilterType.StartsWith)
         .AutoBind(true)
-        .Events(e => e.Select("cmbNmGrupo_Select"))
+        .Events(e => e.Select("cmbNmGrupo_Select").Change("cmbNmGrupo_Change"))
         .HtmlAttributes(new { @placeholder = "Buscar por grupo", @style = "width: 100%" })
     )
 
@@ -32,6 +32,11 @@
                 .Content("<img src='/Images/groupAdd.png' alt='Add New Group'/>")
                 .HtmlAttributes(new { @style = "float: right;", @type = "button" })
                 .Events(e => e.Click("btnGroupAdd_Click")))
+
+            @(Html.Kendo().Button().Name("btnGroupEdit")
+                .Content("<img src='/Images/groupEdit.png' alt='Edit Group'/>")
+                .HtmlAttributes(new { @style = "float: right; visibility: hidden", @type = "button" })
+                .Events(e => e.Click("btnGroupEdit_Click")))
         </div>
     </div>
 </div>
@@ -47,9 +52,16 @@
     .Width(600)
 )
 
+<span id="spnPopupNotification"></span>
+
 <script type="text/javascript">
+    var chat;
     var chatTmpl = $('<span></span>');
     var usrTmpl = $('<h3 style="font-size: 7pt; letter-spacing: 1px; text-align: left; font-weight: bold"></h3>');
+    var popupNotification = $("#spnPopupNotification").kendoNotification({
+        allowHideAfter: 5000,
+        hideOnClick: true
+    }).data("kendoNotification");
 
     $(document).ready(function () {
         $('#btnGroupAdd').kendoTooltip({
@@ -61,6 +73,32 @@
             position: 'top',
             content: 'Enviar mensagem'
         });
+
+        chat = $.connection.chat;
+
+        chat.client.notify = function (data) {
+            var idGrupo = $('#cmbNmGrupo').data('kendoComboBox').value();
+            var message = data.Data;
+
+            if (message.IdGrupo && parseInt(message.IdGrupo)) {
+                if (idGrupo && parseInt(idGrupo) && message.IdGrupo == idGrupo) {
+                    var chatRow = chatTmpl.clone().appendTo('#chat');
+                    var usrName = usrTmpl.clone().appendTo(chatRow).html(message.NmPessoa + "(" + message.DtMensagem + "): <br />");
+                    var msg = chatTmpl.clone().appendTo(chatRow).html(message.TxMensagem);
+
+                    $("#chat").scrollTop($("#chat")[0].scrollHeight);
+                } else {
+                    popupNotification.show("<h4 style='display: inline-block'>" + message.NmPessoa + "(" +
+                                            message.NmGrupo + "):</h4><br />" +
+                                            message.TxMensagem, "info");
+                }
+            }
+        }
+
+        $.signalR.hub.start().done(function () {
+            chat.server.join();
+        });
+
     });
 
     function wndGroup_Close(e) {
@@ -75,7 +113,17 @@
 
     function cmbNmGrupo_Select(e) {
         var dataItem = this.dataItem(e.item.index());
+
         RefreshChat(dataItem.IdGrupo);
+    }
+
+    function cmbNmGrupo_Change(e) {
+        if (!$('#cmbNmGrupo').data('kendoComboBox').value() || !parseInt($('#cmbNmGrupo').data('kendoComboBox').value())) {
+            $('#btnGroupEdit').css('visibility', 'hidden');
+            $('#chat').html('');
+        } else {
+            $('#btnGroupEdit').css('visibility', 'visible');
+        }
     }
 
     function btnSendMessage_Click(e) {
@@ -84,7 +132,7 @@
         if (!idGrupo && !parseInt(idGrupo)) {
             kendoAlert('Para enviar uma mensagem, primeiro selecione um grupo');
             return;
-        }else if (!txMessage){
+        } else if (!txMessage) {
             kendoAlert('É necessário escrever uma mensagem para enviar');
             return;
         }
@@ -99,6 +147,19 @@
 
     function btnGroupAdd_Click(e) {
         $('#wndGroupContent').load('@Url.Action("CreatePartial", "Grupo")', {}, function () {
+            $('#wndGroup').data('kendoWindow').center().open();
+        });
+    }
+
+    function btnGroupEdit_Click(e) {
+        var idGrupo = $('#cmbNmGrupo').data('kendoComboBox').value();
+        if (!idGrupo || !parseInt(idGrupo)) {
+            return;
+        }
+
+        $('#wndGroupContent').load('@Url.Action("EditPartial", "Grupo")', {
+            IdGrupo: idGrupo
+        }, function () {
             $('#wndGroup').data('kendoWindow').center().open();
         });
     }
@@ -120,20 +181,6 @@
                 });
 
                 $("#chat").scrollTop($("#chat")[0].scrollHeight);
-
-                var chat = $.connection.chat;
-
-                chat.client.notify = function (data) {
-                    var chatRow = chatTmpl.clone().appendTo('#chat');
-                    var usrName = usrTmpl.clone().appendTo(chatRow).html(data.Data.NmPessoa + "(" + data.Data.DtMensagem + "): <br />");
-                    var msg = chatTmpl.clone().appendTo(chatRow).html(data.Data.TxMensagem);
-
-                    $("#chat").scrollTop($("#chat")[0].scrollHeight);
-                }
-
-                $.signalR.hub.start().done(function () {
-                    chat.server.join(idGrupo);
-                });
             },
             error: function (error) {
                 kendoAlert(error.statusText);

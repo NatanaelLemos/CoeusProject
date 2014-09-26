@@ -45,9 +45,12 @@
 </style>
 
 <script type="text/x-kendo-tmpl" id="tmplUser">
-    <div class="showUser">
+    <div class="showUser" data-id="#=IdUsuario#">
         <img src="/User_Data/#=NmFoto#" alt="#=NmPessoa# image" />
         <h3>#=NmPessoa#</h3>
+        <button type="button" class="k-button"
+                style="float: right; margin: 0; padding: 0 3px 0 3px; font-size: 8pt; font-weight: bold"
+                onclick="btnRemoveUser_Click()">X</button>
     </div>
 </script>
 
@@ -91,6 +94,14 @@
     function BindLstUsers() {
         var dataSource = new kendo.data.DataSource({data: lstSelectedUsers});
         $('#lstUsers').data('kendoListView').setDataSource(dataSource);
+    }
+
+    function btnRemoveUser_Click() {
+        var selectedUser = $('#lstUsers').data('kendoListView').select();
+        lstSelectedUsers = $.grep(lstSelectedUsers, function (user, index) {
+            return user.IdUsuario != selectedUser.data('id');
+        });
+        BindLstUsers();
     }
 </script>
 

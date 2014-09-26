@@ -28,21 +28,23 @@ namespace CoeusProject.Hubs
                 IdMensagem = decMensagem.IdMensagem,
                 TxMensagem = decMensagem.TxMensagem,
                 DtMensagem = decMensagem.DtMensagem.ToString("dd/MM/yyyy HH:mm"),
-                NmPessoa = decMensagem.Usuario.NmPessoa
+                NmPessoa = decMensagem.Usuario.NmPessoa,
+                IdGrupo = mensagem.IdGrupo.ToString(),
+                NmGrupo = mensagem.Grupo == null ? "" : mensagem.Grupo.NmGrupo
             };
 
             var context = GlobalHost.ConnectionManager.GetHubContext<Chat>();
             context.Clients.Group(mensagem.IdGrupo.ToString()).notify(result);
         }
 
-        public void Join(string groupName)
+        public void Join()
         {
             Usuario usuarioLogado = AccountFacade.GetLoggedInUser();
-            foreach(Grupo grupo in usuarioLogado.Grupos)
+
+            foreach (Grupo grupo in usuarioLogado.Grupos)
             {
-                Groups.Remove(Context.ConnectionId, grupo.IdGrupo.ToString());
+                Groups.Add(Context.ConnectionId, grupo.IdGrupo.ToString());
             }
-            Groups.Add(Context.ConnectionId, groupName);
         }
     }
 }

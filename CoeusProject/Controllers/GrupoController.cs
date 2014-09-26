@@ -19,6 +19,12 @@ namespace CoeusProject.Controllers
             return View("_GrupoEditPartial", new Grupo());
         }
 
+        public ActionResult EditPartial(Int32 IdGrupo)
+        {
+            Grupo grupo = _context.Grupos.Where(g=>g.IdGrupo == IdGrupo).FirstOrDefault();
+            return View("_GrupoEditPartial", grupo);
+        }
+
         [HttpPost]
         public ActionResult Create(String nmGrupo, List<Usuario> usuarios)
         {
@@ -41,6 +47,12 @@ namespace CoeusProject.Controllers
                     if (grupoUser == null || grupo.Usuarios.Contains(grupoUser)) continue;
 
                     grupo.Usuarios.Add(grupoUser);
+                }
+
+                Usuario usuarioLogado = AccountFacade.GetLoggedInUser();
+                if (grupo.Usuarios.Where(u => u.IdUsuario == usuarioLogado.IdUsuario).Count() == 0)
+                {
+                    grupo.Usuarios.Add(_context.Usuarios.Where(u => u.IdUsuario == usuarioLogado.IdUsuario).FirstOrDefault());
                 }
 
                 _context.Grupos.Add(grupo);

@@ -53,6 +53,7 @@
             function () {
                 kendoAlert('Grupo criado');
                 $('#wndGroup').data('kendoWindow').close();
+                $('#cmbNmGrupo').data('kendoComboBox').dataSource.read();
             });
         });
 

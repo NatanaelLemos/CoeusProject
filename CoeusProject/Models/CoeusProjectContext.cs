@@ -9,9 +9,15 @@ namespace CoeusProject.Models
 {
     public class CoeusProjectContext : DbContext
     {
-        public CoeusProjectContext() : base("name=CoeusProjectContext")
+#if DEBUG
+        public CoeusProjectContext() : base("CoeusProjectContext")
         {
         }
+#else
+        public CoeusProjectContext() : base("CoeusPublish")
+        {
+        }
+#endif
 
         public DbSet<Artigo> Artigos { get; set; }
         public DbSet<Avaliacao> Avaliacoes { get; set; }

@@ -1194,7 +1194,9 @@
     <Content Include="Images\saveAs.png" />
     <Content Include="Images\searchFind.png" />
     <Content Include="Images\sendMessage.png" />
-    <Content Include="Kendo.Mvc.dll" />
+    <Content Include="Kendo.Mvc.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <EntityDeploy Include="CoeusProjectContext.edmx">
@@ -1262,6 +1264,7 @@
     <Content Include="Content\LiberationMono-Bold.ttf" />
     <Content Include="Content\LiberationMono-Regular.ttf" />
     <Content Include="Content\kendo.coeus.css" />
+    <None Include="Properties\PublishProfiles\Chimera Publish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -1746,7 +1749,9 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -1770,6 +1775,7 @@
     <Content Include="Views\Account\_EditPartial.cshtml" />
     <Content Include="Views\Grupo\_GrupoEditPartial.cshtml" />
     <Content Include="Views\Grupo\_SearchUsersPartial.cshtml" />
+    <Content Include="Scripts\kendo\jquery.min.map" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

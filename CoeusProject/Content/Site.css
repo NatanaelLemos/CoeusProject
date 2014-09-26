@@ -15,7 +15,7 @@ html {
     height: 100%;
     font-family: "KoiosFont";
     font-size: 14px;
-    letter-spacing: 2px;   
+    letter-spacing: 2px;
     background: -moz-linear-gradient( #dadada, #eeefef);
     background: -webkit-linear-gradient( #dadada, #eeefef);
     background: -ms-linear-gradient( #dadada, #eeefef);
@@ -165,6 +165,18 @@ div.divRightSide {
     background-color: transparent;
     border: 0 none;
 }
+
+.k-notification, .k-notification-wrap {
+    border: 1px solid gray;
+    border-radius: 3px;
+    background-color: #9fbfff;
+    font-size: 9pt;
+    max-width: 400px;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+
+}
 /*endregion*/
 
 .divInline {
@@ -230,14 +242,14 @@ div.divRightSide {
 
 /*#region Register*/
 .inputInline {
-    display:inline-block;
-    vertical-align:middle;
-    margin-left:20px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 20px;
     width: 300px;
 }
 
 .labelInline {
-    display:inline-block;
+    display: inline-block;
     float: left;
     text-align: right;
     width: 150px;
