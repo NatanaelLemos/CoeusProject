@@ -33,5 +33,20 @@ namespace CoeusProject
             }
             return mensagensRet;
         }
+
+        public static List<Usuario> Decrypt(this IQueryable<Usuario> usuarios)
+        {
+            List<Usuario> usuariosRet = new List<Usuario>();
+            foreach (Usuario usuario in usuarios)
+            {
+                usuariosRet.Add(usuario.Decrypt());
+            }
+            return usuariosRet;
+        }
+
+        public static List<Usuario> Decrypt(this ICollection<Usuario> usuarios)
+        {
+            return usuarios.AsQueryable<Usuario>().Decrypt();
+        }
     }
 }

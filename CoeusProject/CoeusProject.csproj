@@ -1190,6 +1190,7 @@
     <Content Include="Images\close.png" />
     <Content Include="Images\configure.png" />
     <Content Include="Images\groupAdd.png" />
+    <Content Include="Images\groupEdit.png" />
     <Content Include="Images\power.png" />
     <Content Include="Images\saveAs.png" />
     <Content Include="Images\searchFind.png" />

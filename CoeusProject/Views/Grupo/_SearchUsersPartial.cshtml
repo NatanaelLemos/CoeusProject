@@ -1,4 +1,5 @@
-﻿@using Kendo.Mvc.UI
+﻿@model int
+@using Kendo.Mvc.UI
 @{
     Layout = null;
 }
@@ -68,6 +69,21 @@
 
 <script>
     var lstSelectedUsers = [];
+
+    $(document).ready(function () {
+        var idGrupo = '@Model';
+        if (idGrupo && parseInt(idGrupo)) {
+            $.ajax({
+                url: '@Url.Action("GetGrupoUsuariosList","Grupo")',
+                type: 'POST',
+                data: { IdGrupo: idGrupo },
+                success: function (data) {
+                    lstSelectedUsers = data;
+                    BindLstUsers();
+                }
+            });
+        }
+    });
 
     function lstFindUsers_Change(e) {
         var a = e;

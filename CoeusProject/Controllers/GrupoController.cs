@@ -25,6 +25,17 @@ namespace CoeusProject.Controllers
             return View("_GrupoEditPartial", grupo);
         }
 
+        public ActionResult GetGrupoUsuariosList(Int32 IdGrupo)
+        {
+            return Json(_context.Grupos.Where(g=>g.IdGrupo == IdGrupo).Include(g=>g.Usuarios)
+                .FirstOrDefault().Usuarios.Decrypt().Select(u=>new
+                {
+                    IdUsuario = u.IdUsuario,
+                    NmPessoa = u.NmPessoa,
+                    NmFoto = u.NmFoto
+                }));
+        }
+
         [HttpPost]
         public ActionResult Create(String nmGrupo, List<Usuario> usuarios)
         {
@@ -33,6 +44,11 @@ namespace CoeusProject.Controllers
                 if (String.IsNullOrEmpty(nmGrupo))
                 {
                     throw new Exception("O nome do grupo é obrigatório");
+                }
+
+                if (usuarios == null || usuarios.Count() == 0)
+                {
+                    throw new Exception("É necessário selecionar algum usuário para o grupo");
                 }
 
                 Grupo grupo = new Grupo
@@ -58,6 +74,64 @@ namespace CoeusProject.Controllers
                 _context.Grupos.Add(grupo);
                 _context.SaveChanges();
 
+                return new HttpStatusCodeResult(HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.NotAcceptable, ErrorFacade.GetErrorMessage(ex));
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Edit(Int32 idGrupo, String nmGrupo, List<Usuario> usuarios)
+        {
+            try
+            {
+                Grupo grupo = _context.Grupos.Where(g => g.IdGrupo == idGrupo).Include(g=>g.Usuarios).FirstOrDefault();
+                if (grupo == null)
+                {
+                    throw new Exception("Grupo inexistente");
+                }
+
+                List<Usuario> usuariosGrupo = grupo.Usuarios.ToList();
+
+                if (String.IsNullOrEmpty(nmGrupo))
+                {
+                    throw new Exception("Nome inválido para o grupo");
+                }
+
+                if (usuarios == null || usuarios.Count() == 0)
+                {
+                    throw new Exception("É necessário selecionar algum usuário para o grupo");
+                }
+
+                grupo.NmGrupo = nmGrupo;
+
+                for (int i = usuariosGrupo.Count() - 1; i >= 0; i--)
+                {
+                    if (usuarios.Where(u => u.IdUsuario == usuariosGrupo[i].IdUsuario).Count() == 0)
+                    {
+                        grupo.Usuarios.Remove(usuariosGrupo[i]);
+                    }
+                }
+
+                for (int i = usuarios.Count() - 1; i >= 0; i--)
+                {
+                    if (usuariosGrupo.Where(ug => ug.IdUsuario == usuarios[i].IdUsuario).Count() == 0)
+                    {
+                        Int32 idUsuarioAdded = usuarios[i].IdUsuario;
+                        grupo.Usuarios.Add(_context.Usuarios.Where(u=>u.IdUsuario == idUsuarioAdded).FirstOrDefault());
+                    }
+                }
+
+                Usuario usuarioLogado = AccountFacade.GetLoggedInUser();
+                if (grupo.Usuarios.Where(u => u.IdUsuario == usuarioLogado.IdUsuario).Count() == 0)
+                {
+                    grupo.Usuarios.Add(_context.Usuarios.Where(u => u.IdUsuario == usuarioLogado.IdUsuario).FirstOrDefault());
+                }
+
+                _context.Entry(grupo).State = EntityState.Modified;
+                _context.SaveChanges();
                 return new HttpStatusCodeResult(HttpStatusCode.OK);
             }
             catch (Exception ex)
