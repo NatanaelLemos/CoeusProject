@@ -7,124 +7,55 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using CoeusProject.Models;
+using Kendo.Mvc.UI;
+using Kendo.Mvc.Extensions;
 
 namespace CoeusProject.Controllers
 {
     public class ArtigoController : Controller
     {
-        private CoeusProjectContext db = new CoeusProjectContext();
+        CoeusProjectContext _context = new CoeusProjectContext();
 
-        // GET: Artigo
-        public ActionResult Index()
+        public ActionResult GetMainArtigos(Int32 idUsuario)
         {
-            var artigos = db.Artigos.Include(a => a.Objeto);
-            return View(artigos.ToList());
+            return View("MainArtigos", idUsuario);
         }
 
-        // GET: Artigo/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult GetLeftDivArtigos(Int32 idUsuario)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Artigo artigo = db.Artigos.Find(id);
-            if (artigo == null)
-            {
-                return HttpNotFound();
-            }
-            return View(artigo);
+            Usuario usuarioDono = _context.Usuarios.Where(u => u.IdUsuario == idUsuario).FirstOrDefault().Decrypt();
+            return View("_ArtigosLeftPartial", usuarioDono);
         }
 
-        // GET: Artigo/Create
-        public ActionResult Create()
+        public ActionResult AjaxReadArtigos(DataSourceRequest request, Int32 idUsuario)
         {
-            ViewBag.IdObjeto = new SelectList(db.Objetos, "IdObjeto", "NmObjeto");
+            IQueryable<Artigo> artigos = _context.Artigos.Include(a=>a.Objeto).Where(o=>o.Objeto.IdUsuario == idUsuario);
+            DataSourceResult result = artigos.ToDataSourceResult(request);
+
+            return Json(new DataSourceResult() 
+            { 
+                Data = result.Data,
+                Total = result.Data.AsQueryable().Count()
+            });
+        }
+
+        public ActionResult CreatePartial()
+        {
+            Artigo artigo = new Artigo() { Objeto = new Objeto()};
+            return View("_ArtigoEditPartial", artigo);
+        }
+
+        [HttpPost]
+        public ActionResult Create(String txArtigo)
+        {
             return View();
-        }
-
-        // POST: Artigo/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "IdArtigo,TxArtigo,IdObjeto")] Artigo artigo)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Artigos.Add(artigo);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            ViewBag.IdObjeto = new SelectList(db.Objetos, "IdObjeto", "NmObjeto", artigo.IdObjeto);
-            return View(artigo);
-        }
-
-        // GET: Artigo/Edit/5
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Artigo artigo = db.Artigos.Find(id);
-            if (artigo == null)
-            {
-                return HttpNotFound();
-            }
-            ViewBag.IdObjeto = new SelectList(db.Objetos, "IdObjeto", "NmObjeto", artigo.IdObjeto);
-            return View(artigo);
-        }
-
-        // POST: Artigo/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "IdArtigo,TxArtigo,IdObjeto")] Artigo artigo)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(artigo).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            ViewBag.IdObjeto = new SelectList(db.Objetos, "IdObjeto", "NmObjeto", artigo.IdObjeto);
-            return View(artigo);
-        }
-
-        // GET: Artigo/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Artigo artigo = db.Artigos.Find(id);
-            if (artigo == null)
-            {
-                return HttpNotFound();
-            }
-            return View(artigo);
-        }
-
-        // POST: Artigo/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            Artigo artigo = db.Artigos.Find(id);
-            db.Artigos.Remove(artigo);
-            db.SaveChanges();
-            return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                db.Dispose();
+                _context.Dispose();
             }
             base.Dispose(disposing);
         }

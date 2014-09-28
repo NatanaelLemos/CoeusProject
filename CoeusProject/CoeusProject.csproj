@@ -1763,20 +1763,24 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Home\_LeftPartial.cshtml" />
-    <Content Include="Views\Home\_RightPartial.cshtml" />
+    <Content Include="Views\Shared\_LeftPartial.cshtml" />
+    <Content Include="Views\Shared\_RightPartial.cshtml" />
     <Content Include="Views\Account\Edit.cshtml" />
     <Content Include="Views\Account\_EditPartial.cshtml" />
     <Content Include="Views\Grupo\_GrupoEditPartial.cshtml" />
     <Content Include="Views\Grupo\_SearchUsersPartial.cshtml" />
     <Content Include="Scripts\kendo\jquery.min.map" />
+    <Content Include="Views\Home\_LeftContentPartial.cshtml" />
+    <Content Include="Views\Home\Artigo.cshtml" />
+    <Content Include="Views\Artigo\MainArtigos.cshtml" />
+    <Content Include="Views\Artigo\_ArtigosLeftPartial.cshtml" />
+    <Content Include="Views\Artigo\_ArtigoEditPartial.cshtml" />
+    <Content Include="Views\Home\_ContentPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

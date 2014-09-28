@@ -37,7 +37,6 @@ namespace CoeusProject.Controllers
                 AccountFacade.Login(user, flContinuarConectado);
                 return Content(Url.Action("Index", "Home"));
             }
-
             return new HttpStatusCodeResult(HttpStatusCode.NotAcceptable, ErrorFacade.GetErrorMessage(ModelState));
         }
 
@@ -121,6 +120,15 @@ namespace CoeusProject.Controllers
                 }
             }
             return new HttpStatusCodeResult(HttpStatusCode.NotAcceptable, ErrorFacade.GetErrorMessage(ModelState));
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _context.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }

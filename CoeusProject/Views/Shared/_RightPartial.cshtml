@@ -2,68 +2,18 @@
 @using Kendo.Mvc.UI
 @{Layout = null;}
 
-<div id="divRightSide" class="divRightSide">
-    @(Html.Kendo().ComboBox().Name("cmbNmGrupo")
-        .DataTextField("NmGrupo")
-        .DataValueField("IdGrupo")
-        .Suggest(true)
-        .MinLength(0)
-        .Height(400)
-        .DataSource(ds => ds.Read(read => read.Action("GetGrupoWhereNmGrupoStartsWith", "Grupo")
-            .Data("cmbNmGrupo_AdditionalData")).ServerFiltering(true))
-        .Filter(FilterType.StartsWith)
-        .AutoBind(true)
-        .Events(e => e.Select("cmbNmGrupo_Select").Change("cmbNmGrupo_Change"))
-        .HtmlAttributes(new { @placeholder = "Buscar por grupo", @style = "width: 100%" })
-    )
-
-    <div style="height: 100%">
-        <div id="chat" class="divChat"></div>
-
-        <div class="divSubmitChat">
-            @Html.TextArea("txtMessage", new { @style = "width: 95%; resize: none; height: 55px" })
-
-            @(Html.Kendo().Button().Name("btnSendMessage")
-                .Content("<img src='/Images/sendMessage.png' alt='Send Message'/>")
-                .HtmlAttributes(new { @style = "float: right;", @type = "button" })
-                .Events(e => e.Click("btnSendMessage_Click")))
-
-            @(Html.Kendo().Button().Name("btnGroupAdd")
-                .Content("<img src='/Images/groupAdd.png' alt='Add New Group'/>")
-                .HtmlAttributes(new { @style = "float: right;", @type = "button" })
-                .Events(e => e.Click("btnGroupAdd_Click")))
-
-            @(Html.Kendo().Button().Name("btnGroupEdit")
-                .Content("<img src='/Images/groupEdit.png' alt='Edit Group'/>")
-                .HtmlAttributes(new { @style = "float: right; visibility: hidden", @type = "button" })
-                .Events(e => e.Click("btnGroupEdit_Click")))
-        </div>
-    </div>
-</div>
-
-@(Html.Kendo().Window().Name("wndGroup")
-    .Modal(true)
-    .Title("Grupo")
-    .Draggable(true)
-    .Content(@<text><div id="wndGroupContent"></div></text>)
-    .Events(e=>e.Close("wndGroup_Close($(this))"))
-    .Visible(false)
-    .Height(330)
-    .Width(600)
-)
-
-<span id="spnPopupNotification"></span>
-
 <script type="text/javascript">
     var chat;
+    var popupNotification;
     var chatTmpl = $('<span></span>');
     var usrTmpl = $('<h3 style="font-size: 7pt; letter-spacing: 1px; text-align: left; font-weight: bold"></h3>');
-    var popupNotification = $("#spnPopupNotification").kendoNotification({
-        allowHideAfter: 5000,
-        hideOnClick: true
-    }).data("kendoNotification");
-
+    
     $(document).ready(function () {
+        $('#btnGroupEdit').kendoTooltip({
+            position: 'top',
+            content: 'Editar grupo'
+        });
+
         $('#btnGroupAdd').kendoTooltip({
             position: 'top',
             content: 'Criar grupo'
@@ -75,6 +25,11 @@
         });
 
         chat = $.connection.chat;
+
+        popupNotification = $("#spnPopupNotification").kendoNotification({
+            allowHideAfter: 5000,
+            hideOnClick: true
+        }).data("kendoNotification");
 
         chat.client.notify = function (data) {
             var idGrupo = $('#cmbNmGrupo').data('kendoComboBox').value();
@@ -106,24 +61,20 @@
     }
 
     function cmbNmGrupo_AdditionalData(e) {
+        var cmbNmGrupo = $('#cmbNmGrupo').data('kendoComboBox');
         return {
-            nmGrupo: $('#cmbNmGrupo').data('kendoComboBox').text()
+            nmGrupo: (cmbNmGrupo && cmbNmGrupo.text()) ? cmbNmGrupo.text() : ''
         };
     }
 
     function cmbNmGrupo_Select(e) {
-        var dataItem = this.dataItem(e.item.index());
-
-        RefreshChat(dataItem.IdGrupo);
-    }
-
-    function cmbNmGrupo_Change(e) {
-        if (!$('#cmbNmGrupo').data('kendoComboBox').value() || !parseInt($('#cmbNmGrupo').data('kendoComboBox').value())) {
-            $('#btnGroupEdit').css('visibility', 'hidden');
+        if (!e || !e.item || !e.item.index()) {
             $('#chat').html('');
-        } else {
-            $('#btnGroupEdit').css('visibility', 'visible');
+            return;
         }
+
+        var dataItem = this.dataItem(e.item.index());
+        RefreshChat(dataItem.IdGrupo);
     }
 
     function btnSendMessage_Click(e) {
@@ -154,6 +105,7 @@
     function btnGroupEdit_Click(e) {
         var idGrupo = $('#cmbNmGrupo').data('kendoComboBox').value();
         if (!idGrupo || !parseInt(idGrupo)) {
+            kendoAlert('Selecione um Grupo para Editar');
             return;
         }
 
@@ -188,3 +140,54 @@
         });
     }
 </script>
+
+<div id="divRightSide" class="divRightSide">
+    @(Html.Kendo().ComboBox().Name("cmbNmGrupo")
+        .DataTextField("NmGrupo")
+        .DataValueField("IdGrupo")
+        .Suggest(true)
+        .MinLength(0)
+        .Height(400)
+        .DataSource(ds => ds.Read(read => read.Action("GetGrupoWhereNmGrupoStartsWith", "Grupo")
+            .Data("cmbNmGrupo_AdditionalData")).ServerFiltering(true))
+        .Filter(FilterType.StartsWith)
+        .AutoBind(true)
+        .Events(e => e.Select("cmbNmGrupo_Select"))
+        .HtmlAttributes(new { @placeholder = "Buscar por grupo", @style = "width: 100%" })
+    )
+
+    <div style="height: 100%">
+        <div id="chat" class="divChat"></div>
+
+        <div class="divSubmitChat">
+            @Html.TextArea("txtMessage", new { @style = "width: 95%; resize: none; height: 55px" })
+
+            @(Html.Kendo().Button().Name("btnSendMessage")
+                .Content("<img src='/Images/sendMessage.png' alt='Send Message'/>")
+                .HtmlAttributes(new { @style = "float: right;", @type = "button" })
+                .Events(e => e.Click("btnSendMessage_Click")))
+
+            @(Html.Kendo().Button().Name("btnGroupAdd")
+                .Content("<img src='/Images/groupAdd.png' alt='Add New Group'/>")
+                .HtmlAttributes(new { @style = "float: right;", @type = "button" })
+                .Events(e => e.Click("btnGroupAdd_Click")))
+
+            @(Html.Kendo().Button().Name("btnGroupEdit")
+                .Content("<img src='/Images/groupEdit.png' alt='Edit Group'/>")
+                .HtmlAttributes(new { @style = "float: right;", @type = "button" })
+                .Events(e => e.Click("btnGroupEdit_Click")))
+        </div>
+    </div>
+    @(Html.Kendo().Window().Name("wndGroup")
+        .Modal(true)
+        .Title("Grupo")
+        .Draggable(true)
+        .Content(@<text><div id="wndGroupContent"></div></text>)
+                .Events(e => e.Close("wndGroup_Close($(this))"))
+                .Visible(false)
+                .Height(330)
+                .Width(600)
+    )
+
+    <span id="spnPopupNotification"></span>
+</div>

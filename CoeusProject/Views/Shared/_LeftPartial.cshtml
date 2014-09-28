@@ -1,0 +1,64 @@
+﻿@model CoeusProject.Models.Usuario
+@using Kendo.Mvc.UI
+@{Layout = null;}
+
+<script>
+    $(document).ready(function () {
+        $('#btnConfigure').kendoTooltip({
+            position: 'top',
+            content: 'Configurar Conta'
+        });
+
+        $('#lnkHome').click(function (e) {
+            e.preventDefault();
+
+            $('#divContent').load('@Url.Action("FeedContent", "Home")');
+            $('#divLeftContent').load('@Url.Action("LeftContent", "Home")');
+        });
+    });
+
+    function btnConfigure_Click(e) {
+        $('#wndEditUserContent').load('@Url.Action("EditPartial", "Account")',
+                {}, function () {
+                    $('#wndEditUser').data('kendoWindow').center().open();
+                });
+    }
+
+    function wndEditUser_Close(e) {
+        $('#wndEditUserContent').html('');
+    }
+
+    function lnkHome_Click() {
+        alert('ahoy');
+    }
+</script>
+
+<div class="divLeftSide">
+    <header>
+        @(Html.ActionLink("Coeus Project", "*", "*", new { @id="lnkHome"}))
+    </header>
+    <div id="divLeftContent">
+        @Html.Action("LeftContent", "Home")
+    </div>
+    <div id="divUser" class="divUser">
+        @(Html.Kendo().Button().Name("btnConfigure")
+            .Content("<img src='/Images/configure.png' alt='Exit'/>")
+            .HtmlAttributes(new { @style = "float: left", @type="button" })
+            .Events(e=>e.Click("btnConfigure_Click"))
+        )
+        <div id="divNmUsuario" style="display: inline-block">
+            @Model.NmPessoa
+        </div>
+    </div>
+</div>
+
+@(Html.Kendo().Window().Name("wndEditUser")
+    .Modal(true)
+    .Title(Model.NmPessoa)
+    .Draggable(true)
+    .Content(@<text><div id="wndEditUserContent"></div></text>)
+    .Events(e=>e.Close("wndEditUser_Close($(this))"))
+    .Visible(false)
+    .Height(300)
+    .Width(500)
+)

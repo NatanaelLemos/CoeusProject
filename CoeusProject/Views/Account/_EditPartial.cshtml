@@ -1,10 +1,68 @@
 ﻿@using Kendo.Mvc.UI
 @model CoeusProject.Models.Usuario
-@{
-    Layout = null;
-}
+@{Layout = null;}
 
-@using (Html.BeginForm("Edit", "Account", FormMethod.Post, new { @id = "frmEdit", @style="overflow: hidden" }))
+<script type="text/javascript">
+    var redirect = false;
+
+    $(document).ready(function () {
+        $('#btnEdit').kendoTooltip({
+            position: 'top',
+            content: 'Salvar'
+        });
+
+        $('#btnCancel').kendoTooltip({
+            position: 'top',
+            content: 'Cancelar'
+        });
+
+        $('#btnExit').kendoTooltip({
+            position: 'top',
+            content: 'Sair'
+        });
+    });
+
+    function btnEditUser_Click(e) {
+        var pwUsuario = $('#PwUsuario').val();
+        var confirmPwUsuario = $('#ConfirmPwUsuario').val();
+
+        if (pwUsuario != confirmPwUsuario) {
+            kendoAlert('Senhas não conferem');
+            return;
+        }
+
+        $('#divActions').attr('disabled', 'disabled');
+
+        function callBack(data) {
+            if (redirect) {
+                window.location = retUrl;
+            } else {
+                $('#divNmUsuario').html($('#NmPessoa').val());
+                $('#wndEditUser').data('kendoWindow').close();
+            }
+        }
+
+        $.ajaxPost('@Url.Action("Edit", "Account")', {
+            usuario: $('#frmEdit').serializeObject()
+        }, $('#frmEdit'), callBack);
+
+        $('#divActions').removeAttr('disabled');
+    };
+
+    function btnCancelEditUser_Click(e) {
+        if (redirect) {
+            window.location = '@Url.Action("Index","Home")';
+        } else {
+            $('#wndEditUser').data('kendoWindow').close();
+        }
+    };
+
+    function btnExit_Click(e) {
+        $.ajaxPost('@Url.Action("Logoff", "Account")', {});
+    };
+</script>
+
+@using (Html.BeginForm("Edit", "Account", FormMethod.Post, new { @id = "frmEdit", @style = "overflow: hidden" }))
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary()
@@ -39,89 +97,25 @@
 
         <div id="divActions" class="k-header" style="position: absolute; left: 0; right:0; bottom:0;">
             @(Html.Kendo().Button()
-                .Name("btnEdit")
+                .Name("btnEditUser")
                 .Content("<img src='/Images/saveAs.png' alt='Save'/>")
-                .HtmlAttributes(new { @style = "float: left" })
+                .HtmlAttributes(new { @style = "float: left", @type = "button" })
+                .Events(e => e.Click("btnEditUser_Click"))
             )
 
             @(Html.Kendo().Button()
-                .Name("btnCancel")
+                .Name("btnCancelEditUser")
                 .Content("<img src='/Images/close.png' alt='Cancel'/>")
-                .HtmlAttributes(new { @style = "float: left" })
+                .HtmlAttributes(new { @style = "float: left", @type = "button" })
+                .Events(e => e.Click("btnCancelEditUser_Click"))
             )
 
             @(Html.Kendo().Button()
                 .Name("btnExit")
                 .Content("<img src='/Images/power.png' alt='Exit'/>")
-                .HtmlAttributes(new { @style = "float: right" })
+                .HtmlAttributes(new { @style = "float: right", @type = "button" })
+                .Events(e => e.Click("btnExit_Click"))
             )
         </div>
     </div>
 }
-
-<script type="text/javascript">
-    var redirect = false;
-
-    $(document).ready(function () {
-        $('#btnEdit').kendoTooltip({
-            position: 'top',
-            content: 'Salvar'
-        });
-
-        $('#btnCancel').kendoTooltip({
-            position: 'top',
-            content: 'Cancelar'
-        });
-
-        $('#btnExit').kendoTooltip({
-            position: 'top',
-            content: 'Sair'
-        });
-
-        $('#btnEdit').click(function (e) {
-            e.preventDefault();
-
-            var pwUsuario = $('#PwUsuario').val();
-            var confirmPwUsuario = $('#ConfirmPwUsuario').val();
-
-            if (pwUsuario != confirmPwUsuario) {
-                kendoAlert('Senhas não conferem');
-                return;
-            }
-
-            $('#divActions').attr('disabled', 'disabled');
-
-            function callBack(data) {
-                if (redirect) {
-                    window.location = retUrl;
-                } else {
-                    $('#divNmUsuario').html($('#NmPessoa').val());
-                    $('#wndEditUser').data('kendoWindow').close();
-                }
-            }
-
-            $.ajaxPost('@Url.Action("Edit", "Account")', {
-                usuario: $('#frmEdit').serializeObject()
-            }, $('#frmEdit'), callBack);
-
-            $('#divActions').removeAttr('disabled');
-        });
-
-        $('#btnCancel').click(function (e) {
-            e.preventDefault();
-
-            if (redirect) {
-                window.location = '@Url.Action("Index","Home")';
-            } else {
-                $('#wndEditUser').data('kendoWindow').close();
-            }
-        });
-
-        $('#btnExit').click(function (e) {
-            e.preventDefault();
-            $.ajaxPost('@Url.Action("Logoff", "Account")', {});
-        });
-    });
-
-
-</script>

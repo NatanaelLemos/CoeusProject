@@ -1,8 +1,41 @@
 ﻿@using Kendo.Mvc.UI
 @model CoeusProject.Models.Grupo
-@{
-    Layout = null;
-}
+@{Layout = null;}
+
+<script>
+    function btnCreateGrupo_Click(e) {
+        var idGrupo = '@((Model == null || Model.IdGrupo == 0) ? 0 : Model.IdGrupo)';
+
+        if (idGrupo && parseInt(idGrupo)) {
+            $.ajaxPost('@Url.Action("Edit","Grupo")', {
+                idGrupo: idGrupo,
+                nmGrupo: $('#NmGrupo').val(),
+                usuarios: lstSelectedUsers
+            },
+            null,
+            function () {
+                kendoAlert('Grupo Editado');
+                $('#wndGroup').data('kendoWindow').close();
+                $('#cmbNmGrupo').data('kendoComboBox').dataSource.read();
+            });
+        } else {
+            $.ajaxPost('@Url.Action("Create","Grupo")', {
+                nmGrupo: $('#NmGrupo').val(),
+                usuarios: lstSelectedUsers
+            },
+            null,
+            function () {
+                kendoAlert('Grupo criado');
+                $('#wndGroup').data('kendoWindow').close();
+                $('#cmbNmGrupo').data('kendoComboBox').dataSource.read();
+            });
+        }
+    }
+
+    function btnCancelGrupo_Click(e) {
+        $('#wndGroup').data('kendoWindow').close();
+    }
+</script>
 
 @using (Html.BeginForm("Create", "Grupo", FormMethod.Post, new { @id = "frmGrupo", @style = "overflow: hidden" }))
 {
@@ -26,56 +59,18 @@
 
         <div id="divActions" class="k-header" style="position: absolute; left: 0; right:0; bottom:0;">
             @(Html.Kendo().Button()
-                .Name("btnCreate")
+                .Name("btnCreateGrupo")
                 .Content("<img src='/Images/saveAs.png' alt='Create'/>")
-                .HtmlAttributes(new { @style = "float: left" })
+                .HtmlAttributes(new { @style = "float: left", @type = "button" })
+                .Events(e => e.Click("btnCreateGrupo_Click"))
             )
 
             @(Html.Kendo().Button()
-                .Name("btnCancel")
+                .Name("btnCancelGrupo")
                 .Content("<img src='/Images/close.png' alt='Cancel'/>")
-                .HtmlAttributes(new { @style = "float: left" })
+                .HtmlAttributes(new { @style = "float: left", @type = "button" })
+                .Events(e => e.Click("btnCancelGrupo_Click"))
             )
         </div>
     </div>
 }
-
-<script>
-    $(document).ready(function () {
-        $('#btnCreate').click(function (e) {
-            e.preventDefault();
-
-            var idGrupo = '@((Model == null || Model.IdGrupo == 0) ? 0 : Model.IdGrupo)';
-
-            if (idGrupo && parseInt(idGrupo)) {
-                $.ajaxPost('@Url.Action("Edit","Grupo")', {
-                    idGrupo: idGrupo,
-                    nmGrupo: $('#NmGrupo').val(),
-                    usuarios: lstSelectedUsers
-                },
-                null,
-                function () {
-                    kendoAlert('Grupo Editado');
-                    $('#wndGroup').data('kendoWindow').close();
-                    $('#cmbNmGrupo').data('kendoComboBox').dataSource.read();
-                });
-            } else {
-                $.ajaxPost('@Url.Action("Create","Grupo")', {
-                    nmGrupo: $('#NmGrupo').val(),
-                    usuarios: lstSelectedUsers
-                },
-                null,
-                function () {
-                    kendoAlert('Grupo criado');
-                    $('#wndGroup').data('kendoWindow').close();
-                    $('#cmbNmGrupo').data('kendoComboBox').dataSource.read();
-                });
-            }
-        });
-
-        $('#btnCancel').click(function (e) {
-            e.preventDefault();
-            $('#wndGroup').data('kendoWindow').close();
-        })
-    })
-</script>

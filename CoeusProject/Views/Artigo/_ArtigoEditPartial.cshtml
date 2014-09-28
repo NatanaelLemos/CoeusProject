@@ -1,0 +1,69 @@
+﻿@model CoeusProject.Models.Artigo
+@using Kendo.Mvc.UI
+@{Layout = null;}
+
+<script>
+    function btnVoltarMainArtigos_Click(e) {
+        $('#divContent').load('@Url.Action("GetMainArtigos", "Artigo")', { idUsuario: idDonoArtigo });
+    }
+
+    function btnEditArtigo_Click(e) {
+        $.ajaxPost('@Url.Action("Create","Artigo")', {
+            txArtigo: $('#artigoEditor').data('kendoEditor').value()
+        });
+    }
+
+    $(document).ready(function () {
+        $('#btnCancelarEditArtigo').kendoTooltip({
+            position: 'bottom',
+            content: 'Cancelar'
+        });
+
+        $('#btnEditArtigo').kendoTooltip({
+            position: 'bottom',
+            content: 'Salvar'
+        });
+    });
+</script>
+
+@(Html.Kendo().Button().Name("btnCancelarEditArtigo")
+    .Content("<img src='/Images/undo.png' alt='Cancelar'/>")
+    .HtmlAttributes(new { @type="button", @style="float: left"})
+    .Events(e=>e.Click("btnVoltarMainArtigos_Click")))
+
+@(Html.Kendo().Button().Name("btnEditArtigo")
+    .Content("<img src='/Images/saveAs.png' alt='Cancelar'/>")
+    .HtmlAttributes(new { @type = "button", @style = "float: left" })
+        .Events(e => e.Click("btnEditArtigo_Click")))
+
+@{
+    if(Model == null || Model.IdArtigo == 0)
+    {
+        @:<h3>Novo Artigo</h3>
+    }
+    else
+    {
+        @:<h3>@Model.Objeto.NmObjeto</h3>
+    }
+}
+
+@(Html.Kendo().Editor().Name("artigoEditor")
+    .Tools(tool=>tool.Clear()
+            .Bold()
+            .Italic()
+            .Underline()
+            .Strikethrough()
+            .JustifyLeft()
+            .JustifyCenter()
+            .JustifyRight()
+            .JustifyFull()
+            .InsertUnorderedList()
+            .InsertOrderedList()
+            .Indent()
+            .Outdent()
+            .Separator()
+            .InsertImage()
+            .CreateLink()
+            .TableEditing()
+    )
+)

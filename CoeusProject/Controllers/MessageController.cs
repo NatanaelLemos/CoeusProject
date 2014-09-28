@@ -67,5 +67,14 @@ namespace CoeusProject.Controllers
                 DtMensagem = m.DtMensagem.ToString("dd/MM/yyyy HH:mm")
             }), JsonRequestBehavior.AllowGet);
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _context.Dispose();
+            }
+            base.Dispose(disposing);
+        }
     }
 }

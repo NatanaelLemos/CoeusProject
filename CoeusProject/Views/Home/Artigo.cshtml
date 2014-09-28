@@ -1,0 +1,16 @@
+﻿@model CoeusProject.Models.Usuario
+@using Kendo.Mvc.UI
+@{ViewBag.Title = "Artigos de " + Model.NmPessoa;}
+
+@Html.Partial("_LeftPartial", Model)
+
+<div style="position: absolute; top: 0; bottom: 0; left: 205px; right: 225px" id="divArtigoContent">
+    @Html.Action("GetMainArtigos", "Artigo", new { idUsuario = Model.IdUsuario})
+</div>
+@Html.Partial("_RightPartial", Model)
+
+<script>
+    $(document).ready(function () {
+        $('#divLeftContent').load('@Url.Action("GetLeftDivArtigos","Artigo")', { idUsuario: '@Model.IdUsuario' });
+    });
+</script>

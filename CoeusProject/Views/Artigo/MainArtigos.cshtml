@@ -1,0 +1,18 @@
+﻿@model int
+@using Kendo.Mvc.UI
+@{Layout = null;}
+
+<script>
+    function gridArtigos_Data() {
+        return { idUsuario: '@Model' };
+    }
+</script>
+
+@(Html.Kendo().Grid<CoeusProject.Models.Artigo>()
+    .Name("gridArtigos")
+    .DataSource(dt => dt.Ajax().Read(r => r.Action("AjaxReadArtigos", "Artigo").Data("gridArtigos_Data")))
+    .Columns(c => 
+    {
+        c.Bound(m => m.Objeto.NmObjeto).Title("Artigos de " + (new CoeusProject.Models.CoeusProjectContext().Usuarios.Where(u=>u.IdUsuario == Model).FirstOrDefault().Decrypt().NmPessoa));
+    })
+)

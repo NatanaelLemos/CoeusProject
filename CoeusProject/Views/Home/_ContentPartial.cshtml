@@ -1,0 +1,16 @@
+﻿@using Kendo.Mvc.UI
+@{Layout = null;}
+
+@(Html.Kendo().TabStrip().Name("tbsIndex")
+    .Items(i =>
+    {
+        i.Add().Text("Feed").Selected(true)
+            .Content(@<text>
+                <div class="divContent">
+                    Feeds
+                </div>
+            </text>);
+    i.Add().Text("Artigos").Content("artigos");
+    i.Add().Text("Videos").Content("videos");
+})
+.HtmlAttributes(new { @style = "height: 100%; background-color: transparent; border: 0 none; background: none" }))

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CoeusProject.Facade;
+using CoeusProject.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -14,18 +16,23 @@ namespace CoeusProject.Controllers
             return View();
         }
 
-        public ActionResult About()
+        public ActionResult LeftContent()
         {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
+            return View("_LeftContentPartial");
         }
 
-        public ActionResult Contact()
+        public ActionResult FeedContent()
         {
-            ViewBag.Message = "Your contact page.";
+            return View("_ContentPartial");
+        }
 
-            return View();
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+        //        _context.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }
