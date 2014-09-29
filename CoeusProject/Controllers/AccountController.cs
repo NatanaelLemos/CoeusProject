@@ -26,10 +26,10 @@ namespace CoeusProject.Controllers
         {
             if (ModelState.IsValid)
             {
-                usuario.Encrypt();
-                Usuario user = _context.Usuarios.Where(u => u.TxEmail == usuario.TxEmail && u.PwUsuario == usuario.PwUsuario).FirstOrDefault();
+                List<Usuario> usuarios = _context.Usuarios.Include(u => u.Salt).Decrypt();
+                Usuario user = usuarios.Where(u => u.TxEmail == usuario.TxEmail).FirstOrDefault();
 
-                if (user == null)
+                if (user == null || user.PwUsuario != SecurityFacade.Encrypt(usuario.PwUsuario, user.Salt.BtSalt))
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.NotAcceptable, "E-mail ou senha inválidos");
                 }
@@ -58,24 +58,28 @@ namespace CoeusProject.Controllers
 
             usuario = new Usuario();
             usuario.NmFoto = Sequence.GetSequence("foto").ToString();
+
+            System.IO.File.Copy(Server.MapPath("~/Images/userNoPhoto.png"), Server.MapPath("~/User_Data/") + usuario.NmFoto + ".png");
+
             return View(usuario);
         }
 
         [HttpPost]
         public ActionResult Register(Usuario usuario)
         {
-            usuario.NmFoto = (new FileController()).FormatImage(usuario.NmFoto);
-            Usuario encUsuario = usuario.Encrypt();
-            if (_context.Usuarios.Where(u => u.TxEmail == encUsuario.TxEmail).FirstOrDefault() != null)
+            if ((new CoeusProjectContext()).Usuarios.Decrypt().Where(u => u.TxEmail == usuario.TxEmail).Count() > 0)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.NotAcceptable, "O email informado já pertence à outro usuário");
+                return new HttpStatusCodeResult(HttpStatusCode.NotAcceptable, "O e-mail informado já pertence à outro usuário");
             }
+
+            usuario.NmFoto = (new FileController()).FormatImage(usuario.NmFoto);
+            usuario.Salt = Salt.GetSalt(0, _context);
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Usuarios.Add(usuario);
+                    _context.Usuarios.Add(usuario.Encrypt(_context));
                     _context.SaveChanges();
 
                     AccountFacade.Login(usuario, false);
@@ -95,7 +99,6 @@ namespace CoeusProject.Controllers
             return View();
         }
 
-        //[OutputCache(Duration=0, NoStore=true)]
         public ActionResult EditPartial()
         {
             Usuario usuario = AccountFacade.GetLoggedInUser();

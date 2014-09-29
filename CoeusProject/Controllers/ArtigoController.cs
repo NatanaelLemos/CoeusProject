@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using CoeusProject.Models;
 using Kendo.Mvc.UI;
 using Kendo.Mvc.Extensions;
+using CoeusProject.Facade;
 
 namespace CoeusProject.Controllers
 {
@@ -29,8 +30,15 @@ namespace CoeusProject.Controllers
 
         public ActionResult AjaxReadArtigos(DataSourceRequest request, Int32 idUsuario)
         {
-            IQueryable<Artigo> artigos = _context.Artigos.Include(a=>a.Objeto).Where(o=>o.Objeto.IdUsuario == idUsuario);
-            DataSourceResult result = artigos.ToDataSourceResult(request);
+            IQueryable<Artigo> artigos = _context.Artigos.Include(a=>a.Objeto).Include(a=>a.Objeto.Salt).Where(o=>o.Objeto.IdUsuario == idUsuario);
+            DataSourceResult result = artigos.Decrypt().Select(a => new Artigo
+                                        {
+                                            Objeto = new Objeto 
+                                            {
+                                                NmObjeto = a.Objeto.NmObjeto,
+                                                TxDescricao = a.Objeto.TxDescricao
+                                            }
+                                        }).ToDataSourceResult(request);
 
             return Json(new DataSourceResult() 
             { 
@@ -46,9 +54,31 @@ namespace CoeusProject.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(String txArtigo)
+        public ActionResult Create(String nmObjeto, String txDescricao, String txArtigo)
         {
-            return View();
+            try
+            {
+                Artigo artigo = new Artigo()
+                {
+                    Objeto = new Objeto()
+                    {
+                        IdUsuario = AccountFacade.GetLoggedInUser().IdUsuario,
+                        Salt = Salt.GetSalt(),
+                        NmObjeto = nmObjeto,
+                        TxDescricao = txDescricao
+                    },
+                    TxArtigo = txArtigo
+                };
+
+                artigo.Objeto.Encrypt(_context);
+                _context.Artigos.Add(artigo.Encrypt(_context));
+                _context.SaveChanges();
+                return new HttpStatusCodeResult(HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.NotAcceptable, ErrorFacade.GetErrorMessage(ex));
+            }
         }
 
         protected override void Dispose(bool disposing)

@@ -32,7 +32,8 @@ namespace CoeusProject.Controllers
                 {
                     IdUsuario = u.IdUsuario,
                     NmPessoa = u.NmPessoa,
-                    NmFoto = u.NmFoto
+                    NmFoto = u.NmFoto,
+                    NmThumbFoto = u.NmThumbFoto
                 }));
         }
 
@@ -54,7 +55,8 @@ namespace CoeusProject.Controllers
                 Grupo grupo = new Grupo
                 {
                     NmGrupo = nmGrupo,
-                    Usuarios = new List<Usuario>()
+                    Usuarios = new List<Usuario>(),
+                    Salt = Salt.GetSalt()
                 };
 
                 foreach (Usuario usuario in usuarios)
@@ -71,6 +73,7 @@ namespace CoeusProject.Controllers
                     grupo.Usuarios.Add(_context.Usuarios.Where(u => u.IdUsuario == usuarioLogado.IdUsuario).FirstOrDefault());
                 }
 
+                grupo.Encrypt();
                 _context.Grupos.Add(grupo);
                 _context.SaveChanges();
 
@@ -87,7 +90,7 @@ namespace CoeusProject.Controllers
         {
             try
             {
-                Grupo grupo = _context.Grupos.Where(g => g.IdGrupo == idGrupo).Include(g=>g.Usuarios).FirstOrDefault();
+                Grupo grupo = _context.Grupos.Where(g => g.IdGrupo == idGrupo).Include(g=>g.Usuarios).FirstOrDefault().Decrypt();
                 if (grupo == null)
                 {
                     throw new Exception("Grupo inexistente");
@@ -130,6 +133,7 @@ namespace CoeusProject.Controllers
                     grupo.Usuarios.Add(_context.Usuarios.Where(u => u.IdUsuario == usuarioLogado.IdUsuario).FirstOrDefault());
                 }
 
+                grupo.Encrypt();
                 _context.Entry(grupo).State = EntityState.Modified;
                 _context.SaveChanges();
                 return new HttpStatusCodeResult(HttpStatusCode.OK);
@@ -170,7 +174,8 @@ namespace CoeusProject.Controllers
                 IdUsuario = u.IdUsuario,
                 NmPessoa = u.NmPessoa,
                 TxEmail = u.TxEmail,
-                NmFoto = u.NmFoto
+                NmFoto = u.NmFoto,
+                NmThumbFoto = u.NmThumbFoto
             }), JsonRequestBehavior.AllowGet);
         }
 
@@ -180,24 +185,24 @@ namespace CoeusProject.Controllers
 
             IQueryable<Grupo> grupos = null;
 
-            if (String.IsNullOrEmpty(nmGrupo))
-            {
+            /*if (String.IsNullOrEmpty(nmGrupo))
+            {*/
                 grupos = _context.Grupos.Where(g => g.Usuarios.Any(u => u.IdUsuario == usuarioLogado.IdUsuario) && g.IdObjeto == null)
                                                             .Include(g => g.Usuarios);
-            }
+            /*}
             else
             {
                 grupos = _context.Grupos.Where(g => g.Usuarios.Any(u => u.IdUsuario == usuarioLogado.IdUsuario) && g.IdObjeto == null
                                                                          && g.NmGrupo.StartsWith(nmGrupo))
                                                             .Include(g => g.Usuarios);
-            }
+            }*/
 
             if (grupos == null)
             {
                 return Json("", JsonRequestBehavior.AllowGet);
             }
 
-            return Json(grupos.Select(g => new
+            return Json(grupos.Decrypt().Select(g => new
             {
                 IdGrupo = g.IdGrupo,
                 NmGrupo = g.NmGrupo

@@ -1,9 +1,11 @@
-﻿using System;
+﻿using CoeusProject.Facade;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
+using System.Data.Entity;
 
 namespace CoeusProject.Models
 {
@@ -22,5 +24,49 @@ namespace CoeusProject.Models
         public virtual Objeto Objeto { get; set; }
 
         public virtual ICollection<Imagem> Imagens { get; set; }
+
+        public Artigo Encrypt(CoeusProjectContext Context = null)
+        {
+            if (Context == null)
+            {
+                Context = new CoeusProjectContext();
+            }
+
+            if (this.Objeto == null)
+            {
+                this.Objeto = Context.Objetos.Where(o => o.IdObjeto == this.IdObjeto).Include(o => o.Salt).FirstOrDefault();
+            }
+
+            if (this.Objeto.Salt == null)
+            {
+                this.Objeto.Salt = Context.Salt.Where(s => s.IdSalt == this.Objeto.IdSalt).FirstOrDefault();
+            }
+
+            this.TxArtigo = SecurityFacade.Encrypt(this.TxArtigo, this.Objeto.Salt.BtSalt);
+
+            return this;
+        }
+
+        public Artigo Decrypt(CoeusProjectContext Context = null)
+        {
+            if (Context == null)
+            {
+                Context = new CoeusProjectContext();
+            }
+
+            if (this.Objeto == null)
+            {
+                this.Objeto = Context.Objetos.Where(o => o.IdObjeto == this.IdObjeto).Include(o => o.Salt).FirstOrDefault();
+            }
+
+            if (this.Objeto.Salt == null)
+            {
+                this.Objeto.Salt = Context.Salt.Where(s => s.IdSalt == this.Objeto.IdSalt).FirstOrDefault();
+            }
+
+            this.Objeto.Decrypt();
+            this.TxArtigo = SecurityFacade.Decrypt(this.TxArtigo, this.Objeto.Salt.BtSalt);
+            return this;
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CoeusProject.Facade;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -23,20 +24,44 @@ namespace CoeusProject.Models
         public Int32 IdUsuario { get; set; }
         public virtual Usuario Usuario { get; set; }
 
-        /*[ForeignKey("Video")]
-        public Int32? IdVideo { get; set; }
-        public virtual Video Video { get; set; }
-
-        [ForeignKey("Som")]
-        public Int32? IdSom { get; set; }
-        public virtual Som Som { get; set; }
-
-        [ForeignKey("Artigo")]
-        public Int32? IdArtigo { get; set; }
-        public virtual Artigo Artigo { get; set; }
-        */
         public virtual ICollection<Avaliacao> Avaliacoes { get; set; }
 
         public virtual ICollection<Tema> Temas { get; set; }
+
+        [ForeignKey("Salt")]
+        public Int32 IdSalt { get; set; }
+        public virtual Salt Salt { get; set; }
+
+        public Objeto Encrypt(CoeusProjectContext Context = null)
+        {
+            if (this.Salt == null)
+            {
+                if (Context == null)
+                {
+                    Context = new CoeusProjectContext();
+                }
+                this.Salt = Context.Salt.Where(s => s.IdSalt == this.IdSalt).FirstOrDefault();
+            }
+
+            this.NmObjeto = SecurityFacade.Encrypt(this.NmObjeto, this.Salt.BtSalt);
+            this.TxDescricao = SecurityFacade.Encrypt(this.TxDescricao, this.Salt.BtSalt);
+            return this;
+        }
+
+        public Objeto Decrypt(CoeusProjectContext Context = null)
+        {
+            if (this.Salt == null)
+            {
+                if (Context == null)
+                {
+                    Context = new CoeusProjectContext();
+                }
+                this.Salt = Context.Salt.Where(s => s.IdSalt == this.IdSalt).FirstOrDefault();
+            }
+
+            this.NmObjeto = SecurityFacade.Decrypt(this.NmObjeto, this.Salt.BtSalt);
+            this.TxDescricao = SecurityFacade.Decrypt(this.TxDescricao, this.Salt.BtSalt);
+            return this;
+        }
     }
 }

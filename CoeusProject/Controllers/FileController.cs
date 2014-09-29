@@ -37,18 +37,33 @@ namespace CoeusProject.Controllers
             {
                 return String.Empty;
             }
-            Stream imageStream = new FileStream(physicalPath, FileMode.Open);
 
-            Image resizedImage = (Image)(new Bitmap(Image.FromStream(imageStream), new Size(80, 80)));
-            imageStream.Close();
-            imageStream.Dispose();
-
+            Image resizedImage = ResizeImage(physicalPath, new Size(80, 80));
             System.IO.File.Delete(physicalPath);
-
             physicalPath = Path.ChangeExtension(physicalPath, "png");
             resizedImage.Save(physicalPath, ImageFormat.Png);
 
+            Image thumb = ResizeImage(physicalPath, new Size(32, 32));
+            String thumbPath = physicalPath.Replace(".png", "-thumb.png");
+            
+            if (System.IO.File.Exists(thumbPath))
+            {
+                System.IO.File.Delete(thumbPath);
+            }
+
+            thumb.Save(thumbPath, ImageFormat.Png);
             return Path.ChangeExtension(nmFoto, "png");
+        }
+
+        private Image ResizeImage(String path, Size size)
+        {
+            Stream imageStream = new FileStream(path, FileMode.Open);
+
+            Image resizedImage = (Image)(new Bitmap(Image.FromStream(imageStream), size));
+            imageStream.Close();
+            imageStream.Dispose();
+
+            return resizedImage;
         }
     }
 }

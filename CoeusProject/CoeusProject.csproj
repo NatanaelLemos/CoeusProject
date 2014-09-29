@@ -220,6 +220,10 @@
     <Compile Include="Migrations\201409222359073_DtMensagem.Designer.cs">
       <DependentUpon>201409222359073_DtMensagem.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201409281446546_Salt.cs" />
+    <Compile Include="Migrations\201409281446546_Salt.Designer.cs">
+      <DependentUpon>201409281446546_Salt.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Artigo.cs" />
     <Compile Include="Models\Avaliacao.cs" />
@@ -228,6 +232,7 @@
     <Compile Include="Models\Imagem.cs" />
     <Compile Include="Models\Mensagem.cs" />
     <Compile Include="Models\Objeto.cs" />
+    <Compile Include="Models\Salt.cs" />
     <Compile Include="Models\Sequence.cs" />
     <Compile Include="Models\Som.cs" />
     <Compile Include="Models\Tema.cs" />
@@ -1195,6 +1200,8 @@
     <Content Include="Images\saveAs.png" />
     <Content Include="Images\searchFind.png" />
     <Content Include="Images\sendMessage.png" />
+    <Content Include="Images\undo.png" />
+    <Content Include="Images\userNoPhoto.png" />
     <Content Include="Kendo.Mvc.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -1767,7 +1774,6 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
-    <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\_LeftPartial.cshtml" />
     <Content Include="Views\Shared\_RightPartial.cshtml" />
     <Content Include="Views\Account\Edit.cshtml" />
@@ -1814,6 +1820,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201409222359073_DtMensagem.resx">
       <DependentUpon>201409222359073_DtMensagem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201409281446546_Salt.resx">
+      <DependentUpon>201409281446546_Salt.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

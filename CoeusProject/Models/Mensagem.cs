@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Data.Entity;
 using System.Web;
 
 namespace CoeusProject.Models
@@ -29,15 +30,62 @@ namespace CoeusProject.Models
         public Int32 IdGrupo { get; set; }
         public virtual Grupo Grupo { get; set; }
 
-        public Mensagem Encrypt()
+        public Mensagem Encrypt(Int32 IdGrupo = 0, CoeusProjectContext Context = null)
         {
-            this.TxMensagem = SecurityFacade.Encrypt(this.TxMensagem);
+            if (Context == null)
+            {
+                Context = new CoeusProjectContext();
+            }
+
+            if (IdGrupo > 0)
+            {
+                this.Grupo = Context.Grupos.Where(g => g.IdGrupo == IdGrupo).FirstOrDefault();
+            }
+
+            if (this.Grupo == null)
+            {
+                this.Grupo = Context.Grupos.Where(g => g.IdGrupo == this.IdGrupo).Include(g=>g.Salt).FirstOrDefault();
+            }
+
+            if (this.Grupo.Salt == null)
+            {
+                this.Grupo.Salt = Context.Salt.Where(s => s.IdSalt == this.Grupo.IdSalt).FirstOrDefault();
+            }
+
+            this.TxMensagem = SecurityFacade.Encrypt(this.TxMensagem, this.Grupo.Salt.BtSalt);
             return this;
         }
 
-        public Mensagem Decrypt(Usuario usuario = null)
+        public Mensagem Decrypt(Int32 IdGrupo = 0, Usuario usuario = null, CoeusProjectContext Context = null)
         {
-            this.TxMensagem = SecurityFacade.Decrypt(this.TxMensagem);
+            if (IdGrupo > 0)
+            {
+                if (Context == null)
+                {
+                    Context = new CoeusProjectContext();
+                }
+                this.Grupo = Context.Grupos.Where(g=>g.IdGrupo == IdGrupo).FirstOrDefault();
+            }
+
+            if (this.Grupo == null)
+            {
+                if (Context == null)
+                {
+                    Context = new CoeusProjectContext();
+                }
+                this.Grupo = Context.Grupos.Where(g => g.IdGrupo == this.IdGrupo).Include(g => g.Salt).FirstOrDefault();
+            }
+
+            if (this.Grupo.Salt == null)
+            {
+                if (Context == null)
+                {
+                    Context = new CoeusProjectContext();
+                }
+                this.Grupo.Salt = Context.Salt.Where(s => s.IdSalt == this.Grupo.IdSalt).FirstOrDefault();
+            }
+
+            this.TxMensagem = SecurityFacade.Decrypt(this.TxMensagem, this.Grupo.Salt.BtSalt);
 
             if (usuario != null)
             {

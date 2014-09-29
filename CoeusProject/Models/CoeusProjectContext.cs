@@ -9,15 +9,15 @@ namespace CoeusProject.Models
 {
     public class CoeusProjectContext : DbContext
     {
-#if DEBUG
-        public CoeusProjectContext() : base("CoeusProjectContext")
-        {
-        }
-#else
+//#if DEBUG
+//        public CoeusProjectContext() : base("CoeusProjectContext")
+//        {
+//        }
+//#else
         public CoeusProjectContext() : base("CoeusPublish")
         {
         }
-#endif
+//#endif
 
         public DbSet<Artigo> Artigos { get; set; }
         public DbSet<Avaliacao> Avaliacoes { get; set; }
@@ -30,6 +30,7 @@ namespace CoeusProject.Models
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Video> Videos { get; set; }
         public DbSet<Sequence> Sequence { get; set; }
+        public DbSet<Salt> Salt { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

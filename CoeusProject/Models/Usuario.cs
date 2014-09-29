@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
 
@@ -39,7 +40,16 @@ namespace CoeusProject.Models
 
         [DisplayName("Foto")]
         [StringLength(100)]
-        public String NmFoto { get; set; } 
+        public String NmFoto { get; set; }
+
+        [NotMapped]
+        public string NmThumbFoto 
+        { 
+            get 
+            {
+                return NmFoto.Replace(".png", "-thumb.png");
+            } 
+        }
         #endregion
 
         public virtual ICollection<Grupo> Grupos { get; set; }
@@ -52,21 +62,45 @@ namespace CoeusProject.Models
 
         public virtual ICollection<Tema> Temas { get; set; }
 
-        public Usuario Encrypt()
+        [ForeignKey("Salt")]
+        public Int32 IdSalt { get; set; }
+        public virtual Salt Salt { get; set; }
+
+        public Usuario Encrypt(CoeusProjectContext Context = null)
         {
-            this.TxEmail = SecurityFacade.Encrypt(TxEmail) + "_@email.com";
-            this.PwUsuario = SecurityFacade.Encrypt(PwUsuario);
-            this.NmPessoa = SecurityFacade.Encrypt(NmPessoa);
-            this.SnPessoa = SecurityFacade.Encrypt(SnPessoa);
+            if (this.Salt == null)
+            {
+                if (Context == null)
+                {
+                    Context = new CoeusProjectContext();
+                }
+
+                this.Salt = Context.Salt.Where(s=>s.IdSalt == this.IdSalt).FirstOrDefault();
+            }
+
+            this.TxEmail = SecurityFacade.Encrypt(TxEmail, this.Salt.BtSalt) + "_@email.com";
+            this.PwUsuario = SecurityFacade.Encrypt(PwUsuario, this.Salt.BtSalt);
+            this.NmPessoa = SecurityFacade.Encrypt(NmPessoa, this.Salt.BtSalt);
+            this.SnPessoa = SecurityFacade.Encrypt(SnPessoa, this.Salt.BtSalt);
 
             return this;
         }
 
-        public Usuario Decrypt()
+        public Usuario Decrypt(CoeusProjectContext Context = null)
         {
-            this.TxEmail = SecurityFacade.Decrypt(TxEmail.Replace("_@email.com",""));
-            this.NmPessoa = SecurityFacade.Decrypt(NmPessoa);
-            this.SnPessoa = SecurityFacade.Decrypt(SnPessoa);
+            if (this.Salt == null)
+            {
+                if (Context == null)
+                {
+                    Context = new CoeusProjectContext();
+                }
+
+                this.Salt = Context.Salt.Where(s => s.IdSalt == this.IdSalt).FirstOrDefault();
+            }
+
+            this.TxEmail = SecurityFacade.Decrypt(TxEmail.Replace("_@email.com", ""), this.Salt.BtSalt);
+            this.NmPessoa = SecurityFacade.Decrypt(NmPessoa, this.Salt.BtSalt);
+            this.SnPessoa = SecurityFacade.Decrypt(SnPessoa, this.Salt.BtSalt);
             
             return this;
         }

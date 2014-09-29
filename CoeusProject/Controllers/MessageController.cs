@@ -22,15 +22,17 @@ namespace CoeusProject.Controllers
                 Mensagem sentMessage = new Mensagem
                     {
                         IdUsuario = Convert.ToInt32(HttpContext.User.Identity.Name),
-                        TxMensagem = SecurityFacade.Encrypt(txMessage),
+                        TxMensagem = txMessage,
                         IdGrupo = idGroup,
                         DtMensagem = DateTime.Now
                     };
 
+                sentMessage.Encrypt(idGroup, _context);
+
                 _context.Mensagens.Add(sentMessage);
                 _context.SaveChanges();
 
-                sentMessage.Grupo = _context.Grupos.Where(g => g.IdGrupo == sentMessage.IdGrupo).FirstOrDefault();
+                sentMessage.Grupo = _context.Grupos.Where(g => g.IdGrupo == sentMessage.IdGrupo).FirstOrDefault().Decrypt();
                 new Chat().Send(sentMessage);
 
                 return new HttpStatusCodeResult(HttpStatusCode.OK);

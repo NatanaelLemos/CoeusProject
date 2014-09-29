@@ -2,14 +2,35 @@
 @using Kendo.Mvc.UI
 @{Layout = null;}
 
+<style>
+    .k-btnCancelar {
+        background-image: url('Images/undo.png');
+        background-position: 3px 3px;
+    }
+    
+    .k-btnEdit {
+        background-image: url('Images/saveAs.png');
+        background-position: 4px 4px;
+    }
+</style>
+
 <script>
     function btnVoltarMainArtigos_Click(e) {
         $('#divContent').load('@Url.Action("GetMainArtigos", "Artigo")', { idUsuario: idDonoArtigo });
     }
 
     function btnEditArtigo_Click(e) {
+        $('#wndArtigoEdit').data('kendoWindow').center().open();
+    }
+
+    function btnSalvarArtigo_Click(e) {
         $.ajaxPost('@Url.Action("Create","Artigo")', {
+            nmObjeto: $('#txNomeObjeto').val(),
+            txDescricao: $('#txDescricaoObjeto').val(),
             txArtigo: $('#artigoEditor').data('kendoEditor').value()
+        }, null, function () {
+            $('#wndArtigoEdit').data('kendoWindow').close();
+            $('#divContent').load('@Url.Action("GetMainArtigos", "Artigo")', { idUsuario: idDonoArtigo });
         });
     }
 
@@ -26,29 +47,23 @@
     });
 </script>
 
-@(Html.Kendo().Button().Name("btnCancelarEditArtigo")
-    .Content("<img src='/Images/undo.png' alt='Cancelar'/>")
-    .HtmlAttributes(new { @type="button", @style="float: left"})
-    .Events(e=>e.Click("btnVoltarMainArtigos_Click")))
-
-@(Html.Kendo().Button().Name("btnEditArtigo")
-    .Content("<img src='/Images/saveAs.png' alt='Cancelar'/>")
-    .HtmlAttributes(new { @type = "button", @style = "float: left" })
-        .Events(e => e.Click("btnEditArtigo_Click")))
-
-@{
-    if(Model == null || Model.IdArtigo == 0)
-    {
-        @:<h3>Novo Artigo</h3>
+    @{
+        if (Model == null || Model.IdArtigo == 0)
+        {
+            @:<h3 style="margin: 3px 0 0 0">Novo Artigo</h3>
+        }
+        else
+        {
+            @:<h3 style="margin: 3px 0 0 0">@Model.Objeto.NmObjeto</h3>
+        }
     }
-    else
-    {
-        @:<h3>@Model.Objeto.NmObjeto</h3>
-    }
-}
-
-@(Html.Kendo().Editor().Name("artigoEditor")
-    .Tools(tool=>tool.Clear()
+<div style="position:absolute; top: 22px; bottom: 12px">
+    @(Html.Kendo().Editor().Name("artigoEditor")
+    .HtmlAttributes(new { @style = "height: 100%; " })
+    .Tools(tool => tool.Clear()
+            .CustomButton(cb => cb.Name("btnCancelar").Exec("btnVoltarMainArtigos_Click").ToolTip("Cancelar"))
+            .CustomButton(cb => cb.Name("btnEdit").Exec("btnEditArtigo_Click").ToolTip("Salvar"))
+            .Separator()
             .Bold()
             .Italic()
             .Underline()
@@ -61,9 +76,28 @@
             .InsertOrderedList()
             .Indent()
             .Outdent()
+            .SubScript()
+            .SuperScript()
             .Separator()
             .InsertImage()
             .CreateLink()
             .TableEditing()
     )
+    )
+</div>
+
+@(Html.Kendo().Window().Name("wndArtigoEdit")
+    .Content(@<text>
+        Nome do Artigo: @(Html.TextBox("txNomeObjeto", "", new { @class="k-textbox" }))
+        Descrição: @(Html.TextBox("txDescricaoObjeto", "", new { @class = "k-textbox" }))
+        @(Html.Kendo().Button().Name("btnSalvarArtigo")
+            .Content("Salvar")
+            .HtmlAttributes(new { @type="button"})
+            .Events(e=>e.Click("btnSalvarArtigo_Click"))
+        )
+    </text>)
+    .Visible(false)
+    .Title("Edição")
+    .Modal(true)
+    .Resizable(r=>r.Enabled(false))
 )

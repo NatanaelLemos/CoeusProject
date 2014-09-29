@@ -1,8 +1,14 @@
 ﻿@using Kendo.Mvc.UI
 @model CoeusProject.Models.Usuario
-
-@{
-    ViewBag.Title = "Registre-se";
+@{ViewBag.Title = "Registre-se";}
+@section Styles {
+    <style>
+        .k-header {
+            background-color: transparent;
+            background-image: none;
+            border: 0 none transparent;
+        }
+    </style>
 }
 
 @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @id = "frmRegister" }))
@@ -42,6 +48,7 @@
                 @Html.Label("Confirma Senha", new { @class = "labelInline" })
                 @Html.Password("ConfirmPwUsuario", null, new { @class = "k-textbox inputInline" })
             </div>
+            <img id="imgUser" height="80" width="80" src="~/Images/userNoPhoto.png" />
             <div>
                 @Html.Label("Foto", new { @class = "labelInline" })
                 @(Html.Kendo().Upload()
@@ -51,6 +58,7 @@
                         .SaveUrl(Url.Action("SaveFile", "File"))
                         .AutoUpload(true)
                     )
+                    .ShowFileList(false)
                     .Events(e => e
                         .Select("Foto_Select")
                         .Upload("Foto_Upload")
@@ -67,7 +75,7 @@
 
 @section Scripts {
     <script type="text/javascript">
-        var extension = "";
+        var extension = ".png";
 
         function Foto_Select(e) {
             if (e.files[0].extension != ".png" && e.files[0].extension != ".jpg" && e.files[0].extension != ".bmp") {
@@ -82,6 +90,7 @@
 
         function Foto_Success(e) {
             extension = e.files[0].extension;
+            $('#imgUser').attr('src', '/User_Data/@(Model.NmFoto)' + extension);
         }
 
         $(document).ready(function () {
