@@ -9,10 +9,22 @@
 </script>
 
 @(Html.Kendo().Grid<CoeusProject.Models.Artigo>()
-    .Name("gridArtigos")
+    .Name("gridMainArtigos")
     .DataSource(dt => dt.Ajax().Read(r => r.Action("AjaxReadArtigos", "Artigo").Data("gridArtigos_Data")))
+    .Selectable(select => select.Mode(GridSelectionMode.Single))
     .Columns(c => 
     {
-        c.Bound(m => m.Objeto.NmObjeto).Title("Artigos de " + (new CoeusProject.Models.CoeusProjectContext().Usuarios.Where(u=>u.IdUsuario == Model).FirstOrDefault().Decrypt().NmPessoa));
+        c.Bound(m => m.Objeto.NmObjeto).Title("Artigos de " + (new CoeusProject.Models.CoeusProjectContext().Usuarios.Where(u=>u.IdUsuario == Model)
+            .FirstOrDefault().Decrypt().NmPessoa));
     })
 )
+
+<script>
+    $(document).ready(function () {
+        $("#gridMainArtigos").on("dblclick", "tr.k-state-selected", function () {
+            var grid = $("#gridMainArtigos").data("kendoGrid");
+            var selectedItem = grid.dataItem(grid.select());
+            EditArtigo(selectedItem.IdArtigo);
+        });
+    })
+</script>

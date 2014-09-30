@@ -42,6 +42,7 @@ namespace CoeusProject.Models
                 this.Objeto.Salt = Context.Salt.Where(s => s.IdSalt == this.Objeto.IdSalt).FirstOrDefault();
             }
 
+            this.Objeto.Encrypt(Context);
             this.TxArtigo = SecurityFacade.Encrypt(this.TxArtigo, this.Objeto.Salt.BtSalt);
 
             return this;
@@ -64,7 +65,7 @@ namespace CoeusProject.Models
                 this.Objeto.Salt = Context.Salt.Where(s => s.IdSalt == this.Objeto.IdSalt).FirstOrDefault();
             }
 
-            this.Objeto.Decrypt();
+            this.Objeto.Decrypt(Context);
             this.TxArtigo = SecurityFacade.Decrypt(this.TxArtigo, this.Objeto.Salt.BtSalt);
             return this;
         }

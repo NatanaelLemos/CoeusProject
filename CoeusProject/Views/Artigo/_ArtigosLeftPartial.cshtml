@@ -2,7 +2,6 @@
 @using Kendo.Mvc.UI
 @using CoeusProject.Models
 @using CoeusProject.Facade
-
 @{
     Layout = null;
     Usuario usuarioLogado = AccountFacade.GetLoggedInUser();
@@ -17,8 +16,32 @@
     function btnNovoArtigo_Click(e) {
         $('#divContent').load('@Url.Action("CreatePartial","Artigo")');
     }
-</script>
 
+    $(document).ready(function () {
+        $("#gridArtigos").on("dblclick", "tr.k-state-selected", function () {
+            var grid = $("#gridArtigos").data("kendoGrid");
+            var selectedItem = grid.dataItem(grid.select());
+            EditArtigo(selectedItem.IdArtigo);
+        });
+    })
+
+    function EditArtigo(idArtigo) {
+        $('#divContent').load('@Url.Action("EditPartial", "Artigo")', { idArtigo: idArtigo });
+    }
+
+    function gridArtigos_DataBound(e) {
+        var data = this.dataSource.data();
+        $(data).each(function () {
+            $('#nmObjeto-' + this.IdArtigo).kendoTooltip({
+                position: 'right',
+                content: '<div style="font-size: 7pt">' + 
+                        ((this && this.Objeto && this.Objeto.TxDescricao) ? this.Objeto.TxDescricao : '') +
+                        '</div>'
+            });
+        });
+
+    }
+</script>
 @{if (usuarioLogado.IdUsuario == Model.IdUsuario)
 {
     <div style="text-align: left">
@@ -32,11 +55,20 @@
 
 @(Html.Kendo().Grid<CoeusProject.Models.Artigo>()
     .Name("gridArtigos")
-    .DataSource(dt => dt.Ajax().Read(r => r.Action("AjaxReadArtigos", "Artigo").Data("gridArtigos_Data")))
+    .DataSource(dt => dt.Ajax()
+        .Read(
+            r => r.Action("AjaxReadArtigos", "Artigo")
+            .Data("gridArtigos_Data")
+        )
+        .Model(model=>model.Id(m=>m.IdArtigo))
+    )
     .Columns(c =>
     {
-        c.Bound(m => m.Objeto.NmObjeto).Title("<div style='margin: 0; padding: 0; width: 187px; overflow: hidden'>Artigos de " + Model.NmPessoa + "</div>")
-            .Width(198).HtmlAttributes(new { @style = "width: 198px" });
+        c.Bound(m => m.Objeto.NmObjeto).Title("<div style='margin: 0; padding: 0; width: 185px; overflow: hidden'>Artigos de " + Model.NmPessoa + "</div>")
+            .Width(198).HtmlAttributes(new { @style = "width: 198px" })
+            .ClientTemplate("<div id='nmObjeto-#=IdArtigo#'>#=Objeto.NmObjeto#</div>");
     })
+    .Events(e=>e.DataBound("gridArtigos_DataBound"))
+    .Selectable(select=>select.Mode(GridSelectionMode.Single))
     .HtmlAttributes(new { @style = "font-size: 8pt; width: 198px" })
 )

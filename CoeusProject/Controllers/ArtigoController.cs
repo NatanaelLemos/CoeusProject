@@ -33,8 +33,10 @@ namespace CoeusProject.Controllers
             IQueryable<Artigo> artigos = _context.Artigos.Include(a=>a.Objeto).Include(a=>a.Objeto.Salt).Where(o=>o.Objeto.IdUsuario == idUsuario);
             DataSourceResult result = artigos.Decrypt().Select(a => new Artigo
                                         {
+                                            IdArtigo = a.IdArtigo,
                                             Objeto = new Objeto 
                                             {
+                                                IdObjeto = a.Objeto.IdObjeto,
                                                 NmObjeto = a.Objeto.NmObjeto,
                                                 TxDescricao = a.Objeto.TxDescricao
                                             }
@@ -47,6 +49,7 @@ namespace CoeusProject.Controllers
             });
         }
 
+        [OutputCache(Duration=0, NoStore=true)]
         public ActionResult CreatePartial()
         {
             Artigo artigo = new Artigo() { Objeto = new Objeto()};
@@ -70,8 +73,42 @@ namespace CoeusProject.Controllers
                     TxArtigo = txArtigo
                 };
 
-                artigo.Objeto.Encrypt(_context);
                 _context.Artigos.Add(artigo.Encrypt(_context));
+                _context.SaveChanges();
+                return new HttpStatusCodeResult(HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.NotAcceptable, ErrorFacade.GetErrorMessage(ex));
+            }
+        }
+
+        [OutputCache(Duration = 0, NoStore = true)]
+        public ActionResult EditPartial(Int32 idArtigo)
+        {
+            Artigo artigo = _context.Artigos.Where(a=>a.IdArtigo == idArtigo).FirstOrDefault();
+            if (artigo == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.NotAcceptable, "Artigo não encontrado");
+            }
+
+            artigo.Decrypt();
+            return View("_ArtigoEditPartial", artigo);
+        }
+
+        [HttpPost]
+        public ActionResult Edit(Int32 idArtigo, String nmObjeto, String txDescricao, String txArtigo)
+        {
+            try
+            {
+                Artigo artigo = _context.Artigos.Where(a => a.IdArtigo == idArtigo).Include(a=>a.Objeto).FirstOrDefault().Decrypt(_context);
+                artigo.Objeto.NmObjeto = nmObjeto;
+                artigo.Objeto.TxDescricao = txDescricao;
+                
+                artigo.TxArtigo = txArtigo;
+                artigo.Encrypt(_context);
+
+                _context.Entry(artigo).State = EntityState.Modified;
                 _context.SaveChanges();
                 return new HttpStatusCodeResult(HttpStatusCode.OK);
             }

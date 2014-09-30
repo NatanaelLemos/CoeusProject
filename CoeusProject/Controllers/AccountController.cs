@@ -59,7 +59,14 @@ namespace CoeusProject.Controllers
             usuario = new Usuario();
             usuario.NmFoto = Sequence.GetSequence("foto").ToString();
 
-            System.IO.File.Copy(Server.MapPath("~/Images/userNoPhoto.png"), Server.MapPath("~/User_Data/") + usuario.NmFoto + ".png");
+            String physicalPath = Server.MapPath("~/User_Data/") + usuario.NmFoto + ".png";
+
+            if (System.IO.File.Exists(physicalPath))
+            {
+                System.IO.File.Delete(physicalPath);
+            }
+
+            System.IO.File.Copy(Server.MapPath("~/Images/userNoPhoto.png"), physicalPath);
 
             return View(usuario);
         }
