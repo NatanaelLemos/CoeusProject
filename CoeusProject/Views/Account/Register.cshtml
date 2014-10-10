@@ -11,18 +11,18 @@
     </style>
 }
 
-@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @id = "frmRegister" }))
-{
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary()
-    @Html.HiddenFor(m => m.NmFoto)
+<div class="divScrollable">
+    <header style="margin-top: 5%">
+        <a href='@Url.Action("Index","Home")' style="font-size: 26px">Coeus Project</a>
+    </header>
 
-    <div class="divScrollable">
-        <header style="margin-top: 5%">
-            <a href='@Url.Action("Index","Home")' style="font-size: 26px">Coeus Project</a>
-        </header>
+    <div class="divInline">
+        @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @id = "frmRegister" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.ValidationSummary()
+            @Html.HiddenFor(m => m.NmFoto)
 
-        <div class="divInline">
             <div>
                 @Html.LabelFor(m => m.TxEmail, new { @class = "labelInline" })
                 @Html.TextBoxFor(m => m.TxEmail, new { @class = "k-textbox inputInline" })
@@ -58,6 +58,7 @@
                         .SaveUrl(Url.Action("SaveFile", "File"))
                         .AutoUpload(true)
                     )
+                    .Messages(m => m.Select("Selecionar Imagem"))
                     .ShowFileList(false)
                     .Events(e => e
                         .Select("Foto_Select")
@@ -66,12 +67,14 @@
                     )
                 )
             </div>
-            <div>
-                @(Html.Kendo().Button().Name("btnRegister").Content("Registrar"))
-            </div>
+        }
+
+        @Html.Action("GetInteressePartial", "Interesse")
+        <div>
+            @(Html.Kendo().Button().Name("btnRegister").Content("Registrar"))
         </div>
     </div>
-}
+</div>
 
 @section Scripts {
     <script type="text/javascript">
@@ -93,6 +96,10 @@
             $('#imgUser').attr('src', '/User_Data/@(Model.NmFoto)' + extension);
         }
 
+        function acpInteresses_AdditionalData(e) {
+            return { text: $('#acpInteresses').data('kendoAutoComplete').text() };
+        }
+
         $(document).ready(function () {
             $('#btnRegister').click(function (e) {
                 e.preventDefault();
@@ -109,7 +116,8 @@
                 $('#btnRegister').data('kendoButton').enable(false);
 
                 $.ajaxPost('@Url.Action("Register", "Account")', {
-                    usuario: $('#frmRegister').serializeObject()
+                    usuario: $('#frmRegister').serializeObject(),
+                    interesses: interesses
                 }, $('#frmRegister'));
 
                 $('#btnRegister').data('kendoButton').enable();

@@ -1,0 +1,66 @@
+﻿@{Layout = null;}
+
+<div id="divInteressesItens" style="height: 150px; width:315px; margin: auto auto 10px auto; overflow: auto">
+</div>
+
+<script type="text/javascript">
+    var interesses = [];
+
+    $(document).ready(function () {
+        $('#divInteressesItens').html('');
+        btnAddInteresse_Click(null);
+    })
+
+    function btnAddInteresse_Click(e) {
+        var eIndex = e ? parseInt($(e.sender.element[0]).data("index")) : -1;
+
+        $.get('@Url.Action("GetInteresseItem","Interesse")', {
+            index: eIndex
+        }, function (page) {
+            $('#divInteressesItens').append(page);
+
+            $('#btnAddInteresse' + eIndex).addClass('invisible');
+            $('#btnRemoveInteresse' + eIndex).removeClass('invisible');
+
+            $("#divInteressesItens").scrollTop($("#divInteressesItens")[0].scrollHeight);
+        });
+    }
+
+    function btnRemoveInteresse_Click(e) {
+        var eIndex = parseInt($(e.sender.element[0]).data("index"));
+        
+        interesses = $.grep(interesses, function (interesse) {
+            return interesse.IxInteresse != eIndex;
+        });
+
+        $('#divInteresse' + eIndex).remove();
+        $("#divInteressesItens").scrollTop($("#divInteressesItens")[0].scrollHeight);
+    }
+
+    function cmbInteresse_AdditionalData(e) {
+        return { text: (e && e.filter && e.filter.filters[0] && e.filter.filters[0].value) ? e.filter.filters[0].value : '' };
+    }
+
+    function cmbInteresse_Change(e) {
+        var ixElement = $(e.sender.element[0]).data('index');
+        var txElement = e.sender.text();
+
+        $.ajax({
+            url: '@Url.Action("AddInteresse","Interesse")',
+            type: 'POST',
+            data: {
+                NmInteresse: txElement
+            },
+            success: function () {
+                interesses = $.grep(interesses, function (interesse) {
+                    return interesse.IxInteresse != ixElement
+                });
+
+                interesses.push({
+                    IxInteresse: ixElement,
+                    NmInteresse: txElement
+                });
+            }
+        });
+    }
+</script>

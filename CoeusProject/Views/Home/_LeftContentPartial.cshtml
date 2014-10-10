@@ -2,6 +2,8 @@
 
 <div style="position: absolute; top: 50%; left: 0; right: 0;">
     @(Html.ActionLink("Meus Artigos", "*", "*", new { @id="lnkMyArticles"}))
+    <br /><br />
+    @(Html.ActionLink("Meus Vídeos", "*", "*", new { @id = "lnkMyVideos" }))
 </div>
 
 <script>
@@ -11,6 +13,13 @@
 
             $('#divContent').load('@Url.Action("GetMainArtigos", "Artigo")', { idUsuario: idUsuarioLogado });
             $('#divLeftContent').load('@Url.Action("GetLeftDivArtigos","Artigo")', { idUsuario: idUsuarioLogado });
+        });
+
+        $('#lnkMyVideos').click(function (e) {
+            e.preventDefault();
+
+            $('#divContent').load('@Url.Action("GetMainVideos", "Video")', { idUsuario: idUsuarioLogado });
+            $('#divLeftContent').load('@Url.Action("GetLeftDivVideos","Video")', { idUsuario: idUsuarioLogado });
         });
     });
 </script>

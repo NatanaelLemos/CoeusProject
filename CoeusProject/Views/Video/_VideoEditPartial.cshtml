@@ -1,0 +1,130 @@
+﻿@model CoeusProject.Models.Video
+@using Kendo.Mvc.UI
+@{Layout = null;}
+
+<script>
+    function btnVoltarMainVideos_Click(e) {
+        $('#divContent').load('@Url.Action("GetMainVideos", "Videos")', { idUsuario: idDonoVideo });
+    }
+
+    function btnEditVideo_Click(e) {
+        $('#txNomeObjeto').val($('#hidNmObjeto').val());
+        $('#txDescricaoObjeto').val($('#hidTxDescricao').val());
+
+        $('#wndVideoEdit').data('kendoWindow').center().open();
+    }
+
+    function btnSalvarVideo_Click(e) {
+        var idVideoEdit = parseInt($('#idVideoEdit').val());
+
+        function VideoEditPartial_Close() {
+            $('#wndArtigoEdit').data('kendoWindow').close();
+            $('#divContent').load('@Url.Action("GetMainVideos", "Video")', { idUsuario: idDonoVideo });
+            $('#gridVideos').data('kendoGrid').dataSource.read();
+        }
+
+        if (idVideoEdit) {
+            $.ajaxPost('@Url.Action("Edit","Video")', {
+                idArtigo: idVideoEdit,
+                nmObjeto: $('#txNomeObjeto').val(),
+                txDescricao: $('#txDescricaoObjeto').val()
+            }, null, VideoEditPartial_Close);
+        } else {
+            $.ajaxPost('@Url.Action("Create","Video")', {
+                nmObjeto: $('#txNomeObjeto').val(),
+                txDescricao: $('#txDescricaoObjeto').val()
+            }, null, VideoEditPartial_Close);
+        }
+    }
+
+    var extension;
+    function Video_Select(e) {
+        if (e.files[0].extension != ".mp4" && e.files[0].extension != ".webm" && e.files[0].extension != ".ogg") {
+            e.preventDefault();
+            kendoAlert('Apenas vídeos nos formatos mp4, ogg ou webm são aceitos');
+        }
+    }
+
+    function Video_Upload(e) {
+        e.data = { nmFile: '@Model.TxUrl' };
+    }
+
+    function Video_Success(e) {
+        extension = e.files[0].extension;
+    }
+
+    $(document).ready(function () {
+        $('#btnCancelarEditVideo').kendoTooltip({
+            position: 'bottom',
+            content: 'Cancelar'
+        });
+
+        $('#btnEditVideo').kendoTooltip({
+            position: 'bottom',
+            content: 'Salvar'
+        });
+    });
+</script>
+
+@Html.HiddenFor(m => m.TxUrl)
+@Html.HiddenFor(m => m.IdVideo, new { @id = "idVideoEdit" })
+@Html.HiddenFor(m => m.Objeto.NmObjeto, new { @id = "hidNmObjeto" })
+@Html.HiddenFor(m => m.Objeto.TxDescricao, new { @id = "hidTxDescricao" })
+
+@{
+    if (Model == null || Model.IdVideo == 0)
+    {
+        @:<h3 style="margin: 3px 0 0 0">Novo Vídeo</h3>
+    }
+    else
+    {
+        @:<h3 style="margin: 3px 0 0 0">@Model.Objeto.NmObjeto</h3>
+    }
+}
+
+@(Html.Kendo().Button().Name("btnVoltarMainVideos")
+    .Content("<img src='Images/undo.png' width='16' height='16' />")
+    .HtmlAttributes(new { @type = "button" })
+    .Events(e => e.Click("btnVoltarMainVideos"))
+)
+@(Html.Kendo().Button().Name("btnEditVideo")
+    .Content("<img src='Images/saveAs.png' width='16' height='16' />")
+    .HtmlAttributes(new { @type = "button" })
+    .Events(e => e.Click("btnEditVideo"))
+)
+
+@(Html.Kendo().Upload()
+    .Name("file")
+    .Multiple(false)
+    .Async(async => async
+        .SaveUrl(Url.Action("SaveFile", "File"))
+        .AutoUpload(true)
+    )
+    .Messages(m => m.Select("Selecionar Vídeo"))
+    .ShowFileList(false)
+    .Events(e => e
+        .Select("Video_Select")
+        .Upload("Video_Upload")
+        .Success("Video_Success")
+    )
+)
+
+@(Html.Kendo().Window().Name("wndVideoEdit")
+    .Content(@<text>
+        Nome do Vídeo:
+        @(Html.TextBox("txNomeObjeto", "", new { @class = "k-textbox" }))
+
+        Descrição:
+        @(Html.TextBox("txDescricaoObjeto", "", new { @class = "k-textbox" }))
+
+        @(Html.Kendo().Button().Name("btnSalvarVideo")
+            .Content("Salvar")
+            .HtmlAttributes(new { @type = "button" })
+            .Events(e => e.Click("btnSalvarVideo_Click"))
+        )
+    </text>)
+    .Visible(false)
+    .Title("Edição")
+    .Modal(true)
+    .Resizable(r=>r.Enabled(false))
+)

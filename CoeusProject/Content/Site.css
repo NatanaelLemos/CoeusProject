@@ -91,6 +91,13 @@ input[type=text], input[type=password] {
     width: 300px;
     margin: 2% auto 2% auto;
 }
+
+.invisible {
+    display: none;
+    visibility:hidden;
+    width: 0;
+    height: 0;
+}
 /*#endregion*/
 
 /*#region divLeftSide*/

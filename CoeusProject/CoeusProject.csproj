@@ -183,7 +183,9 @@
     <Compile Include="Controllers\FileController.cs" />
     <Compile Include="Controllers\GrupoController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InteresseController.cs" />
     <Compile Include="Controllers\MessageController.cs" />
+    <Compile Include="Controllers\VideoController.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Facade\AccountFacade.cs" />
     <Compile Include="Global.asax.cs">
@@ -240,10 +242,12 @@
     <Compile Include="Models\Video.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\InteresseVM.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\font\vjs.svg" />
     <Content Include="Content\kendo\dataviz\Black\markers.png" />
     <Content Include="Content\kendo\dataviz\Black\markers_2x.png" />
     <Content Include="Content\kendo\dataviz\BlueOpal\markers.png" />
@@ -1189,6 +1193,7 @@
     <Content Include="Content\kendo\web\window\egg-chair.png" />
     <Content Include="Content\kendo\web\window\kubus-armchair.png" />
     <Content Include="Content\Site.css" />
+    <Content Include="Content\video-js.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -1272,6 +1277,9 @@
     <Content Include="Content\LiberationMono-Bold.ttf" />
     <Content Include="Content\LiberationMono-Regular.ttf" />
     <Content Include="Content\kendo.coeus.css" />
+    <Content Include="Content\font\vjs.eot" />
+    <Content Include="Content\font\vjs.ttf" />
+    <Content Include="Content\font\vjs.woff" />
     <None Include="Properties\PublishProfiles\Chimera Publish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -1756,6 +1764,7 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\video.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -1787,6 +1796,11 @@
     <Content Include="Views\Artigo\_ArtigosLeftPartial.cshtml" />
     <Content Include="Views\Artigo\_ArtigoEditPartial.cshtml" />
     <Content Include="Views\Home\_ContentPartial.cshtml" />
+    <Content Include="Views\Interesse\_InteressePartial.cshtml" />
+    <Content Include="Views\Interesse\_InteresseItemPartial.cshtml" />
+    <Content Include="Views\Video\MainVideos.cshtml" />
+    <Content Include="Views\Video\_VideosLeftPartial.cshtml" />
+    <Content Include="Views\Video\_VideoEditPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,0 +1,40 @@
+﻿@model int
+@using Kendo.Mvc.UI
+@{Layout = null;}
+<link href="~/Content/video-js.css" rel="stylesheet" />
+<script src="~/Scripts/video.js"></script>
+<script>
+    function gridVideos_Data() {
+        return { idUsuario: '@Model' };
+    }
+</script>
+
+@(Html.Kendo().Grid<CoeusProject.Models.Video>()
+    .Name("gridMainVideos")
+    .DataSource(dt => dt.Ajax().Read(r => r.Action("AjaxReadVideos", "Video").Data("gridVideos_Data")))
+    .Selectable(select => select.Mode(GridSelectionMode.Single))
+    .Columns(c =>
+    {
+        c.Bound(m => m.Objeto.NmObjeto).Title("Vídeos de " + (new CoeusProject.Models.CoeusProjectContext().Usuarios.Where(u => u.IdUsuario == Model)
+            .FirstOrDefault().Decrypt().NmPessoa));
+    })
+)
+
+<video id="example_video_1" class="video-js vjs-default-skin" controls preload="none" width="640" height="264"
+       poster="http://video-js.zencoder.com/oceans-clip.png"
+       data-setup="{}">
+    @*<source src="http://video-js.zencoder.com/oceans-clip.mp4" type='video/mp4' />*@
+    <source src="~/User_Data/1.mp4" type='video/mp4' />
+    <p class="vjs-no-js">To view this video please enable JavaScript, and consider upgrading to a web browser that <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a></p>
+</video>
+
+
+<script>
+    $(document).ready(function () {
+        $("#gridMainVideos").on("dblclick", "tr.k-state-selected", function () {
+            var grid = $("#gridMainVideos").data("kendoGrid");
+            var selectedItem = grid.dataItem(grid.select());
+            EditVideo(selectedItem.IdVideo);
+        });
+    })
+</script>

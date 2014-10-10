@@ -35,16 +35,16 @@
 
 <div class="divLeftSide">
     <header>
-        @(Html.ActionLink("Coeus Project", "*", "*", new { @id="lnkHome"}))
+        @(Html.ActionLink("Coeus Project", "*", "*", new { @id = "lnkHome" }))
     </header>
     <div id="divLeftContent">
         @Html.Action("LeftContent", "Home")
     </div>
     <div id="divUser" class="divUser">
         @(Html.Kendo().Button().Name("btnConfigure")
-            .Content("<img src='/Images/configure.png' alt='Exit'/>")
-            .HtmlAttributes(new { @style = "float: left", @type="button" })
-            .Events(e=>e.Click("btnConfigure_Click"))
+            .Content("<img src='/User_Data/" + Model.NmThumbFoto + "' alt='Configure'/>")
+            .HtmlAttributes(new { @style = "float: left; margin: 0; padding: 0; background-color: transparent; background-image: none; border: 0 none transparent", @type = "button" })
+            .Events(e => e.Click("btnConfigure_Click"))
         )
         <div id="divNmUsuario" style="display: inline-block">
             @Model.NmPessoa

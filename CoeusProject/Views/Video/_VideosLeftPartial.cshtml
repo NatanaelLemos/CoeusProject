@@ -1,0 +1,74 @@
+﻿@model CoeusProject.Models.Usuario
+@using Kendo.Mvc.UI
+@using CoeusProject.Models
+@using CoeusProject.Facade
+@{
+    Layout = null;
+    Usuario usuarioLogado = AccountFacade.GetLoggedInUser();
+}
+
+<script>
+    var idDonoVideo = '@Model.IdUsuario';
+    function gridVideos_Data() {
+        return { idUsuario: idDonoVideo };
+    }
+
+    function btnNovoVideo_Click(e) {
+        $('#divContent').load('@Url.Action("CreatePartial","Video")');
+    }
+
+    $(document).ready(function () {
+        $("#gridVideos").on("dblclick", "tr.k-state-selected", function () {
+            var grid = $("#gridVideos").data("kendoGrid");
+            var selectedItem = grid.dataItem(grid.select());
+            EditVideo(selectedItem.IdArtigo);
+        });
+    })
+
+    function EditVideo(idVideo) {
+        $('#divContent').load('@Url.Action("EditPartial", "Video")', { idVideo: idVideo });
+    }
+
+    function gridVideos_DataBound(e) {
+        var data = this.dataSource.data();
+        $(data).each(function () {
+            $('#nmObjeto-' + this.IdVideo).kendoTooltip({
+                position: 'right',
+                content: '<div style="font-size: 7pt">' +
+                        ((this && this.Objeto && this.Objeto.TxDescricao) ? this.Objeto.TxDescricao : '') +
+                        '</div>'
+            });
+        });
+
+    }
+</script>
+@{if (usuarioLogado.IdUsuario == Model.IdUsuario)
+{
+    <div style="text-align: left">
+        @(Html.Kendo().Button()
+        .Name("btnNovoVideo")
+        .Content("Novo Vídeo")
+        .HtmlAttributes(new { @type = "button", @style = "width: 100%" })
+        .Events(e => e.Click("btnNovoVideo_Click")))
+    </div>
+}}
+
+@(Html.Kendo().Grid<CoeusProject.Models.Video>()
+    .Name("gridVideos")
+    .DataSource(dt => dt.Ajax()
+        .Read(
+            r => r.Action("AjaxReadVideos", "Video")
+            .Data("gridVideos_Data")
+        )
+        .Model(model => model.Id(m => m.IdVideo))
+    )
+    .Columns(c =>
+    {
+        c.Bound(m => m.Objeto.NmObjeto).Title("<div style='margin: 0; padding: 0; width: 185px; overflow: hidden'>Vídeos de " + Model.NmPessoa + "</div>")
+            .Width(198).HtmlAttributes(new { @style = "width: 198px" })
+            .ClientTemplate("<div id='nmObjeto-#=IdVideo#'>#=Objeto.NmObjeto#</div>");
+    })
+    .Events(e => e.DataBound("gridVideos_DataBound"))
+    .Selectable(select => select.Mode(GridSelectionMode.Single))
+    .HtmlAttributes(new { @style = "font-size: 8pt; width: 198px" })
+)

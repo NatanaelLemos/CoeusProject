@@ -79,6 +79,16 @@ namespace CoeusProject
             return artigosRet;
         }
 
+        public static List<Video> Decrypt(this IQueryable<Video> videos)
+        {
+            List<Video> videosRet = new List<Video>();
+            foreach (Video video in videos)
+            {
+                videosRet.Add(video.Decrypt());
+            }
+            return videosRet;
+        }
+
         public static List<Grupo> Decrypt(this IQueryable<Grupo> grupos)
         {
             List<Grupo> gruposRet = new List<Grupo>();

@@ -9,6 +9,7 @@ using CoeusProject.Facade;
 using System.Data.Entity;
 using System.Web;
 using System.Collections.Generic;
+using CoeusProject.ViewModels;
 
 namespace CoeusProject.Controllers
 {
@@ -47,6 +48,11 @@ namespace CoeusProject.Controllers
             return Content(Url.Action("Index", "Home"));
         }
 
+        public ActionResult Teste(Int32 IdTeste)
+        {
+            return View();
+        }
+
         public ActionResult Register()
         {
             Usuario usuario = AccountFacade.GetLoggedInUser();
@@ -72,11 +78,20 @@ namespace CoeusProject.Controllers
         }
 
         [HttpPost]
-        public ActionResult Register(Usuario usuario)
+        public ActionResult Register(Usuario usuario, List<InteresseVM> interesses)
         {
             if ((new CoeusProjectContext()).Usuarios.Decrypt().Where(u => u.TxEmail == usuario.TxEmail).Count() > 0)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.NotAcceptable, "O e-mail informado já pertence à outro usuário");
+            }
+
+            if (interesses != null && interesses.Count() > 0)
+            {
+                usuario.Temas = new List<Tema>();
+                foreach (InteresseVM interesse in interesses)
+                {
+                    usuario.Temas.Add(_context.Temas.Where(t => t.NmTema == interesse.NmInteresse).FirstOrDefault());
+                }
             }
 
             usuario.NmFoto = (new FileController()).FormatImage(usuario.NmFoto);
@@ -97,7 +112,7 @@ namespace CoeusProject.Controllers
                     return new HttpStatusCodeResult(HttpStatusCode.NotAcceptable, ErrorFacade.GetErrorMessage(ex));
                 }
             }
-
+            
             return new HttpStatusCodeResult(HttpStatusCode.NotAcceptable, ErrorFacade.GetErrorMessage(ModelState));
         }
 

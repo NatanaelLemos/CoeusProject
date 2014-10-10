@@ -1,0 +1,47 @@
+﻿@model int?
+@using Kendo.Mvc.UI
+@{Layout = null;}
+
+<script>
+    $(document).ready(function () {
+        $('#btnAddInteresse@(Model.ToString())').kendoTooltip({
+            position: 'right',
+            content: 'Adicionar novo interesse'
+        });
+
+        $('#btnRemoveInteresse@(Model.ToString())').kendoTooltip({
+            position: 'right',
+            content: 'Remover interesse'
+        });
+    })
+</script>
+
+<div id="divInteresse@(Model.ToString())" style="float: left">
+    @Html.Hidden("hidIdxInteresse", Model.Value)
+
+    @(Html.Kendo().ComboBox().Name("cmbInteresse" + Model.ToString())
+        .DataValueField("IdTema")
+        .DataTextField("NmTema")
+        .HtmlAttributes(new { @style = "width: 250px" , @placeholder = "Interesse", @data_index = Model.ToString() })
+        .Suggest(true)
+        .MinLength(2)
+        .AutoBind(false)
+        .DataSource(ds=>ds.Read(r=>r.Action("GetInteresses", "Interesse").Data("cmbInteresse_AdditionalData")).ServerFiltering(true))
+        .Events(e=>e.Change("cmbInteresse_Change"))
+        .Filter(FilterType.StartsWith)
+    )
+
+    @(Html.Kendo().Button()
+        .Name("btnAddInteresse" + Model.ToString())
+        .Content("+")
+        .HtmlAttributes(new { @type = "button", @data_index = Model.ToString() })
+        .Events(e => e.Click("btnAddInteresse_Click"))
+    )
+
+    @(Html.Kendo().Button()
+        .Name("btnRemoveInteresse" + Model.ToString())
+        .Content("-")
+        .HtmlAttributes(new { @type = "button", @data_index = Model.ToString(), @class = "invisible" })
+        .Events(e => e.Click("btnRemoveInteresse_Click"))
+    )
+</div>
