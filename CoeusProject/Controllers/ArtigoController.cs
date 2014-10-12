@@ -28,7 +28,7 @@ namespace CoeusProject.Controllers
             return View("_ArtigosLeftPartial", usuarioDono);
         }
 
-        public ActionResult AjaxReadArtigos(DataSourceRequest request, Int32 idUsuario)
+        private JsonResult GetAjaxArtigos(DataSourceRequest request, Int32 idUsuario)
         {
             IQueryable<Artigo> artigos = _context.Artigos.Include(a=>a.Objeto).Include(a=>a.Objeto.Salt).Where(o=>o.Objeto.IdUsuario == idUsuario);
             DataSourceResult result = artigos.Decrypt().Select(a => new Artigo
@@ -47,6 +47,11 @@ namespace CoeusProject.Controllers
                 Data = result.Data,
                 Total = result.Data.AsQueryable().Count()
             });
+        }
+
+        public ActionResult AjaxReadArtigos(DataSourceRequest request, Int32 idUsuario)
+        {
+            return GetAjaxArtigos(request, idUsuario);
         }
 
         [OutputCache(Duration=0, NoStore=true)]
@@ -116,6 +121,18 @@ namespace CoeusProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.NotAcceptable, ErrorFacade.GetErrorMessage(ex));
             }
+        }
+
+        public ActionResult Delete(DataSourceRequest request, Artigo artigo)
+        {
+            Objeto objeto = _context.Objetos.Where(o=>o.IdObjeto == artigo.IdObjeto).FirstOrDefault();
+            
+            _context.Artigos.Remove(_context.Artigos.Where(a => a.IdArtigo == artigo.IdArtigo).FirstOrDefault());
+            _context.Objetos.Remove(objeto);
+
+            _context.SaveChanges();
+
+            return GetAjaxArtigos(request, AccountFacade.GetLoggedInUser().IdUsuario);
         }
 
         protected override void Dispose(bool disposing)

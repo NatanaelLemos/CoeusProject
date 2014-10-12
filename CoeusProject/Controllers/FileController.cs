@@ -13,6 +13,18 @@ namespace CoeusProject.Controllers
     {
         public ActionResult SaveFile(HttpPostedFileBase file, String nmFile)
         {
+            DoSaveFile(file, nmFile);
+            return Content("");
+        }
+
+        public ActionResult SavePoster(HttpPostedFileBase poster, String nmFile)
+        {
+            DoSaveFile(poster, nmFile);
+            return Content("");
+        }
+
+        private void DoSaveFile(HttpPostedFileBase file, String nmFile)
+        {
             if (file != null)
             {
                 String extension = Path.GetExtension(file.FileName);
@@ -26,7 +38,6 @@ namespace CoeusProject.Controllers
 
                 file.SaveAs(physicalPath);
             }
-            return Content("");
         }
 
         public String FormatImage(String nmFoto)
@@ -55,6 +66,23 @@ namespace CoeusProject.Controllers
             return Path.ChangeExtension(nmFoto, "png");
         }
 
+        public String FormatPoster(String nmPoster)
+        {
+            String physicalPath = Path.Combine(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "User_Data"), nmPoster);
+
+            if (!System.IO.File.Exists(physicalPath))
+            {
+                return String.Empty;
+            }
+
+            Image resizedImage = ResizeImage(physicalPath, new Size(400, 225));
+            System.IO.File.Delete(physicalPath);
+            physicalPath = Path.ChangeExtension(physicalPath, "png");
+            resizedImage.Save(physicalPath, ImageFormat.Png);
+
+            return Path.ChangeExtension(nmPoster, "png");
+        }
+
         private Image ResizeImage(String path, Size size)
         {
             Stream imageStream = new FileStream(path, FileMode.Open);
@@ -64,6 +92,16 @@ namespace CoeusProject.Controllers
             imageStream.Dispose();
 
             return resizedImage;
+        }
+
+        public static void RemoveFile(String fileName)
+        {
+            String physicalPath = Path.Combine(Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "User_Data"), fileName);
+
+            if (System.IO.File.Exists(physicalPath))
+            {
+                System.IO.File.Delete(physicalPath);
+            }
         }
     }
 }

@@ -98,5 +98,18 @@ namespace CoeusProject
             }
             return gruposRet;
         }
+
+        public static List<Objeto> Decrypt(this IQueryable<Objeto> objetos)
+        {
+            CoeusProjectContext _context = new CoeusProjectContext();
+            List<Objeto> objetosRet = new List<Objeto>();
+
+            foreach (Objeto objeto in objetos)
+            {
+                objetosRet.Add(objeto.Decrypt(_context));
+            }
+
+            return objetosRet;
+        }
     }
 }

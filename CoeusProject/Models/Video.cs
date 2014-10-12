@@ -19,6 +19,10 @@ namespace CoeusProject.Models
         public String TxUrl { get; set; }
 
         [Required]
+        [StringLength(4096)]
+        public string TxUrlPoster { get; set; }
+
+        [Required]
         [ForeignKey("Objeto")]
         public Int32 IdObjeto { get; set; }
         public virtual Objeto Objeto { get; set; }

@@ -1,0 +1,62 @@
+﻿@using CoeusProject.ViewModels
+@model IEnumerable<ObjetoVM>
+@{Layout = null;}
+
+<style>
+    #tblAllContent td {
+        border: 1px solid gray;
+        border-radius: 5px;
+        width: 50%;
+    }
+
+    #tblAllContent a{
+        cursor: pointer;
+    }
+</style>
+
+<script>
+    function ContentArtigo_Click(idArtigo) {
+        $('#divContent').load('@Url.Action("EditPartial", "Artigo")', { idArtigo: idArtigo });
+    }
+
+    function ContentVideo_Click(idVideo) {
+        $('#divContent').load('@Url.Action("EditPartial", "Video")', { idVideo: idVideo });
+    }
+</script>
+
+<table id="tblAllContent" style="width: 100%">
+    @{
+        Int32 index = 0;
+
+        foreach (ObjetoVM objeto in Model)
+        {
+            if (index % 2 == 0)
+            {
+                <text>
+                    <tr>
+                </text>
+            }
+            <text>
+                <td>
+                    <h4>
+                        @{if (objeto.TpObjeto == TipoObjeto.Artigo)
+                        { <img src="../../Images/objectTypeArticlepng.png" alt="A" />
+                            <a onclick="ContentArtigo_Click(@objeto.IdArtigo)">@objeto.NmObjeto</a>
+                        }
+                        else
+                        { <img src="../../Images/objectTypeVideo.png" alt="V" />
+                            <a onclick="ContentVideo_Click(@objeto.IdVideo)">@objeto.NmObjeto</a>
+                        }}
+
+                    </h4>
+                    @objeto.TxDescricao
+                </td>
+            </text>
+            if (index % 2 != 0)
+            {
+                @:</tr>
+            }
+            index++;
+        }
+    }
+</table>

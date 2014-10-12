@@ -2,9 +2,22 @@
 @using Kendo.Mvc.UI
 @{Layout = null;}
 
+<style>
+    .k-upload {
+        display: inline-block;
+        width: 300px;
+        height: 0;
+        vertical-align: top;
+    }
+
+    .k-dropzone {
+        height: 0;
+    }
+</style>
+
 <script>
     function btnVoltarMainVideos_Click(e) {
-        $('#divContent').load('@Url.Action("GetMainVideos", "Videos")', { idUsuario: idDonoVideo });
+        $('#divContent').load('@Url.Action("GetMainVideos", "Video")', { idUsuario: idDonoVideo });
     }
 
     function btnEditVideo_Click(e) {
@@ -18,21 +31,24 @@
         var idVideoEdit = parseInt($('#idVideoEdit').val());
 
         function VideoEditPartial_Close() {
-            $('#wndArtigoEdit').data('kendoWindow').close();
+            $('#wndVideoEdit').data('kendoWindow').close();
             $('#divContent').load('@Url.Action("GetMainVideos", "Video")', { idUsuario: idDonoVideo });
             $('#gridVideos').data('kendoGrid').dataSource.read();
         }
 
         if (idVideoEdit) {
             $.ajaxPost('@Url.Action("Edit","Video")', {
-                idArtigo: idVideoEdit,
+                idVideo: idVideoEdit,
                 nmObjeto: $('#txNomeObjeto').val(),
-                txDescricao: $('#txDescricaoObjeto').val()
+                txUrl: $('#TxUrl').val() + extension,
+                txUrlPoster: $('#TxUrlPoster').val() + extensionPoster
             }, null, VideoEditPartial_Close);
         } else {
             $.ajaxPost('@Url.Action("Create","Video")', {
                 nmObjeto: $('#txNomeObjeto').val(),
-                txDescricao: $('#txDescricaoObjeto').val()
+                txDescricao: $('#txDescricaoObjeto').val(),
+                txUrl: $('#TxUrl').val() + extension,
+                txUrlPoster: $('#TxUrlPoster').val() + extensionPoster
             }, null, VideoEditPartial_Close);
         }
     }
@@ -53,6 +69,23 @@
         extension = e.files[0].extension;
     }
 
+
+    var extensionPoster = ".png";
+    function Poster_Select(e) {
+        if (e.files[0].extension != ".png" && e.files[0].extension != ".jpg" && e.files[0].extension != ".bmp") {
+            e.preventDefault();
+            kendoAlert('Apenas imagens nos formatos png, jpg ou bmp são aceitas');
+        }
+    }
+
+    function Poster_Upload(e) {
+        e.data = { nmFile: '@Model.TxUrlPoster' };
+    }
+
+    function Poster_Success(e) {
+        extensionPoster = e.files[0].extension;
+    }
+
     $(document).ready(function () {
         $('#btnCancelarEditVideo').kendoTooltip({
             position: 'bottom',
@@ -67,6 +100,7 @@
 </script>
 
 @Html.HiddenFor(m => m.TxUrl)
+@Html.HiddenFor(m => m.TxUrlPoster)
 @Html.HiddenFor(m => m.IdVideo, new { @id = "idVideoEdit" })
 @Html.HiddenFor(m => m.Objeto.NmObjeto, new { @id = "hidNmObjeto" })
 @Html.HiddenFor(m => m.Objeto.TxDescricao, new { @id = "hidTxDescricao" })
@@ -82,32 +116,55 @@
     }
 }
 
-@(Html.Kendo().Button().Name("btnVoltarMainVideos")
-    .Content("<img src='Images/undo.png' width='16' height='16' />")
-    .HtmlAttributes(new { @type = "button" })
-    .Events(e => e.Click("btnVoltarMainVideos"))
-)
-@(Html.Kendo().Button().Name("btnEditVideo")
-    .Content("<img src='Images/saveAs.png' width='16' height='16' />")
-    .HtmlAttributes(new { @type = "button" })
-    .Events(e => e.Click("btnEditVideo"))
-)
+<div class="k-header" style="height: 50px">
+    <div style="margin-top: 10px; display: inline-block">
+        @(Html.Kendo().Button().Name("btnVoltarMainVideos")
+            .Content("<img src='Images/undo.png' width='16' height='16' />")
+            .HtmlAttributes(new { @type = "button" })
+            .Events(e => e.Click("btnVoltarMainVideos_Click"))
+        )
 
-@(Html.Kendo().Upload()
-    .Name("file")
-    .Multiple(false)
-    .Async(async => async
-        .SaveUrl(Url.Action("SaveFile", "File"))
-        .AutoUpload(true)
+        @(Html.Kendo().Button().Name("btnEditVideo")
+            .Content("<img src='Images/saveAs.png' width='16' height='16' />")
+            .HtmlAttributes(new { @type = "button" })
+            .Events(e => e.Click("btnEditVideo_Click"))
+        )
+    </div>
+
+    @(Html.Kendo().Upload()
+        .Name("file")
+        .Multiple(false)
+        .Async(async => async
+            .SaveUrl(Url.Action("SaveFile", "File"))
+            .AutoUpload(true)
+        )
+        .Messages(m => m.Select("Selecionar Vídeo"))
+        .HtmlAttributes(new { @style = "width: 200px" })
+        .ShowFileList(false)
+        .Events(e => e
+            .Select("Video_Select")
+            .Upload("Video_Upload")
+            .Success("Video_Success")
+        )
     )
-    .Messages(m => m.Select("Selecionar Vídeo"))
-    .ShowFileList(false)
-    .Events(e => e
-        .Select("Video_Select")
-        .Upload("Video_Upload")
-        .Success("Video_Success")
+
+    @(Html.Kendo().Upload()
+        .Name("poster")
+        .Multiple(false)
+        .Async(async => async
+            .SaveUrl(Url.Action("SavePoster", "File"))
+            .AutoUpload(true)
+        )
+        .Messages(m => m.Select("Selecionar Poster"))
+        .ShowFileList(false)
+        .Events(e => e
+            .Select("Poster_Select")
+            .Upload("Poster_Upload")
+            .Success("Poster_Success")
+        )
     )
-)
+
+</div>
 
 @(Html.Kendo().Window().Name("wndVideoEdit")
     .Content(@<text>

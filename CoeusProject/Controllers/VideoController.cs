@@ -28,55 +28,73 @@ namespace CoeusProject.Controllers
             return View("_VideosLeftPartial", usuarioDono);
         }
 
-        public ActionResult AjaxReadVideos(DataSourceRequest request, Int32 idUsuario)
+        private JsonResult GetAjaxVideos(DataSourceRequest request, Int32 idUsuario)
         {
-            IQueryable<Video> videos = _context.Videos.Include(v=>v.Objeto).Include(v=>v.Objeto.Salt).Where(o=>o.Objeto.IdUsuario == idUsuario);
+            IQueryable<Video> videos = _context.Videos.Include(v => v.Objeto).Include(v => v.Objeto.Salt).Where(o => o.Objeto.IdUsuario == idUsuario);
             DataSourceResult result = videos.Decrypt().Select(v => new Video
-                                        {
-                                            IdVideo = v.IdVideo,
-                                            Objeto = new Objeto 
-                                            {
-                                                IdObjeto = v.Objeto.IdObjeto,
-                                                NmObjeto = v.Objeto.NmObjeto,
-                                                TxDescricao = v.Objeto.TxDescricao
-                                            }
-                                        }).ToDataSourceResult(request);
+            {
+                IdVideo = v.IdVideo,
+                Objeto = new Objeto
+                {
+                    IdObjeto = v.Objeto.IdObjeto,
+                    NmObjeto = v.Objeto.NmObjeto,
+                    TxDescricao = v.Objeto.TxDescricao
+                }
+            }).ToDataSourceResult(request);
 
-            return Json(new DataSourceResult() 
-            { 
+            return Json(new DataSourceResult()
+            {
                 Data = result.Data,
                 Total = result.Data.AsQueryable().Count()
             });
         }
 
+        public ActionResult AjaxReadVideos(DataSourceRequest request, Int32 idUsuario)
+        {
+            return GetAjaxVideos(request, idUsuario);
+        }
+
         [OutputCache(Duration=0, NoStore=true)]
         public ActionResult CreatePartial()
         {
-            Video video = new Video() { Objeto = new Objeto(), TxUrl = Sequence.GetSequence("video").ToString()};
-            String physicalPath = Server.MapPath("~/User_Data/") + video.TxUrl;
+            Video video = new Video() 
+            { 
+                Objeto = new Objeto(), 
+                TxUrl = Sequence.GetSequence("video").ToString(), 
+                TxUrlPoster = Sequence.GetSequence("foto").ToString()
+            };
+            
+            String physicalPathVideo = Server.MapPath("~/User_Data/") + video.TxUrl;
+            String physicalPathPoster = Server.MapPath("~/User_Data/") + video.TxUrlPoster;
 
-            if (System.IO.File.Exists(physicalPath + ".mp4"))
+            if (System.IO.File.Exists(physicalPathVideo + ".mp4"))
             {
-                System.IO.File.Delete(physicalPath + ".mp4");
+                System.IO.File.Delete(physicalPathVideo + ".mp4");
             }
-            else if (System.IO.File.Exists(physicalPath + ".webm"))
+            else if (System.IO.File.Exists(physicalPathVideo + ".webm"))
             {
-                System.IO.File.Delete(physicalPath + ".webm");
+                System.IO.File.Delete(physicalPathVideo + ".webm");
             }
-            else if (System.IO.File.Exists(physicalPath + ".ogg"))
+            else if (System.IO.File.Exists(physicalPathVideo + ".ogg"))
             {
-                System.IO.File.Delete(physicalPath + ".ogg");
+                System.IO.File.Delete(physicalPathVideo + ".ogg");
             }
 
+            if (System.IO.File.Exists(physicalPathPoster + ".png"))
+            {
+                System.IO.File.Delete(physicalPathPoster + ".png");
+            }
+
+            System.IO.File.Copy(Server.MapPath("~/Images/noPoster.png"), physicalPathPoster);
             return View("_VideoEditPartial", video);
         }
 
         [HttpPost]
-        public ActionResult Create(String nmObjeto, String txDescricao, String txArtigo)
+        public ActionResult Create(String nmObjeto, String txDescricao, String txUrl, String txUrlPoster)
         {
             try
             {
-                Artigo artigo = new Artigo()
+                Video video = new Video()
                 {
                     Objeto = new Objeto()
                     {
@@ -85,10 +103,11 @@ namespace CoeusProject.Controllers
                         NmObjeto = nmObjeto,
                         TxDescricao = txDescricao
                     },
-                    TxArtigo = txArtigo
+                    TxUrl = txUrl,
+                    TxUrlPoster = (new FileController()).FormatPoster(txUrlPoster)
                 };
 
-                _context.Artigos.Add(artigo.Encrypt(_context));
+                _context.Videos.Add(video.Encrypt(_context));
                 _context.SaveChanges();
                 return new HttpStatusCodeResult(HttpStatusCode.OK);
             }
@@ -99,16 +118,16 @@ namespace CoeusProject.Controllers
         }
 
         [OutputCache(Duration = 0, NoStore = true)]
-        public ActionResult EditPartial(Int32 idArtigo)
+        public ActionResult EditPartial(Int32 idVideo)
         {
-            Artigo artigo = _context.Artigos.Where(a=>a.IdArtigo == idArtigo).FirstOrDefault();
-            if (artigo == null)
+            Video video =  _context.Videos.Where(v=>v.IdVideo == idVideo).Include(v=>v.Objeto).FirstOrDefault();
+            if (video == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.NotAcceptable, "Artigo não encontrado");
+                return new HttpStatusCodeResult(HttpStatusCode.NotAcceptable, "Vídeo não encontrado");
             }
 
-            artigo.Decrypt();
-            return View("_ArtigoEditPartial", artigo);
+            video.Decrypt();
+            return View("_VideoWatchPartial", video);
         }
 
         [HttpPost]
@@ -131,6 +150,22 @@ namespace CoeusProject.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.NotAcceptable, ErrorFacade.GetErrorMessage(ex));
             }
+        }
+
+        public ActionResult Delete(DataSourceRequest request, Video video)
+        {
+            Video deletedVideo = _context.Videos.Where(v => v.IdVideo == video.IdVideo).FirstOrDefault();
+            Objeto deletedObject = _context.Objetos.Where(o => o.IdObjeto == deletedVideo.IdObjeto).FirstOrDefault();
+
+            deletedVideo.Decrypt();
+
+            FileController.RemoveFile(deletedVideo.TxUrl);
+            _context.Videos.Remove(deletedVideo);
+            _context.Objetos.Remove(deletedObject);
+
+            _context.SaveChanges();
+
+            return GetAjaxVideos(request, AccountFacade.GetLoggedInUser().IdUsuario);
         }
 
         protected override void Dispose(bool disposing)

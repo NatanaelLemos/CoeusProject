@@ -1,0 +1,47 @@
+﻿@model CoeusProject.Models.Video
+@using Kendo.Mvc.UI
+@{Layout = null;}
+
+<link href="~/Content/video-js.css" rel="stylesheet" />
+<script src="~/Scripts/video.js"></script>
+
+<style type="text/css">
+    
+</style>
+
+<script>
+    function btnVoltarMainVideos_Click(e) {
+        $('#divContent').load('@Url.Action("GetMainVideos", "Video")', { idUsuario: idDonoVideo });
+    }
+</script>
+
+
+<div class="k-header" style="height: 30px">
+    @(Html.Kendo().Button().Name("btnVoltarMainVideos")
+            .Content("<img src='Images/undo.png' width='16' height='16' />")
+            .HtmlAttributes(new { @type = "button", @style = "float: left" })
+            .Events(e => e.Click("btnVoltarMainVideos_Click"))
+    )
+    <h3>@Model.Objeto.NmObjeto</h3>
+</div>
+
+<div style="position: absolute; bottom: 105px; top: 60px; left: 0; right: 0">
+    <video id="vidVideo" class="video-js vjs-default-skin" controls preload="none" width="400" height="225"
+           poster="~/User_Data/@Model.TxUrlPoster"
+           data-setup="{}">
+        <source src="~/User_Data/@Model.TxUrl" type='video/mp4' />
+        <source src="~/User_Data/@Model.TxUrl" type='video/3gpp' />
+        <source src="~/User_Data/@Model.TxUrl" type='video/m4v' />
+        <source src="~/User_Data/@Model.TxUrl" type='video/mpeg' />
+        <source src="~/User_Data/@Model.TxUrl" type='video/ogg' />
+        <source src="~/User_Data/@Model.TxUrl" type='video/quicktime' />
+        <source src="~/User_Data/@Model.TxUrl" type='video/webm' />
+        <source src="~/User_Data/@Model.TxUrl" type='video/x-ms-wmv' />
+
+        <p class="vjs-no-js">Para assistir à este vídeo, habilite a execução de JavaScript e considere atualizar seu web browser para um <a href="http://videojs.com/html5-video-support/" target="_blank">que suporte vídeos HTML5</a></p>
+    </video>
+</div>
+
+<div style="position: absolute; bottom: 0; left: 20px; right: 20px; height: 100px; overflow:auto">
+    @Model.Objeto.TxDescricao
+</div>

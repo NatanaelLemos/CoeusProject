@@ -22,7 +22,7 @@
     function btnEditArtigo_Click(e) {
         $('#txNomeObjeto').val($('#hidNmObjeto').val());
         $('#txDescricaoObjeto').val($('#hidTxDescricao').val());
-        
+
         $('#wndArtigoEdit').data('kendoWindow').center().open();
     }
 
@@ -79,32 +79,46 @@
     @Html.HiddenFor(m => m.Objeto.NmObjeto, new { @id = "hidNmObjeto" })
     @Html.HiddenFor(m => m.Objeto.TxDescricao, new { @id = "hidTxDescricao" })
 
-    @(Html.Kendo().EditorFor(model => model.TxArtigo).Name("artigoEditor")
-    .HtmlAttributes(new { @style = "height: 100%; " })
-    .Tools(tool => tool.Clear()
-            .CustomButton(cb => cb.Name("btnCancelar").Exec("btnVoltarMainArtigos_Click").ToolTip("Cancelar"))
-            .CustomButton(cb => cb.Name("btnEdit").Exec("btnEditArtigo_Click").ToolTip("Salvar"))
-            .Separator()
-            .Bold()
-            .Italic()
-            .Underline()
-            .Strikethrough()
-            .JustifyLeft()
-            .JustifyCenter()
-            .JustifyRight()
-            .JustifyFull()
-            .InsertUnorderedList()
-            .InsertOrderedList()
-            .Indent()
-            .Outdent()
-            .SubScript()
-            .SuperScript()
-            .Separator()
-            .InsertImage()
-            .CreateLink()
-            .TableEditing()
-    )
-    )
+    @{if (Model.Objeto.IdUsuario == CoeusProject.Facade.AccountFacade.GetLoggedInUser().IdUsuario)
+    {
+        @(Html.Kendo().EditorFor(model => model.TxArtigo).Name("artigoEditor")
+            .HtmlAttributes(new { @style = "height: 100%; " })
+            .Tools(tool => tool.Clear()
+                    .CustomButton(cb => cb.Name("btnCancelar").Exec("btnVoltarMainArtigos_Click").ToolTip("Cancelar"))
+                    .CustomButton(cb => cb.Name("btnEdit").Exec("btnEditArtigo_Click").ToolTip("Salvar"))
+                    .Separator()
+                    .Bold()
+                    .Italic()
+                    .Underline()
+                    .Strikethrough()
+                    .JustifyLeft()
+                    .JustifyCenter()
+                    .JustifyRight()
+                    .JustifyFull()
+                    .InsertUnorderedList()
+                    .InsertOrderedList()
+                    .Indent()
+                    .Outdent()
+                    .SubScript()
+                    .SuperScript()
+                    .Separator()
+                    .InsertImage()
+                    .CreateLink()
+                    .TableEditing()
+            ))
+    }
+    else
+    {
+        @(Html.Kendo().EditorFor(model => model.TxArtigo).Name("artigoEditor")
+            .HtmlAttributes(new { @style = "height: 100%; "})
+            .Tools(tool => tool.Clear()
+            )
+        )
+        
+        <script>
+            $($('#artigoEditor').data().kendoEditor.body).attr('contenteditable', false)
+        </script>
+    }}
 </div>
 
 @(Html.Kendo().Window().Name("wndArtigoEdit")
@@ -113,7 +127,7 @@
         @(Html.TextBox("txNomeObjeto", "", new { @class = "k-textbox" }))
 
         Descrição:
-        @(Html.TextBox("txDescricaoObjeto","", new { @class = "k-textbox" }))
+        @(Html.TextBox("txDescricaoObjeto", "", new { @class = "k-textbox" }))
 
         @(Html.Kendo().Button().Name("btnSalvarArtigo")
             .Content("Salvar")

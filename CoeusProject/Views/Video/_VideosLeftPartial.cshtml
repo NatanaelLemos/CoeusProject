@@ -21,7 +21,7 @@
         $("#gridVideos").on("dblclick", "tr.k-state-selected", function () {
             var grid = $("#gridVideos").data("kendoGrid");
             var selectedItem = grid.dataItem(grid.select());
-            EditVideo(selectedItem.IdArtigo);
+            EditVideo(selectedItem.IdVideo);
         });
     })
 

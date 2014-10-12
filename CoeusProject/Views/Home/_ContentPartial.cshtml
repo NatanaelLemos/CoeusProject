@@ -7,7 +7,7 @@
         i.Add().Text("Feed").Selected(true)
             .Content(@<text>
                 <div class="divContent">
-                    Feeds
+                    @Html.Action("GetAllContent", "Home")
                 </div>
             </text>);
     i.Add().Text("Artigos").Content("artigos");
