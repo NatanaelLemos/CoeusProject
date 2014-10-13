@@ -1,5 +1,7 @@
-﻿using System;
+﻿using CoeusProject.Models;
+using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -27,6 +29,8 @@ namespace CoeusProject
             {
                 System.IO.Directory.CreateDirectory(userDataPath);
             }
+
+            Database.SetInitializer<CoeusProjectContext>(new MigrateDatabaseToLatestVersion<CoeusProjectContext, CoeusProject.Migrations.Configuration>());
         }
     }
 }
