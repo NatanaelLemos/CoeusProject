@@ -43,7 +43,8 @@
         }
 
         $.ajaxPost('@Url.Action("Edit", "Account")', {
-            usuario: $('#frmEdit').serializeObject()
+            usuario: $('#frmEdit').serializeObject(),
+            interesses: interesses
         }, $('#frmEdit'), callBack);
 
         $('#divActions').removeAttr('disabled');
@@ -117,5 +118,7 @@
                 .Events(e => e.Click("btnExit_Click"))
             )
         </div>
+
+        @Html.Action("GetInteressePartial", "Interesse")
     </div>
 }

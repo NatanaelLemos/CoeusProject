@@ -29,9 +29,52 @@ namespace CoeusProject.Controllers
             return View("_ContentPartial");
         }
 
+        private IEnumerable<ObjetoVM> GetObjetos()
+        {
+            Usuario usuarioLogado = AccountFacade.GetLoggedInUser();
+            List<int> idUsuarioTemas = usuarioLogado.Temas.Select(t => t.IdTema).ToList();
+            IQueryable<Objeto> objetos = _context.Objetos
+                                    .Where(o => o.Temas.Any(t => idUsuarioTemas.Contains(t.IdTema)) ||
+                                                o.IdUsuario == usuarioLogado.IdUsuario);
+
+            return objetos.Decrypt().Select(o => new ObjetoVM(o));
+        }
+
         public ActionResult GetAllContent()
         {
-            return View("_AllContent", _context.Objetos.Decrypt().Select(o=>new ObjetoVM(o)));
+            return View("_AllContent", GetObjetos());
+        }
+
+        public ActionResult GetArtigosContent()
+        {
+            List<ObjetoVM> objetos = GetObjetos().ToList();
+
+            for (Int32 i = objetos.Count() - 1; i >= 0; i--)
+            {
+                Int32 idObjeto = objetos[i].IdObjeto;
+                if (_context.Artigos.Where(a => a.IdObjeto == idObjeto).Count() == 0)
+                {
+                    objetos.RemoveAt(i);
+                }
+            }
+            
+            return View("_AllContent", objetos);
+        }
+
+        public ActionResult GetVideosContent()
+        {
+            List<ObjetoVM> objetos = GetObjetos().ToList();
+
+            for (Int32 i = objetos.Count() - 1; i >= 0; i--)
+            {
+                Int32 idObjeto = objetos[i].IdObjeto;
+                if (_context.Videos.Where(v => v.IdObjeto == idObjeto).Count() == 0)
+                {
+                    objetos.RemoveAt(i);
+                }
+            }
+
+            return View("_AllContent", objetos);
         }
 
         protected override void Dispose(bool disposing)

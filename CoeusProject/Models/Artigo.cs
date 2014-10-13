@@ -23,8 +23,6 @@ namespace CoeusProject.Models
         public Int32 IdObjeto { get; set; }
         public virtual Objeto Objeto { get; set; }
 
-        public virtual ICollection<Imagem> Imagens { get; set; }
-
         public Artigo Encrypt(CoeusProjectContext Context = null)
         {
             if (Context == null)

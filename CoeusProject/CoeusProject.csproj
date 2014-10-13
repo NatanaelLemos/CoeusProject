@@ -230,6 +230,14 @@
     <Compile Include="Migrations\201410112129132_Video_UrlPoster.Designer.cs">
       <DependentUpon>201410112129132_Video_UrlPoster.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201410122330185_video_artigo_tema.cs" />
+    <Compile Include="Migrations\201410122330185_video_artigo_tema.Designer.cs">
+      <DependentUpon>201410122330185_video_artigo_tema.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201410122333205_video_artigo_tema_correcao.cs" />
+    <Compile Include="Migrations\201410122333205_video_artigo_tema_correcao.Designer.cs">
+      <DependentUpon>201410122333205_video_artigo_tema_correcao.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Artigo.cs" />
     <Compile Include="Models\Avaliacao.cs" />
@@ -1850,6 +1858,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201410112129132_Video_UrlPoster.resx">
       <DependentUpon>201410112129132_Video_UrlPoster.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201410122330185_video_artigo_tema.resx">
+      <DependentUpon>201410122330185_video_artigo_tema.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201410122333205_video_artigo_tema_correcao.resx">
+      <DependentUpon>201410122333205_video_artigo_tema_correcao.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -129,13 +129,28 @@ namespace CoeusProject.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(Usuario usuario)
+        public ActionResult Edit(Usuario usuario, List<InteresseVM> interesses)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Entry(usuario.Encrypt()).State = EntityState.Modified;
+                    Usuario usuarioEdit = _context.Usuarios.Where(u => u.IdUsuario == usuario.IdUsuario).FirstOrDefault().Decrypt();
+                    usuarioEdit.TxEmail = usuario.TxEmail;
+                    usuarioEdit.NmPessoa = usuario.NmPessoa;
+                    usuarioEdit.SnPessoa = usuario.SnPessoa;
+                    usuarioEdit.PwUsuario = usuario.PwUsuario;
+
+                    if (interesses != null && interesses.Count() > 0)
+                    {
+                        usuarioEdit.Temas = new List<Tema>();
+                        foreach (InteresseVM interesse in interesses)
+                        {
+                            usuarioEdit.Temas.Add(_context.Temas.Where(t => t.NmTema == interesse.NmInteresse).FirstOrDefault());
+                        }
+                    }
+
+                    _context.Entry(usuarioEdit.Encrypt()).State = EntityState.Modified;
                     _context.SaveChanges();
                     return Content(Url.Action("Index", "Home"));
                 }

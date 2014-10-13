@@ -10,6 +10,7 @@ using CoeusProject.Models;
 using Kendo.Mvc.UI;
 using Kendo.Mvc.Extensions;
 using CoeusProject.Facade;
+using CoeusProject.ViewModels;
 
 namespace CoeusProject.Controllers
 {
@@ -90,10 +91,15 @@ namespace CoeusProject.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(String nmObjeto, String txDescricao, String txUrl, String txUrlPoster)
+        public ActionResult Create(String nmObjeto, String txDescricao, String txUrl, String txUrlPoster, List<InteresseVM> tags)
         {
             try
             {
+                if (tags == null || tags.Count == 0)
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.NotAcceptable, "É necessário selecionar ao menos 1 tema para o vídeo");
+                }
+
                 Video video = new Video()
                 {
                     Objeto = new Objeto()
@@ -106,6 +112,13 @@ namespace CoeusProject.Controllers
                     TxUrl = txUrl,
                     TxUrlPoster = (new FileController()).FormatPoster(txUrlPoster)
                 };
+
+                video.Objeto.Temas = new List<Tema>();
+
+                foreach (InteresseVM interesse in tags)
+                {
+                    video.Objeto.Temas.Add(_context.Temas.Where(t => t.NmTema == interesse.NmInteresse).FirstOrDefault());
+                }
 
                 _context.Videos.Add(video.Encrypt(_context));
                 _context.SaveChanges();

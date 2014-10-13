@@ -40,13 +40,15 @@
                 idArtigo: idArtigoEdit,
                 nmObjeto: $('#txNomeObjeto').val(),
                 txDescricao: $('#txDescricaoObjeto').val(),
-                txArtigo: $('#artigoEditor').data('kendoEditor').value()
+                txArtigo: $('#artigoEditor').data('kendoEditor').value(),
+                tags: interesses
             }, null, ArtigoEditPartial_Close);
         } else {
             $.ajaxPost('@Url.Action("Create","Artigo")', {
                 nmObjeto: $('#txNomeObjeto').val(),
                 txDescricao: $('#txDescricaoObjeto').val(),
-                txArtigo: $('#artigoEditor').data('kendoEditor').value()
+                txArtigo: $('#artigoEditor').data('kendoEditor').value(),
+                tags: interesses
             }, null, ArtigoEditPartial_Close);
         }
     }
@@ -128,6 +130,8 @@
 
         Descrição:
         @(Html.TextBox("txDescricaoObjeto", "", new { @class = "k-textbox" }))
+
+        @Html.Action("GetInteressePartial", "Interesse")
 
         @(Html.Kendo().Button().Name("btnSalvarArtigo")
             .Content("Salvar")

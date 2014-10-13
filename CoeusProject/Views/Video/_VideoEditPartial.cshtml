@@ -41,14 +41,16 @@
                 idVideo: idVideoEdit,
                 nmObjeto: $('#txNomeObjeto').val(),
                 txUrl: $('#TxUrl').val() + extension,
-                txUrlPoster: $('#TxUrlPoster').val() + extensionPoster
+                txUrlPoster: $('#TxUrlPoster').val() + extensionPoster,
+                tags: interesses
             }, null, VideoEditPartial_Close);
         } else {
             $.ajaxPost('@Url.Action("Create","Video")', {
                 nmObjeto: $('#txNomeObjeto').val(),
                 txDescricao: $('#txDescricaoObjeto').val(),
                 txUrl: $('#TxUrl').val() + extension,
-                txUrlPoster: $('#TxUrlPoster').val() + extensionPoster
+                txUrlPoster: $('#TxUrlPoster').val() + extensionPoster,
+                tags: interesses
             }, null, VideoEditPartial_Close);
         }
     }
@@ -173,7 +175,9 @@
 
         Descrição:
         @(Html.TextBox("txDescricaoObjeto", "", new { @class = "k-textbox" }))
-
+        
+        @Html.Action("GetInteressePartial", "Interesse")
+            
         @(Html.Kendo().Button().Name("btnSalvarVideo")
             .Content("Salvar")
             .HtmlAttributes(new { @type = "button" })

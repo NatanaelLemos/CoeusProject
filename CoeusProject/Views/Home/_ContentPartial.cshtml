@@ -10,7 +10,15 @@
                     @Html.Action("GetAllContent", "Home")
                 </div>
             </text>);
-    i.Add().Text("Artigos").Content("artigos");
-    i.Add().Text("Videos").Content("videos");
-})
-.HtmlAttributes(new { @style = "height: 100%; background-color: transparent; border: 0 none; background: none" }))
+        i.Add().Text("Artigos").Content(@<text>
+        <div class="divContent">
+            @Html.Action("GetArtigosContent", "Home")
+        </div>
+        </text>);
+        i.Add().Text("Videos").Content(@<text>
+        <div class="divContent">
+            @Html.Action("GetVideosContent", "Home")
+        </div>
+        </text>);
+    })
+                        .HtmlAttributes(new { @style = "height: 100%; background-color: transparent; border: 0 none; background: none" }))
