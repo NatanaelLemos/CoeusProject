@@ -85,13 +85,15 @@ namespace CoeusProject.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.NotAcceptable, "O e-mail informado já pertence à outro usuário");
             }
 
-            if (interesses != null && interesses.Count() > 0)
+            if (interesses == null && interesses.Count() == 0)
             {
-                usuario.Temas = new List<Tema>();
-                foreach (InteresseVM interesse in interesses)
-                {
-                    usuario.Temas.Add(_context.Temas.Where(t => t.NmTema == interesse.NmInteresse).FirstOrDefault());
-                }
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden, "É necessário selecionar ao menos um interesse");
+            }
+
+            usuario.Temas = new List<Tema>();
+            foreach (InteresseVM interesse in interesses)
+            {
+                usuario.Temas.Add(_context.Temas.Where(t => t.NmTema == interesse.NmInteresse).FirstOrDefault());
             }
 
             usuario.NmFoto = (new FileController()).FormatImage(usuario.NmFoto);
@@ -112,7 +114,7 @@ namespace CoeusProject.Controllers
                     return new HttpStatusCodeResult(HttpStatusCode.NotAcceptable, ErrorFacade.GetErrorMessage(ex));
                 }
             }
-            
+
             return new HttpStatusCodeResult(HttpStatusCode.NotAcceptable, ErrorFacade.GetErrorMessage(ModelState));
         }
 

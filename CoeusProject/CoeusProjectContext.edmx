@@ -20,7 +20,22 @@
           <Property Name="NmObjeto" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="TxDescricao" Type="String" MaxLength="2048" FixedLength="false" Unicode="true" />
           <Property Name="IdUsuario" Type="Int32" Nullable="false" />
+          <Property Name="IdSalt" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Avaliacoes" Relationship="Self.Avaliacao_Objeto" FromRole="Avaliacao_Objeto_Target" ToRole="Avaliacao_Objeto_Source" />
+          <NavigationProperty Name="Salt" Relationship="Self.Objeto_Salt" FromRole="Objeto_Salt_Source" ToRole="Objeto_Salt_Target" />
+          <NavigationProperty Name="Temas" Relationship="Self.Tema_Objetos" FromRole="Tema_Objetos_Target" ToRole="Tema_Objetos_Source" />
           <NavigationProperty Name="Usuario" Relationship="Self.Objeto_Usuario" FromRole="Objeto_Usuario_Source" ToRole="Objeto_Usuario_Target" />
+        </EntityType>
+        <EntityType Name="Avaliacao" customannotation:ClrType="CoeusProject.Models.Avaliacao, CoeusProject, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+          <Key>
+            <PropertyRef Name="IdAvaliacao" />
+          </Key>
+          <Property Name="IdAvaliacao" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NoAvaliacao" Type="Int32" Nullable="false" />
+          <Property Name="IdUsuario" Type="Int32" />
+          <Property Name="IdObjeto" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Objeto" Relationship="Self.Avaliacao_Objeto" FromRole="Avaliacao_Objeto_Source" ToRole="Avaliacao_Objeto_Target" />
+          <NavigationProperty Name="Usuario" Relationship="Self.Avaliacao_Usuario" FromRole="Avaliacao_Usuario_Source" ToRole="Avaliacao_Usuario_Target" />
         </EntityType>
         <EntityType Name="Usuario" customannotation:ClrType="CoeusProject.Models.Usuario, CoeusProject, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
           <Key>
@@ -30,17 +45,15 @@
           <Property Name="TxEmail" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="PwUsuario" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="NmPessoa" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" Nullable="false" />
-        </EntityType>
-        <EntityType Name="Avaliacao" customannotation:ClrType="CoeusProject.Models.Avaliacao, CoeusProject, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-          <Key>
-            <PropertyRef Name="IdAvaliacao" />
-          </Key>
-          <Property Name="IdAvaliacao" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="NoAvaliacao" Type="Int32" Nullable="false" />
-          <Property Name="IdUsuario" Type="Int32" Nullable="false" />
-          <Property Name="IdObjeto" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Objeto" Relationship="Self.Avaliacao_Objeto" FromRole="Avaliacao_Objeto_Source" ToRole="Avaliacao_Objeto_Target" />
-          <NavigationProperty Name="Usuario" Relationship="Self.Avaliacao_Usuario" FromRole="Avaliacao_Usuario_Source" ToRole="Avaliacao_Usuario_Target" />
+          <Property Name="SnPessoa" Type="String" MaxLength="1024" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="NmFoto" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="IdSalt" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Avaliacoes" Relationship="Self.Avaliacao_Usuario" FromRole="Avaliacao_Usuario_Target" ToRole="Avaliacao_Usuario_Source" />
+          <NavigationProperty Name="Grupos" Relationship="Self.Grupo_Usuarios" FromRole="Grupo_Usuarios_Target" ToRole="Grupo_Usuarios_Source" />
+          <NavigationProperty Name="Mensagens" Relationship="Self.Mensagem_Usuario" FromRole="Mensagem_Usuario_Target" ToRole="Mensagem_Usuario_Source" />
+          <NavigationProperty Name="Objetos" Relationship="Self.Objeto_Usuario" FromRole="Objeto_Usuario_Target" ToRole="Objeto_Usuario_Source" />
+          <NavigationProperty Name="Salt" Relationship="Self.Usuario_Salt" FromRole="Usuario_Salt_Source" ToRole="Usuario_Salt_Target" />
+          <NavigationProperty Name="Temas" Relationship="Self.Tema_Usuarios" FromRole="Tema_Usuarios_Target" ToRole="Tema_Usuarios_Source" />
         </EntityType>
         <EntityType Name="Grupo" customannotation:ClrType="CoeusProject.Models.Grupo, CoeusProject, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
           <Key>
@@ -48,8 +61,40 @@
           </Key>
           <Property Name="IdGrupo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="NmGrupo" Type="String" MaxLength="512" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="NidObjeto" Type="Int32" />
+          <Property Name="IdObjeto" Type="Int32" />
+          <Property Name="IdSalt" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Mensagens" Relationship="Self.Mensagem_Grupo" FromRole="Mensagem_Grupo_Target" ToRole="Mensagem_Grupo_Source" />
           <NavigationProperty Name="Objeto" Relationship="Self.Grupo_Objeto" FromRole="Grupo_Objeto_Source" ToRole="Grupo_Objeto_Target" />
+          <NavigationProperty Name="Salt" Relationship="Self.Grupo_Salt" FromRole="Grupo_Salt_Source" ToRole="Grupo_Salt_Target" />
+          <NavigationProperty Name="Usuarios" Relationship="Self.Grupo_Usuarios" FromRole="Grupo_Usuarios_Source" ToRole="Grupo_Usuarios_Target" />
+        </EntityType>
+        <EntityType Name="Mensagem" customannotation:ClrType="CoeusProject.Models.Mensagem, CoeusProject, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+          <Key>
+            <PropertyRef Name="IdMensagem" />
+          </Key>
+          <Property Name="IdMensagem" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TxMensagem" Type="String" MaxLength="4096" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DtMensagem" Type="DateTime" Nullable="false" />
+          <Property Name="IdUsuario" Type="Int32" Nullable="false" />
+          <Property Name="IdGrupo" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Grupo" Relationship="Self.Mensagem_Grupo" FromRole="Mensagem_Grupo_Source" ToRole="Mensagem_Grupo_Target" />
+          <NavigationProperty Name="Usuario" Relationship="Self.Mensagem_Usuario" FromRole="Mensagem_Usuario_Source" ToRole="Mensagem_Usuario_Target" />
+        </EntityType>
+        <EntityType Name="Salt" customannotation:ClrType="CoeusProject.Models.Salt, CoeusProject, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+          <Key>
+            <PropertyRef Name="IdSalt" />
+          </Key>
+          <Property Name="IdSalt" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TxSalt" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Tema" customannotation:ClrType="CoeusProject.Models.Tema, CoeusProject, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+          <Key>
+            <PropertyRef Name="IdTema" />
+          </Key>
+          <Property Name="IdTema" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NmTema" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Objetos" Relationship="Self.Tema_Objetos" FromRole="Tema_Objetos_Source" ToRole="Tema_Objetos_Target" />
+          <NavigationProperty Name="Usuarios" Relationship="Self.Tema_Usuarios" FromRole="Tema_Usuarios_Source" ToRole="Tema_Usuarios_Target" />
         </EntityType>
         <EntityType Name="Imagem" customannotation:ClrType="CoeusProject.Models.Imagem, CoeusProject, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
           <Key>
@@ -60,32 +105,12 @@
           <Property Name="IdArtigo" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Artigo" Relationship="Self.Imagem_Artigo" FromRole="Imagem_Artigo_Source" ToRole="Imagem_Artigo_Target" />
         </EntityType>
-        <EntityType Name="Mensagem" customannotation:ClrType="CoeusProject.Models.Mensagem, CoeusProject, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+        <EntityType Name="Sequence" customannotation:ClrType="CoeusProject.Models.Sequence, CoeusProject, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
           <Key>
-            <PropertyRef Name="IdMensagem" />
+            <PropertyRef Name="NmSequence" />
           </Key>
-          <Property Name="IdMensagem" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TxMensagem" Type="String" MaxLength="4096" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="IdUsuario" Type="Int32" Nullable="false" />
-          <Property Name="IdGrupo" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Grupo" Relationship="Self.Mensagem_Grupo" FromRole="Mensagem_Grupo_Source" ToRole="Mensagem_Grupo_Target" />
-          <NavigationProperty Name="Usuario" Relationship="Self.Mensagem_Usuario" FromRole="Mensagem_Usuario_Source" ToRole="Mensagem_Usuario_Target" />
-        </EntityType>
-        <EntityType Name="Som" customannotation:ClrType="CoeusProject.Models.Som, CoeusProject, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-          <Key>
-            <PropertyRef Name="IdSom" />
-          </Key>
-          <Property Name="IdSom" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TxUrl" Type="String" MaxLength="4096" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="IdObjeto" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Objeto" Relationship="Self.Som_Objeto" FromRole="Som_Objeto_Source" ToRole="Som_Objeto_Target" />
-        </EntityType>
-        <EntityType Name="Tema" customannotation:ClrType="CoeusProject.Models.Tema, CoeusProject, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-          <Key>
-            <PropertyRef Name="IdTema" />
-          </Key>
-          <Property Name="IdTema" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="NmTema" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="NmSequence" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="VlSequence" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="Video" customannotation:ClrType="CoeusProject.Models.Video, CoeusProject, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
           <Key>
@@ -93,37 +118,10 @@
           </Key>
           <Property Name="IdVideo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="TxUrl" Type="String" MaxLength="4096" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="TxUrlPoster" Type="String" MaxLength="4096" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="IdObjeto" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Objeto" Relationship="Self.Video_Objeto" FromRole="Video_Objeto_Source" ToRole="Video_Objeto_Target" />
         </EntityType>
-        <Association Name="Objeto_Usuario">
-          <End Role="Objeto_Usuario_Source" Type="Self.Objeto" Multiplicity="*" />
-          <End Role="Objeto_Usuario_Target" Type="Self.Usuario" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <ReferentialConstraint>
-            <Principal Role="Objeto_Usuario_Target">
-              <PropertyRef Name="IdUsuario" />
-            </Principal>
-            <Dependent Role="Objeto_Usuario_Source">
-              <PropertyRef Name="IdUsuario" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="Artigo_Objeto">
-          <End Role="Artigo_Objeto_Source" Type="Self.Artigo" Multiplicity="*" />
-          <End Role="Artigo_Objeto_Target" Type="Self.Objeto" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <ReferentialConstraint>
-            <Principal Role="Artigo_Objeto_Target">
-              <PropertyRef Name="IdObjeto" />
-            </Principal>
-            <Dependent Role="Artigo_Objeto_Source">
-              <PropertyRef Name="IdObjeto" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="Avaliacao_Objeto">
           <End Role="Avaliacao_Objeto_Source" Type="Self.Avaliacao" Multiplicity="*" />
           <End Role="Avaliacao_Objeto_Target" Type="Self.Objeto" Multiplicity="1">
@@ -135,46 +133,6 @@
             </Principal>
             <Dependent Role="Avaliacao_Objeto_Source">
               <PropertyRef Name="IdObjeto" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="Avaliacao_Usuario">
-          <End Role="Avaliacao_Usuario_Source" Type="Self.Avaliacao" Multiplicity="*" />
-          <End Role="Avaliacao_Usuario_Target" Type="Self.Usuario" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <ReferentialConstraint>
-            <Principal Role="Avaliacao_Usuario_Target">
-              <PropertyRef Name="IdUsuario" />
-            </Principal>
-            <Dependent Role="Avaliacao_Usuario_Source">
-              <PropertyRef Name="IdUsuario" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="Grupo_Objeto">
-          <End Role="Grupo_Objeto_Source" Type="Self.Grupo" Multiplicity="*" />
-          <End Role="Grupo_Objeto_Target" Type="Self.Objeto" Multiplicity="0..1" />
-          <ReferentialConstraint>
-            <Principal Role="Grupo_Objeto_Target">
-              <PropertyRef Name="IdObjeto" />
-            </Principal>
-            <Dependent Role="Grupo_Objeto_Source">
-              <PropertyRef Name="NidObjeto" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="Imagem_Artigo">
-          <End Role="Imagem_Artigo_Source" Type="Self.Imagem" Multiplicity="*" />
-          <End Role="Imagem_Artigo_Target" Type="Self.Artigo" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <ReferentialConstraint>
-            <Principal Role="Imagem_Artigo_Target">
-              <PropertyRef Name="IdArtigo" />
-            </Principal>
-            <Dependent Role="Imagem_Artigo_Source">
-              <PropertyRef Name="IdArtigo" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -206,17 +164,123 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="Som_Objeto">
-          <End Role="Som_Objeto_Source" Type="Self.Som" Multiplicity="*" />
-          <End Role="Som_Objeto_Target" Type="Self.Objeto" Multiplicity="1">
+        <Association Name="Grupo_Objeto">
+          <End Role="Grupo_Objeto_Source" Type="Self.Grupo" Multiplicity="*" />
+          <End Role="Grupo_Objeto_Target" Type="Self.Objeto" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Grupo_Objeto_Target">
+              <PropertyRef Name="IdObjeto" />
+            </Principal>
+            <Dependent Role="Grupo_Objeto_Source">
+              <PropertyRef Name="IdObjeto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Grupo_Salt">
+          <End Role="Grupo_Salt_Source" Type="Self.Grupo" Multiplicity="*" />
+          <End Role="Grupo_Salt_Target" Type="Self.Salt" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
           <ReferentialConstraint>
-            <Principal Role="Som_Objeto_Target">
+            <Principal Role="Grupo_Salt_Target">
+              <PropertyRef Name="IdSalt" />
+            </Principal>
+            <Dependent Role="Grupo_Salt_Source">
+              <PropertyRef Name="IdSalt" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Grupo_Usuarios">
+          <End Role="Grupo_Usuarios_Source" Type="Self.Grupo" Multiplicity="*" />
+          <End Role="Grupo_Usuarios_Target" Type="Self.Usuario" Multiplicity="*" />
+        </Association>
+        <Association Name="Usuario_Salt">
+          <End Role="Usuario_Salt_Source" Type="Self.Usuario" Multiplicity="*" />
+          <End Role="Usuario_Salt_Target" Type="Self.Salt" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <ReferentialConstraint>
+            <Principal Role="Usuario_Salt_Target">
+              <PropertyRef Name="IdSalt" />
+            </Principal>
+            <Dependent Role="Usuario_Salt_Source">
+              <PropertyRef Name="IdSalt" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Tema_Objetos">
+          <End Role="Tema_Objetos_Source" Type="Self.Tema" Multiplicity="*" />
+          <End Role="Tema_Objetos_Target" Type="Self.Objeto" Multiplicity="*" />
+        </Association>
+        <Association Name="Tema_Usuarios">
+          <End Role="Tema_Usuarios_Source" Type="Self.Tema" Multiplicity="*" />
+          <End Role="Tema_Usuarios_Target" Type="Self.Usuario" Multiplicity="*" />
+        </Association>
+        <Association Name="Avaliacao_Usuario">
+          <End Role="Avaliacao_Usuario_Source" Type="Self.Avaliacao" Multiplicity="*" />
+          <End Role="Avaliacao_Usuario_Target" Type="Self.Usuario" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Avaliacao_Usuario_Target">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Avaliacao_Usuario_Source">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Objeto_Salt">
+          <End Role="Objeto_Salt_Source" Type="Self.Objeto" Multiplicity="*" />
+          <End Role="Objeto_Salt_Target" Type="Self.Salt" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <ReferentialConstraint>
+            <Principal Role="Objeto_Salt_Target">
+              <PropertyRef Name="IdSalt" />
+            </Principal>
+            <Dependent Role="Objeto_Salt_Source">
+              <PropertyRef Name="IdSalt" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Objeto_Usuario">
+          <End Role="Objeto_Usuario_Source" Type="Self.Objeto" Multiplicity="*" />
+          <End Role="Objeto_Usuario_Target" Type="Self.Usuario" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <ReferentialConstraint>
+            <Principal Role="Objeto_Usuario_Target">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Objeto_Usuario_Source">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Artigo_Objeto">
+          <End Role="Artigo_Objeto_Source" Type="Self.Artigo" Multiplicity="*" />
+          <End Role="Artigo_Objeto_Target" Type="Self.Objeto" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <ReferentialConstraint>
+            <Principal Role="Artigo_Objeto_Target">
               <PropertyRef Name="IdObjeto" />
             </Principal>
-            <Dependent Role="Som_Objeto_Source">
+            <Dependent Role="Artigo_Objeto_Source">
               <PropertyRef Name="IdObjeto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Imagem_Artigo">
+          <End Role="Imagem_Artigo_Source" Type="Self.Imagem" Multiplicity="*" />
+          <End Role="Imagem_Artigo_Target" Type="Self.Artigo" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <ReferentialConstraint>
+            <Principal Role="Imagem_Artigo_Target">
+              <PropertyRef Name="IdArtigo" />
+            </Principal>
+            <Dependent Role="Imagem_Artigo_Source">
+              <PropertyRef Name="IdArtigo" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -237,37 +301,18 @@
         <EntityContainer Name="CoeusProjectContext" customannotation:UseClrTypes="true">
           <EntitySet Name="Artigos" EntityType="Self.Artigo" />
           <EntitySet Name="Objetos" EntityType="Self.Objeto" />
-          <EntitySet Name="Usuarios" EntityType="Self.Usuario" />
           <EntitySet Name="Avaliacoes" EntityType="Self.Avaliacao" />
+          <EntitySet Name="Usuarios" EntityType="Self.Usuario" />
           <EntitySet Name="Grupos" EntityType="Self.Grupo" />
-          <EntitySet Name="Imagens" EntityType="Self.Imagem" />
           <EntitySet Name="Mensagens" EntityType="Self.Mensagem" />
-          <EntitySet Name="Sons" EntityType="Self.Som" />
+          <EntitySet Name="Salt" EntityType="Self.Salt" />
           <EntitySet Name="Temas" EntityType="Self.Tema" />
+          <EntitySet Name="Imagens" EntityType="Self.Imagem" />
+          <EntitySet Name="Sequence" EntityType="Self.Sequence" />
           <EntitySet Name="Videos" EntityType="Self.Video" />
-          <AssociationSet Name="Objeto_Usuario" Association="Self.Objeto_Usuario">
-            <End Role="Objeto_Usuario_Source" EntitySet="Objetos" />
-            <End Role="Objeto_Usuario_Target" EntitySet="Usuarios" />
-          </AssociationSet>
-          <AssociationSet Name="Artigo_Objeto" Association="Self.Artigo_Objeto">
-            <End Role="Artigo_Objeto_Source" EntitySet="Artigos" />
-            <End Role="Artigo_Objeto_Target" EntitySet="Objetos" />
-          </AssociationSet>
           <AssociationSet Name="Avaliacao_Objeto" Association="Self.Avaliacao_Objeto">
             <End Role="Avaliacao_Objeto_Source" EntitySet="Avaliacoes" />
             <End Role="Avaliacao_Objeto_Target" EntitySet="Objetos" />
-          </AssociationSet>
-          <AssociationSet Name="Avaliacao_Usuario" Association="Self.Avaliacao_Usuario">
-            <End Role="Avaliacao_Usuario_Source" EntitySet="Avaliacoes" />
-            <End Role="Avaliacao_Usuario_Target" EntitySet="Usuarios" />
-          </AssociationSet>
-          <AssociationSet Name="Grupo_Objeto" Association="Self.Grupo_Objeto">
-            <End Role="Grupo_Objeto_Source" EntitySet="Grupos" />
-            <End Role="Grupo_Objeto_Target" EntitySet="Objetos" />
-          </AssociationSet>
-          <AssociationSet Name="Imagem_Artigo" Association="Self.Imagem_Artigo">
-            <End Role="Imagem_Artigo_Source" EntitySet="Imagens" />
-            <End Role="Imagem_Artigo_Target" EntitySet="Artigos" />
           </AssociationSet>
           <AssociationSet Name="Mensagem_Grupo" Association="Self.Mensagem_Grupo">
             <End Role="Mensagem_Grupo_Source" EntitySet="Mensagens" />
@@ -277,9 +322,49 @@
             <End Role="Mensagem_Usuario_Source" EntitySet="Mensagens" />
             <End Role="Mensagem_Usuario_Target" EntitySet="Usuarios" />
           </AssociationSet>
-          <AssociationSet Name="Som_Objeto" Association="Self.Som_Objeto">
-            <End Role="Som_Objeto_Source" EntitySet="Sons" />
-            <End Role="Som_Objeto_Target" EntitySet="Objetos" />
+          <AssociationSet Name="Grupo_Objeto" Association="Self.Grupo_Objeto">
+            <End Role="Grupo_Objeto_Source" EntitySet="Grupos" />
+            <End Role="Grupo_Objeto_Target" EntitySet="Objetos" />
+          </AssociationSet>
+          <AssociationSet Name="Grupo_Salt" Association="Self.Grupo_Salt">
+            <End Role="Grupo_Salt_Source" EntitySet="Grupos" />
+            <End Role="Grupo_Salt_Target" EntitySet="Salt" />
+          </AssociationSet>
+          <AssociationSet Name="Grupo_Usuarios" Association="Self.Grupo_Usuarios">
+            <End Role="Grupo_Usuarios_Source" EntitySet="Grupos" />
+            <End Role="Grupo_Usuarios_Target" EntitySet="Usuarios" />
+          </AssociationSet>
+          <AssociationSet Name="Usuario_Salt" Association="Self.Usuario_Salt">
+            <End Role="Usuario_Salt_Source" EntitySet="Usuarios" />
+            <End Role="Usuario_Salt_Target" EntitySet="Salt" />
+          </AssociationSet>
+          <AssociationSet Name="Tema_Objetos" Association="Self.Tema_Objetos">
+            <End Role="Tema_Objetos_Source" EntitySet="Temas" />
+            <End Role="Tema_Objetos_Target" EntitySet="Objetos" />
+          </AssociationSet>
+          <AssociationSet Name="Tema_Usuarios" Association="Self.Tema_Usuarios">
+            <End Role="Tema_Usuarios_Source" EntitySet="Temas" />
+            <End Role="Tema_Usuarios_Target" EntitySet="Usuarios" />
+          </AssociationSet>
+          <AssociationSet Name="Avaliacao_Usuario" Association="Self.Avaliacao_Usuario">
+            <End Role="Avaliacao_Usuario_Source" EntitySet="Avaliacoes" />
+            <End Role="Avaliacao_Usuario_Target" EntitySet="Usuarios" />
+          </AssociationSet>
+          <AssociationSet Name="Objeto_Salt" Association="Self.Objeto_Salt">
+            <End Role="Objeto_Salt_Source" EntitySet="Objetos" />
+            <End Role="Objeto_Salt_Target" EntitySet="Salt" />
+          </AssociationSet>
+          <AssociationSet Name="Objeto_Usuario" Association="Self.Objeto_Usuario">
+            <End Role="Objeto_Usuario_Source" EntitySet="Objetos" />
+            <End Role="Objeto_Usuario_Target" EntitySet="Usuarios" />
+          </AssociationSet>
+          <AssociationSet Name="Artigo_Objeto" Association="Self.Artigo_Objeto">
+            <End Role="Artigo_Objeto_Source" EntitySet="Artigos" />
+            <End Role="Artigo_Objeto_Target" EntitySet="Objetos" />
+          </AssociationSet>
+          <AssociationSet Name="Imagem_Artigo" Association="Self.Imagem_Artigo">
+            <End Role="Imagem_Artigo_Source" EntitySet="Imagens" />
+            <End Role="Imagem_Artigo_Target" EntitySet="Artigos" />
           </AssociationSet>
           <AssociationSet Name="Video_Objeto" Association="Self.Video_Objeto">
             <End Role="Video_Objeto_Source" EntitySet="Videos" />
@@ -307,16 +392,7 @@
                 <ScalarProperty Name="NmObjeto" ColumnName="NmObjeto" />
                 <ScalarProperty Name="TxDescricao" ColumnName="TxDescricao" />
                 <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Usuarios">
-            <EntityTypeMapping TypeName="CoeusProject.Models.Usuario">
-              <MappingFragment StoreEntitySet="Usuario">
-                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
-                <ScalarProperty Name="TxEmail" ColumnName="TxEmail" />
-                <ScalarProperty Name="PwUsuario" ColumnName="PwUsuario" />
-                <ScalarProperty Name="NmPessoa" ColumnName="NmPessoa" />
+                <ScalarProperty Name="IdSalt" ColumnName="IdSalt" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -330,12 +406,53 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Usuarios">
+            <EntityTypeMapping TypeName="CoeusProject.Models.Usuario">
+              <MappingFragment StoreEntitySet="Usuario">
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="TxEmail" ColumnName="TxEmail" />
+                <ScalarProperty Name="PwUsuario" ColumnName="PwUsuario" />
+                <ScalarProperty Name="NmPessoa" ColumnName="NmPessoa" />
+                <ScalarProperty Name="SnPessoa" ColumnName="SnPessoa" />
+                <ScalarProperty Name="NmFoto" ColumnName="NmFoto" />
+                <ScalarProperty Name="IdSalt" ColumnName="IdSalt" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Grupos">
             <EntityTypeMapping TypeName="CoeusProject.Models.Grupo">
               <MappingFragment StoreEntitySet="Grupo">
                 <ScalarProperty Name="IdGrupo" ColumnName="IdGrupo" />
                 <ScalarProperty Name="NmGrupo" ColumnName="NmGrupo" />
-                <ScalarProperty Name="NidObjeto" ColumnName="NidObjeto" />
+                <ScalarProperty Name="IdObjeto" ColumnName="IdObjeto" />
+                <ScalarProperty Name="IdSalt" ColumnName="IdSalt" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Mensagens">
+            <EntityTypeMapping TypeName="CoeusProject.Models.Mensagem">
+              <MappingFragment StoreEntitySet="Mensagem">
+                <ScalarProperty Name="IdMensagem" ColumnName="IdMensagem" />
+                <ScalarProperty Name="TxMensagem" ColumnName="TxMensagem" />
+                <ScalarProperty Name="DtMensagem" ColumnName="DtMensagem" />
+                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+                <ScalarProperty Name="IdGrupo" ColumnName="IdGrupo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Salt">
+            <EntityTypeMapping TypeName="CoeusProject.Models.Salt">
+              <MappingFragment StoreEntitySet="Salt">
+                <ScalarProperty Name="IdSalt" ColumnName="IdSalt" />
+                <ScalarProperty Name="TxSalt" ColumnName="TxSalt" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Temas">
+            <EntityTypeMapping TypeName="CoeusProject.Models.Tema">
+              <MappingFragment StoreEntitySet="Tema">
+                <ScalarProperty Name="IdTema" ColumnName="IdTema" />
+                <ScalarProperty Name="NmTema" ColumnName="NmTema" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -348,30 +465,11 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Mensagens">
-            <EntityTypeMapping TypeName="CoeusProject.Models.Mensagem">
-              <MappingFragment StoreEntitySet="Mensagem">
-                <ScalarProperty Name="IdMensagem" ColumnName="IdMensagem" />
-                <ScalarProperty Name="TxMensagem" ColumnName="TxMensagem" />
-                <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
-                <ScalarProperty Name="IdGrupo" ColumnName="IdGrupo" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Sons">
-            <EntityTypeMapping TypeName="CoeusProject.Models.Som">
-              <MappingFragment StoreEntitySet="Som">
-                <ScalarProperty Name="IdSom" ColumnName="IdSom" />
-                <ScalarProperty Name="TxUrl" ColumnName="TxUrl" />
-                <ScalarProperty Name="IdObjeto" ColumnName="IdObjeto" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Temas">
-            <EntityTypeMapping TypeName="CoeusProject.Models.Tema">
-              <MappingFragment StoreEntitySet="Tema">
-                <ScalarProperty Name="IdTema" ColumnName="IdTema" />
-                <ScalarProperty Name="NmTema" ColumnName="NmTema" />
+          <EntitySetMapping Name="Sequence">
+            <EntityTypeMapping TypeName="CoeusProject.Models.Sequence">
+              <MappingFragment StoreEntitySet="Sequence">
+                <ScalarProperty Name="NmSequence" ColumnName="NmSequence" />
+                <ScalarProperty Name="VlSequence" ColumnName="VlSequence" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -380,10 +478,35 @@
               <MappingFragment StoreEntitySet="Video">
                 <ScalarProperty Name="IdVideo" ColumnName="IdVideo" />
                 <ScalarProperty Name="TxUrl" ColumnName="TxUrl" />
+                <ScalarProperty Name="TxUrlPoster" ColumnName="TxUrlPoster" />
                 <ScalarProperty Name="IdObjeto" ColumnName="IdObjeto" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <AssociationSetMapping Name="Grupo_Usuarios" TypeName="CoeusProject.Models.Grupo_Usuarios" StoreEntitySet="GrupoUsuario">
+            <EndProperty Name="Grupo_Usuarios_Source">
+              <ScalarProperty Name="IdGrupo" ColumnName="Grupo_IdGrupo" />
+            </EndProperty>
+            <EndProperty Name="Grupo_Usuarios_Target">
+              <ScalarProperty Name="IdUsuario" ColumnName="Usuario_IdUsuario" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="Tema_Objetos" TypeName="CoeusProject.Models.Tema_Objetos" StoreEntitySet="TemaObjeto">
+            <EndProperty Name="Tema_Objetos_Source">
+              <ScalarProperty Name="IdTema" ColumnName="Tema_IdTema" />
+            </EndProperty>
+            <EndProperty Name="Tema_Objetos_Target">
+              <ScalarProperty Name="IdObjeto" ColumnName="Objeto_IdObjeto" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="Tema_Usuarios" TypeName="CoeusProject.Models.Tema_Usuarios" StoreEntitySet="TemaUsuario">
+            <EndProperty Name="Tema_Usuarios_Source">
+              <ScalarProperty Name="IdTema" ColumnName="Tema_IdTema" />
+            </EndProperty>
+            <EndProperty Name="Tema_Usuarios_Target">
+              <ScalarProperty Name="IdUsuario" ColumnName="Usuario_IdUsuario" />
+            </EndProperty>
+          </AssociationSetMapping>
         </EntityContainerMapping>
       </Mapping>
     </Mappings>
@@ -405,6 +528,16 @@
           <Property Name="NmObjeto" Type="nvarchar" MaxLength="255" Nullable="false" />
           <Property Name="TxDescricao" Type="nvarchar" MaxLength="2048" Nullable="true" />
           <Property Name="IdUsuario" Type="int" customannotation:Index="{ Name: IX_IdUsuario, Order: 0 }" Nullable="false" />
+          <Property Name="IdSalt" Type="int" customannotation:Index="{ Name: IX_IdSalt, Order: 0 }" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Avaliacao">
+          <Key>
+            <PropertyRef Name="IdAvaliacao" />
+          </Key>
+          <Property Name="IdAvaliacao" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NoAvaliacao" Type="int" Nullable="false" />
+          <Property Name="IdUsuario" Type="int" customannotation:Index="{ Name: IX_IdUsuario, Order: 0 }" Nullable="true" />
+          <Property Name="IdObjeto" Type="int" customannotation:Index="{ Name: IX_IdObjeto, Order: 0 }" Nullable="false" />
         </EntityType>
         <EntityType Name="Usuario">
           <Key>
@@ -414,15 +547,9 @@
           <Property Name="TxEmail" Type="nvarchar" MaxLength="1024" Nullable="false" />
           <Property Name="PwUsuario" Type="nvarchar" MaxLength="1024" Nullable="false" />
           <Property Name="NmPessoa" Type="nvarchar" MaxLength="1024" Nullable="false" />
-        </EntityType>
-        <EntityType Name="Avaliacao">
-          <Key>
-            <PropertyRef Name="IdAvaliacao" />
-          </Key>
-          <Property Name="IdAvaliacao" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="NoAvaliacao" Type="int" Nullable="false" />
-          <Property Name="IdUsuario" Type="int" customannotation:Index="{ Name: IX_IdUsuario, Order: 0 }" Nullable="false" />
-          <Property Name="IdObjeto" Type="int" customannotation:Index="{ Name: IX_IdObjeto, Order: 0 }" Nullable="false" />
+          <Property Name="SnPessoa" Type="nvarchar" MaxLength="1024" Nullable="false" />
+          <Property Name="NmFoto" Type="nvarchar" MaxLength="100" Nullable="true" />
+          <Property Name="IdSalt" Type="int" customannotation:Index="{ Name: IX_IdSalt, Order: 0 }" Nullable="false" />
         </EntityType>
         <EntityType Name="Grupo">
           <Key>
@@ -430,7 +557,32 @@
           </Key>
           <Property Name="IdGrupo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="NmGrupo" Type="nvarchar" MaxLength="512" Nullable="false" />
-          <Property Name="NidObjeto" Type="int" customannotation:Index="{ Name: IX_NidObjeto, Order: 0 }" Nullable="true" />
+          <Property Name="IdObjeto" Type="int" customannotation:Index="{ Name: IX_IdObjeto, Order: 0 }" Nullable="true" />
+          <Property Name="IdSalt" Type="int" customannotation:Index="{ Name: IX_IdSalt, Order: 0 }" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Mensagem">
+          <Key>
+            <PropertyRef Name="IdMensagem" />
+          </Key>
+          <Property Name="IdMensagem" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TxMensagem" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="DtMensagem" Type="datetime" Nullable="false" />
+          <Property Name="IdUsuario" Type="int" customannotation:Index="{ Name: IX_IdUsuario, Order: 0 }" Nullable="false" />
+          <Property Name="IdGrupo" Type="int" customannotation:Index="{ Name: IX_IdGrupo, Order: 0 }" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Salt">
+          <Key>
+            <PropertyRef Name="IdSalt" />
+          </Key>
+          <Property Name="IdSalt" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TxSalt" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Tema">
+          <Key>
+            <PropertyRef Name="IdTema" />
+          </Key>
+          <Property Name="IdTema" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NmTema" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="Imagem">
           <Key>
@@ -440,29 +592,12 @@
           <Property Name="TxUrl" Type="nvarchar(max)" Nullable="false" />
           <Property Name="IdArtigo" Type="int" customannotation:Index="{ Name: IX_IdArtigo, Order: 0 }" Nullable="false" />
         </EntityType>
-        <EntityType Name="Mensagem">
+        <EntityType Name="Sequence">
           <Key>
-            <PropertyRef Name="IdMensagem" />
+            <PropertyRef Name="NmSequence" />
           </Key>
-          <Property Name="IdMensagem" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="TxMensagem" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="IdUsuario" Type="int" customannotation:Index="{ Name: IX_IdUsuario, Order: 0 }" Nullable="false" />
-          <Property Name="IdGrupo" Type="int" customannotation:Index="{ Name: IX_IdGrupo, Order: 0 }" Nullable="false" />
-        </EntityType>
-        <EntityType Name="Som">
-          <Key>
-            <PropertyRef Name="IdSom" />
-          </Key>
-          <Property Name="IdSom" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="TxUrl" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="IdObjeto" Type="int" customannotation:Index="{ Name: IX_IdObjeto, Order: 0 }" Nullable="false" />
-        </EntityType>
-        <EntityType Name="Tema">
-          <Key>
-            <PropertyRef Name="IdTema" />
-          </Key>
-          <Property Name="IdTema" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="NmTema" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="NmSequence" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="VlSequence" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Video">
           <Key>
@@ -470,36 +605,33 @@
           </Key>
           <Property Name="IdVideo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TxUrl" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="TxUrlPoster" Type="nvarchar(max)" Nullable="false" />
           <Property Name="IdObjeto" Type="int" customannotation:Index="{ Name: IX_IdObjeto, Order: 0 }" Nullable="false" />
         </EntityType>
-        <Association Name="Objeto_Usuario">
-          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="Objeto" Type="Self.Objeto" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Usuario">
-              <PropertyRef Name="IdUsuario" />
-            </Principal>
-            <Dependent Role="Objeto">
-              <PropertyRef Name="IdUsuario" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="Artigo_Objeto">
-          <End Role="Objeto" Type="Self.Objeto" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="Artigo" Type="Self.Artigo" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Objeto">
-              <PropertyRef Name="IdObjeto" />
-            </Principal>
-            <Dependent Role="Artigo">
-              <PropertyRef Name="IdObjeto" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
+        <EntityType Name="GrupoUsuario">
+          <Key>
+            <PropertyRef Name="Grupo_IdGrupo" />
+            <PropertyRef Name="Usuario_IdUsuario" />
+          </Key>
+          <Property Name="Grupo_IdGrupo" Type="int" customannotation:Index="{ Name: IX_Grupo_IdGrupo, Order: 0 }" Nullable="false" />
+          <Property Name="Usuario_IdUsuario" Type="int" customannotation:Index="{ Name: IX_Usuario_IdUsuario, Order: 0 }" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TemaObjeto">
+          <Key>
+            <PropertyRef Name="Tema_IdTema" />
+            <PropertyRef Name="Objeto_IdObjeto" />
+          </Key>
+          <Property Name="Tema_IdTema" Type="int" customannotation:Index="{ Name: IX_Tema_IdTema, Order: 0 }" Nullable="false" />
+          <Property Name="Objeto_IdObjeto" Type="int" customannotation:Index="{ Name: IX_Objeto_IdObjeto, Order: 0 }" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TemaUsuario">
+          <Key>
+            <PropertyRef Name="Tema_IdTema" />
+            <PropertyRef Name="Usuario_IdUsuario" />
+          </Key>
+          <Property Name="Tema_IdTema" Type="int" customannotation:Index="{ Name: IX_Tema_IdTema, Order: 0 }" Nullable="false" />
+          <Property Name="Usuario_IdUsuario" Type="int" customannotation:Index="{ Name: IX_Usuario_IdUsuario, Order: 0 }" Nullable="false" />
+        </EntityType>
         <Association Name="Avaliacao_Objeto">
           <End Role="Objeto" Type="Self.Objeto" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -511,46 +643,6 @@
             </Principal>
             <Dependent Role="Avaliacao">
               <PropertyRef Name="IdObjeto" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="Avaliacao_Usuario">
-          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="Avaliacao" Type="Self.Avaliacao" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Usuario">
-              <PropertyRef Name="IdUsuario" />
-            </Principal>
-            <Dependent Role="Avaliacao">
-              <PropertyRef Name="IdUsuario" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="Grupo_Objeto">
-          <End Role="Objeto" Type="Self.Objeto" Multiplicity="0..1" />
-          <End Role="Grupo" Type="Self.Grupo" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Objeto">
-              <PropertyRef Name="IdObjeto" />
-            </Principal>
-            <Dependent Role="Grupo">
-              <PropertyRef Name="NidObjeto" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="Imagem_Artigo">
-          <End Role="Artigo" Type="Self.Artigo" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="Imagem" Type="Self.Imagem" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Artigo">
-              <PropertyRef Name="IdArtigo" />
-            </Principal>
-            <Dependent Role="Imagem">
-              <PropertyRef Name="IdArtigo" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -582,17 +674,183 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="Som_Objeto">
-          <End Role="Objeto" Type="Self.Objeto" Multiplicity="1">
-            <OnDelete Action="Cascade" />
-          </End>
-          <End Role="Som" Type="Self.Som" Multiplicity="*" />
+        <Association Name="Grupo_Objeto">
+          <End Role="Objeto" Type="Self.Objeto" Multiplicity="0..1" />
+          <End Role="Grupo" Type="Self.Grupo" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Objeto">
               <PropertyRef Name="IdObjeto" />
             </Principal>
-            <Dependent Role="Som">
+            <Dependent Role="Grupo">
               <PropertyRef Name="IdObjeto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Grupo_Salt">
+          <End Role="Salt" Type="Self.Salt" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Grupo" Type="Self.Grupo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Salt">
+              <PropertyRef Name="IdSalt" />
+            </Principal>
+            <Dependent Role="Grupo">
+              <PropertyRef Name="IdSalt" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Grupo_Usuarios_Source">
+          <End Role="Grupo" Type="Self.Grupo" Multiplicity="1" />
+          <End Role="GrupoUsuario" Type="Self.GrupoUsuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Grupo">
+              <PropertyRef Name="IdGrupo" />
+            </Principal>
+            <Dependent Role="GrupoUsuario">
+              <PropertyRef Name="Grupo_IdGrupo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Grupo_Usuarios_Target">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="GrupoUsuario" Type="Self.GrupoUsuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="GrupoUsuario">
+              <PropertyRef Name="Usuario_IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Usuario_Salt">
+          <End Role="Salt" Type="Self.Salt" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Salt">
+              <PropertyRef Name="IdSalt" />
+            </Principal>
+            <Dependent Role="Usuario">
+              <PropertyRef Name="IdSalt" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Tema_Objetos_Source">
+          <End Role="Tema" Type="Self.Tema" Multiplicity="1" />
+          <End Role="TemaObjeto" Type="Self.TemaObjeto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tema">
+              <PropertyRef Name="IdTema" />
+            </Principal>
+            <Dependent Role="TemaObjeto">
+              <PropertyRef Name="Tema_IdTema" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Tema_Objetos_Target">
+          <End Role="Objeto" Type="Self.Objeto" Multiplicity="1" />
+          <End Role="TemaObjeto" Type="Self.TemaObjeto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Objeto">
+              <PropertyRef Name="IdObjeto" />
+            </Principal>
+            <Dependent Role="TemaObjeto">
+              <PropertyRef Name="Objeto_IdObjeto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Tema_Usuarios_Source">
+          <End Role="Tema" Type="Self.Tema" Multiplicity="1" />
+          <End Role="TemaUsuario" Type="Self.TemaUsuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Tema">
+              <PropertyRef Name="IdTema" />
+            </Principal>
+            <Dependent Role="TemaUsuario">
+              <PropertyRef Name="Tema_IdTema" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Tema_Usuarios_Target">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1" />
+          <End Role="TemaUsuario" Type="Self.TemaUsuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="TemaUsuario">
+              <PropertyRef Name="Usuario_IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Avaliacao_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="0..1" />
+          <End Role="Avaliacao" Type="Self.Avaliacao" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Avaliacao">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Objeto_Salt">
+          <End Role="Salt" Type="Self.Salt" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Objeto" Type="Self.Objeto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Salt">
+              <PropertyRef Name="IdSalt" />
+            </Principal>
+            <Dependent Role="Objeto">
+              <PropertyRef Name="IdSalt" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Objeto_Usuario">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Objeto" Type="Self.Objeto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="Objeto">
+              <PropertyRef Name="IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Artigo_Objeto">
+          <End Role="Objeto" Type="Self.Objeto" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Artigo" Type="Self.Artigo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Objeto">
+              <PropertyRef Name="IdObjeto" />
+            </Principal>
+            <Dependent Role="Artigo">
+              <PropertyRef Name="IdObjeto" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Imagem_Artigo">
+          <End Role="Artigo" Type="Self.Artigo" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Imagem" Type="Self.Imagem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Artigo">
+              <PropertyRef Name="IdArtigo" />
+            </Principal>
+            <Dependent Role="Imagem">
+              <PropertyRef Name="IdArtigo" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -613,37 +871,21 @@
         <EntityContainer Name="CodeFirstDatabase">
           <EntitySet Name="Artigo" EntityType="Self.Artigo" Schema="dbo" Table="Artigo" />
           <EntitySet Name="Objeto" EntityType="Self.Objeto" Schema="dbo" Table="Objeto" />
-          <EntitySet Name="Usuario" EntityType="Self.Usuario" Schema="dbo" Table="Usuario" />
           <EntitySet Name="Avaliacao" EntityType="Self.Avaliacao" Schema="dbo" Table="Avaliacao" />
+          <EntitySet Name="Usuario" EntityType="Self.Usuario" Schema="dbo" Table="Usuario" />
           <EntitySet Name="Grupo" EntityType="Self.Grupo" Schema="dbo" Table="Grupo" />
-          <EntitySet Name="Imagem" EntityType="Self.Imagem" Schema="dbo" Table="Imagem" />
           <EntitySet Name="Mensagem" EntityType="Self.Mensagem" Schema="dbo" Table="Mensagem" />
-          <EntitySet Name="Som" EntityType="Self.Som" Schema="dbo" Table="Som" />
+          <EntitySet Name="Salt" EntityType="Self.Salt" Schema="dbo" Table="Salt" />
           <EntitySet Name="Tema" EntityType="Self.Tema" Schema="dbo" Table="Tema" />
+          <EntitySet Name="Imagem" EntityType="Self.Imagem" Schema="dbo" Table="Imagem" />
+          <EntitySet Name="Sequence" EntityType="Self.Sequence" Schema="dbo" Table="Sequence" />
           <EntitySet Name="Video" EntityType="Self.Video" Schema="dbo" Table="Video" />
-          <AssociationSet Name="Objeto_Usuario" Association="Self.Objeto_Usuario">
-            <End Role="Usuario" EntitySet="Usuario" />
-            <End Role="Objeto" EntitySet="Objeto" />
-          </AssociationSet>
-          <AssociationSet Name="Artigo_Objeto" Association="Self.Artigo_Objeto">
-            <End Role="Objeto" EntitySet="Objeto" />
-            <End Role="Artigo" EntitySet="Artigo" />
-          </AssociationSet>
+          <EntitySet Name="GrupoUsuario" EntityType="Self.GrupoUsuario" Schema="dbo" Table="GrupoUsuario" />
+          <EntitySet Name="TemaObjeto" EntityType="Self.TemaObjeto" Schema="dbo" Table="TemaObjeto" />
+          <EntitySet Name="TemaUsuario" EntityType="Self.TemaUsuario" Schema="dbo" Table="TemaUsuario" />
           <AssociationSet Name="Avaliacao_Objeto" Association="Self.Avaliacao_Objeto">
             <End Role="Objeto" EntitySet="Objeto" />
             <End Role="Avaliacao" EntitySet="Avaliacao" />
-          </AssociationSet>
-          <AssociationSet Name="Avaliacao_Usuario" Association="Self.Avaliacao_Usuario">
-            <End Role="Usuario" EntitySet="Usuario" />
-            <End Role="Avaliacao" EntitySet="Avaliacao" />
-          </AssociationSet>
-          <AssociationSet Name="Grupo_Objeto" Association="Self.Grupo_Objeto">
-            <End Role="Objeto" EntitySet="Objeto" />
-            <End Role="Grupo" EntitySet="Grupo" />
-          </AssociationSet>
-          <AssociationSet Name="Imagem_Artigo" Association="Self.Imagem_Artigo">
-            <End Role="Artigo" EntitySet="Artigo" />
-            <End Role="Imagem" EntitySet="Imagem" />
           </AssociationSet>
           <AssociationSet Name="Mensagem_Grupo" Association="Self.Mensagem_Grupo">
             <End Role="Grupo" EntitySet="Grupo" />
@@ -653,9 +895,61 @@
             <End Role="Usuario" EntitySet="Usuario" />
             <End Role="Mensagem" EntitySet="Mensagem" />
           </AssociationSet>
-          <AssociationSet Name="Som_Objeto" Association="Self.Som_Objeto">
+          <AssociationSet Name="Grupo_Objeto" Association="Self.Grupo_Objeto">
             <End Role="Objeto" EntitySet="Objeto" />
-            <End Role="Som" EntitySet="Som" />
+            <End Role="Grupo" EntitySet="Grupo" />
+          </AssociationSet>
+          <AssociationSet Name="Grupo_Salt" Association="Self.Grupo_Salt">
+            <End Role="Salt" EntitySet="Salt" />
+            <End Role="Grupo" EntitySet="Grupo" />
+          </AssociationSet>
+          <AssociationSet Name="Grupo_Usuarios_Source" Association="Self.Grupo_Usuarios_Source">
+            <End Role="Grupo" EntitySet="Grupo" />
+            <End Role="GrupoUsuario" EntitySet="GrupoUsuario" />
+          </AssociationSet>
+          <AssociationSet Name="Grupo_Usuarios_Target" Association="Self.Grupo_Usuarios_Target">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="GrupoUsuario" EntitySet="GrupoUsuario" />
+          </AssociationSet>
+          <AssociationSet Name="Usuario_Salt" Association="Self.Usuario_Salt">
+            <End Role="Salt" EntitySet="Salt" />
+            <End Role="Usuario" EntitySet="Usuario" />
+          </AssociationSet>
+          <AssociationSet Name="Tema_Objetos_Source" Association="Self.Tema_Objetos_Source">
+            <End Role="Tema" EntitySet="Tema" />
+            <End Role="TemaObjeto" EntitySet="TemaObjeto" />
+          </AssociationSet>
+          <AssociationSet Name="Tema_Objetos_Target" Association="Self.Tema_Objetos_Target">
+            <End Role="Objeto" EntitySet="Objeto" />
+            <End Role="TemaObjeto" EntitySet="TemaObjeto" />
+          </AssociationSet>
+          <AssociationSet Name="Tema_Usuarios_Source" Association="Self.Tema_Usuarios_Source">
+            <End Role="Tema" EntitySet="Tema" />
+            <End Role="TemaUsuario" EntitySet="TemaUsuario" />
+          </AssociationSet>
+          <AssociationSet Name="Tema_Usuarios_Target" Association="Self.Tema_Usuarios_Target">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="TemaUsuario" EntitySet="TemaUsuario" />
+          </AssociationSet>
+          <AssociationSet Name="Avaliacao_Usuario" Association="Self.Avaliacao_Usuario">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Avaliacao" EntitySet="Avaliacao" />
+          </AssociationSet>
+          <AssociationSet Name="Objeto_Salt" Association="Self.Objeto_Salt">
+            <End Role="Salt" EntitySet="Salt" />
+            <End Role="Objeto" EntitySet="Objeto" />
+          </AssociationSet>
+          <AssociationSet Name="Objeto_Usuario" Association="Self.Objeto_Usuario">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="Objeto" EntitySet="Objeto" />
+          </AssociationSet>
+          <AssociationSet Name="Artigo_Objeto" Association="Self.Artigo_Objeto">
+            <End Role="Objeto" EntitySet="Objeto" />
+            <End Role="Artigo" EntitySet="Artigo" />
+          </AssociationSet>
+          <AssociationSet Name="Imagem_Artigo" Association="Self.Imagem_Artigo">
+            <End Role="Artigo" EntitySet="Artigo" />
+            <End Role="Imagem" EntitySet="Imagem" />
           </AssociationSet>
           <AssociationSet Name="Video_Objeto" Association="Self.Video_Objeto">
             <End Role="Objeto" EntitySet="Objeto" />
@@ -680,26 +974,32 @@
       </DesignerInfoPropertySet>
     </Options>
     <Diagrams >
-      <Diagram DiagramId="ff86b2af6dd74eba965050c1c6d74907" Name="Diagram1">
-        <EntityTypeShape EntityType="CoeusProject.Models.Artigo" Width="1.5" PointX="10.75" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="CoeusProject.Models.Objeto" Width="1.5" PointX="8.5" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="CoeusProject.Models.Usuario" Width="1.5" PointX="8.125" PointY="1.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="CoeusProject.Models.Avaliacao" Width="1.5" PointX="5.875" PointY="3.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="CoeusProject.Models.Grupo" Width="1.5" PointX="3.375" PointY="1.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="CoeusProject.Models.Imagem" Width="1.5" PointX="10.875" PointY="7.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="CoeusProject.Models.Mensagem" Width="1.5" PointX="5.75" PointY="1.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="CoeusProject.Models.Som" Width="1.5" PointX="5.125" PointY="6.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="CoeusProject.Models.Tema" Width="1.5" PointX="10.625" PointY="1.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="CoeusProject.Models.Video" Width="1.5" PointX="8.75" PointY="7.375" IsExpanded="true" />
-        <AssociationConnector Association="CoeusProject.Models.Objeto_Usuario" ManuallyRouted="false" />
-        <AssociationConnector Association="CoeusProject.Models.Artigo_Objeto" ManuallyRouted="false" />
+      <Diagram DiagramId="2c2363e1e6544554bfaf7a57d2052bb2" Name="Diagram1">
+        <EntityTypeShape EntityType="CoeusProject.Models.Artigo" Width="1.5" PointX="6.25" PointY="7.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="CoeusProject.Models.Objeto" Width="1.5" PointX="3.75" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="CoeusProject.Models.Avaliacao" Width="1.5" PointX="0.75" PointY="7.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="CoeusProject.Models.Usuario" Width="1.5" PointX="0.75" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CoeusProject.Models.Grupo" Width="1.5" PointX="7" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="CoeusProject.Models.Mensagem" Width="1.5" PointX="3.625" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CoeusProject.Models.Salt" Width="1.5" PointX="4.375" PointY="3.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="CoeusProject.Models.Tema" Width="1.5" PointX="1.625" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="CoeusProject.Models.Imagem" Width="1.5" PointX="8.625" PointY="7.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="CoeusProject.Models.Sequence" Width="1.5" PointX="8.5" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="CoeusProject.Models.Video" Width="1.5" PointX="6.25" PointY="5" IsExpanded="true" />
         <AssociationConnector Association="CoeusProject.Models.Avaliacao_Objeto" ManuallyRouted="false" />
-        <AssociationConnector Association="CoeusProject.Models.Avaliacao_Usuario" ManuallyRouted="false" />
-        <AssociationConnector Association="CoeusProject.Models.Grupo_Objeto" ManuallyRouted="false" />
-        <AssociationConnector Association="CoeusProject.Models.Imagem_Artigo" ManuallyRouted="false" />
         <AssociationConnector Association="CoeusProject.Models.Mensagem_Grupo" ManuallyRouted="false" />
         <AssociationConnector Association="CoeusProject.Models.Mensagem_Usuario" ManuallyRouted="false" />
-        <AssociationConnector Association="CoeusProject.Models.Som_Objeto" ManuallyRouted="false" />
+        <AssociationConnector Association="CoeusProject.Models.Grupo_Objeto" ManuallyRouted="false" />
+        <AssociationConnector Association="CoeusProject.Models.Grupo_Salt" ManuallyRouted="false" />
+        <AssociationConnector Association="CoeusProject.Models.Grupo_Usuarios" ManuallyRouted="false" />
+        <AssociationConnector Association="CoeusProject.Models.Usuario_Salt" ManuallyRouted="false" />
+        <AssociationConnector Association="CoeusProject.Models.Tema_Objetos" ManuallyRouted="false" />
+        <AssociationConnector Association="CoeusProject.Models.Tema_Usuarios" ManuallyRouted="false" />
+        <AssociationConnector Association="CoeusProject.Models.Avaliacao_Usuario" ManuallyRouted="false" />
+        <AssociationConnector Association="CoeusProject.Models.Objeto_Salt" ManuallyRouted="false" />
+        <AssociationConnector Association="CoeusProject.Models.Objeto_Usuario" ManuallyRouted="false" />
+        <AssociationConnector Association="CoeusProject.Models.Artigo_Objeto" ManuallyRouted="false" />
+        <AssociationConnector Association="CoeusProject.Models.Imagem_Artigo" ManuallyRouted="false" />
         <AssociationConnector Association="CoeusProject.Models.Video_Objeto" ManuallyRouted="false" />
       </Diagram>
     </Diagrams>

@@ -238,6 +238,10 @@
     <Compile Include="Migrations\201410122333205_video_artigo_tema_correcao.Designer.cs">
       <DependentUpon>201410122333205_video_artigo_tema_correcao.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201410172245457_AudioNoMore.cs" />
+    <Compile Include="Migrations\201410172245457_AudioNoMore.Designer.cs">
+      <DependentUpon>201410172245457_AudioNoMore.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Artigo.cs" />
     <Compile Include="Models\Avaliacao.cs" />
@@ -248,7 +252,6 @@
     <Compile Include="Models\Objeto.cs" />
     <Compile Include="Models\Salt.cs" />
     <Compile Include="Models\Sequence.cs" />
-    <Compile Include="Models\Som.cs" />
     <Compile Include="Models\Tema.cs" />
     <Compile Include="Models\Usuario.cs" />
     <Compile Include="Models\Video.cs" />
@@ -1228,10 +1231,6 @@
     </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <EntityDeploy Include="CoeusProjectContext.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>CoeusProjectContext.Designer.cs</LastGenOutput>
-    </EntityDeploy>
     <Content Include="Content\kendo\dataviz\dashboards\stock-data-2007.json" />
     <Content Include="Content\kendo\dataviz\dashboards\stock-data-2008.json" />
     <Content Include="Content\kendo\dataviz\dashboards\stock-data-2009.json" />
@@ -1296,6 +1295,10 @@
     <Content Include="Content\font\vjs.eot" />
     <Content Include="Content\font\vjs.ttf" />
     <Content Include="Content\font\vjs.woff" />
+    <EntityDeploy Include="CoeusProjectContext.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>CoeusProjectContext.Designer.cs</LastGenOutput>
+    </EntityDeploy>
     <None Include="Properties\PublishProfiles\Chimera Publish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -1864,6 +1867,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201410122333205_video_artigo_tema_correcao.resx">
       <DependentUpon>201410122333205_video_artigo_tema_correcao.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201410172245457_AudioNoMore.resx">
+      <DependentUpon>201410172245457_AudioNoMore.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

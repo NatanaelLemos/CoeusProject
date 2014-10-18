@@ -25,7 +25,6 @@ namespace CoeusProject.Models
         public DbSet<Imagem> Imagens { get; set; }
         public DbSet<Mensagem> Mensagens { get; set; }
         public DbSet<Objeto> Objetos { get; set; }
-        public DbSet<Som> Sons { get; set; }
         public DbSet<Tema> Temas { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Video> Videos { get; set; }
