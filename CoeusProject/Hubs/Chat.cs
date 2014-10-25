@@ -28,6 +28,7 @@ namespace CoeusProject.Hubs
                 IdMensagem = decMensagem.IdMensagem,
                 TxMensagem = decMensagem.TxMensagem,
                 DtMensagem = decMensagem.DtMensagem.ToString("dd/MM/yyyy HH:mm"),
+                IdUsuario = decMensagem.IdUsuario,
                 NmPessoa = decMensagem.Usuario.NmPessoa,
                 IdGrupo = mensagem.IdGrupo.ToString(),
                 NmGrupo = mensagem.Grupo == null ? "" : mensagem.Grupo.NmGrupo

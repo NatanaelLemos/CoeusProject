@@ -65,6 +65,7 @@ namespace CoeusProject.Controllers
             {
                 IdMensagem = m.IdMensagem,
                 TxMensagem = m.TxMensagem,
+                IdUsuario = m.IdUsuario,
                 NmPessoa = m.Usuario.NmPessoa,
                 DtMensagem = m.DtMensagem.ToString("dd/MM/yyyy HH:mm")
             }), JsonRequestBehavior.AllowGet);

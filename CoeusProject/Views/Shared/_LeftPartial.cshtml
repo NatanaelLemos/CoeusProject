@@ -11,9 +11,21 @@
 
         $('#lnkHome').click(function (e) {
             e.preventDefault();
+            var kendoWaitWindow = kendoWait();
+            var loaded = false;
 
-            $('#divContent').load('@Url.Action("FeedContent", "Home")');
-            $('#divLeftContent').load('@Url.Action("LeftContent", "Home")');
+            $('#divContent').load('@Url.Action("FeedContent", "Home")', {}, function () {
+                if (loaded) {
+                    kendoWaitWindow.close();
+                }
+                loaded = true;
+            });
+            $('#divLeftContent').load('@Url.Action("LeftContent", "Home")', {}, function () {
+                if (loaded) {
+                    kendoWaitWindow.close();
+                }
+                loaded = true;
+            });
         });
     });
 
@@ -28,15 +40,37 @@
         $('#wndEditUserContent').html('');
     }
 
-    function lnkHome_Click() {
-        alert('ahoy');
+    function btnHideLeftContent_Click(e) {
+        $('#divLeftSide').addClass("invisible");
+        $('#divContent').css('left', '0');
+
+        $('#btnHideLeftContent').addClass('invisible');
+        $('#btnShowLeftContent').removeClass('invisible');
+        $('.k-tabstrip-items').css('margin-left', '200px');
+    }
+
+    function btnShowLeftContent_Click(e) {
+        $('#divLeftSide').removeClass("invisible");
+        $('#divContent').css('left', '205px');
+
+        $('#btnShowLeftContent').addClass('invisible');
+        $('#btnHideLeftContent').removeClass('invisible');
+        $('.k-tabstrip-items').css('margin-left', '0');
     }
 </script>
 
-<div class="divLeftSide">
-    <header>
-        @(Html.ActionLink("Coeus Project", "*", "*", new { @id = "lnkHome" }))
-    </header>
+@(Html.Kendo().Button()
+    .Name("btnShowLeftContent")
+    .Content("►")
+    .HtmlAttributes(new { @type = "button", @class = "invisible", @style = "position: absolute; top: 45px; left: 0; height: 20px; width: 20px; padding: 0; z-index: 9999" })
+    .Events(e => e.Click("btnShowLeftContent_Click")))
+
+<div id="divLeftSide" class="divLeftSide">
+    @(Html.Kendo().Button().Name("btnHideLeftContent")
+        .Content("◄")
+        .HtmlAttributes(new { @style = "float: left; height: 20px; width: 100%; padding: 0", @type = "button" })
+        .Events(e => e.Click("btnHideLeftContent_Click")))
+
     <div id="divLeftContent">
         @Html.Action("LeftContent", "Home")
     </div>

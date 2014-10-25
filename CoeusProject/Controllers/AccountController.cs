@@ -19,6 +19,14 @@ namespace CoeusProject.Controllers
 
         public ActionResult Login()
         {
+            (new FileController()).CleanImages(_context);
+            Usuario usuarioLogado = AccountFacade.GetLoggedInUser();
+            if (usuarioLogado != null)
+            {
+                //return View("Home/Index");
+                return RedirectToAction("Index", "Home");
+            }
+
             return View();
         }
 
@@ -77,6 +85,29 @@ namespace CoeusProject.Controllers
             return View(usuario);
         }
 
+        public ActionResult RegisterPartial()
+        {
+            Usuario usuario = AccountFacade.GetLoggedInUser();
+
+            if (usuario != null)
+            {
+                return Content("&nbsp;");
+            }
+
+            usuario = new Usuario();
+            usuario.NmFoto = Sequence.GetSequence("foto").ToString();
+
+            String physicalPath = Server.MapPath("~/User_Data/") + usuario.NmFoto + ".png";
+
+            if (System.IO.File.Exists(physicalPath))
+            {
+                System.IO.File.Delete(physicalPath);
+            }
+
+            System.IO.File.Copy(Server.MapPath("~/Images/userNoPhoto.png"), physicalPath);
+            return View("~/Views/Account/_RegisterPartial.cshtml", usuario);
+        }
+
         [HttpPost]
         public ActionResult Register(Usuario usuario, List<InteresseVM> interesses)
         {
@@ -85,7 +116,7 @@ namespace CoeusProject.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.NotAcceptable, "O e-mail informado já pertence à outro usuário");
             }
 
-            if (interesses == null && interesses.Count() == 0)
+            if (interesses == null || interesses.Count() == 0)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.Forbidden, "É necessário selecionar ao menos um interesse");
             }

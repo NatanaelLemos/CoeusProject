@@ -38,5 +38,27 @@ namespace CoeusProject.Models
             Context.SaveChanges();
             return sequence.VlSequence;
         }
+
+        public static void ResetSequence(String NmSequence, int VlSequence = 1, CoeusProjectContext Context = null)
+        {
+            if (Context == null) Context = new CoeusProjectContext();
+
+            Sequence sequence = Context.Sequence.Where(s => s.NmSequence == NmSequence).FirstOrDefault();
+
+            if (sequence == null)
+            {
+                sequence = new Sequence();
+                sequence.NmSequence = NmSequence;
+                sequence.VlSequence = VlSequence;
+                Context.Sequence.Add(sequence);
+            }
+            else
+            {
+                sequence.VlSequence = VlSequence;
+                Context.Entry(sequence).State = EntityState.Modified;
+            }
+
+            Context.SaveChanges();
+        }
     }
 }

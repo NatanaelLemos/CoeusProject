@@ -25,10 +25,17 @@
 </head>
 
 <body>
+    <div id="divHeader" style="background-color: #AAA; position: absolute; top: 0; left: 0; right: 0; height: 45px">
+        <header style="position: absolute; top: 0; left: 0; font-size: 12pt; margin: 6px 0 0 50px">
+            <a id="lnkHome" href="*"><img src='../../Images/logo.png' alt='Coeus' /></a>
+        </header>
+        @RenderSection("header", required: false)
+    </div>
+
     @RenderBody()
-    <footer>
-        <p>&copy; @DateTime.Now.Year - Coeus Project - Designed By Natanael Lemos</p>
-    </footer>
+    @*<footer>
+            <p>&copy; @DateTime.Now.Year - Coeus Project - Designed By Natanael Lemos</p>
+        </footer>*@
     @RenderSection("scripts", required: false)
 </body>
 </html>

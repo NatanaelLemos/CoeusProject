@@ -1,0 +1,122 @@
+﻿@using Kendo.Mvc.UI
+@model CoeusProject.Models.Usuario
+@{Layout = null;}
+
+<style>
+    .k-header {
+        background-color: transparent;
+        background-image: none;
+        border: 0 none transparent;
+    }
+</style>
+
+<script type="text/javascript">
+    var extension = ".png";
+
+    function Foto_Select(e) {
+        if (e.files[0].extension != ".png" && e.files[0].extension != ".jpg" && e.files[0].extension != ".bmp") {
+            e.preventDefault();
+            kendoAlert('Apenas imagens nos formatos png, jpg ou bmp são aceitas');
+        }
+    }
+
+    function Foto_Upload(e) {
+        e.data = { nmFile: '@Model.NmFoto' };
+    }
+
+    function Foto_Success(e) {
+        extension = e.files[0].extension;
+        $('#imgUser').attr('src', '/User_Data/@(Model.NmFoto)' + extension);
+    }
+
+    function acpInteresses_AdditionalData(e) {
+        return { text: $('#acpInteresses').data('kendoAutoComplete').text() };
+    }
+
+    $(document).ready(function () {
+        $('#btnRegister').click(function (e) {
+            e.preventDefault();
+
+            var pwUsuario = $('#registerPwd').val();
+            var confirmPwUsuario = $('#ConfirmPwUsuario').val();
+
+            if (pwUsuario != confirmPwUsuario) {
+                kendoAlert('Senhas não conferem');
+                return;
+            }
+
+            $('#NmFoto').val($('#NmFoto').val() + extension);
+            $('#btnRegister').data('kendoButton').enable(false);
+
+            $.ajaxPost('@Url.Action("Register", "Account")', {
+                usuario: $('#frmRegister').serializeObject(),
+                interesses: interesses
+            }, $('#frmRegister'));
+
+            $('#btnRegister').data('kendoButton').enable();
+            $('#NmFoto').val($('#NmFoto').val().replace(extension, ''));
+        });
+    });
+</script>
+
+<div id="divRegisterPartial" class="divScrollable divInline" style="position: absolute; top: 60px; right: 0; bottom: 30px; width: 100%">
+    @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @id = "frmRegister" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary()
+        @Html.HiddenFor(m => m.NmFoto)
+
+        <div>
+            @Html.LabelFor(m => m.TxEmail, new { @class = "labelInline" })
+            @Html.TextBoxFor(m => m.TxEmail, new { @class = "k-textbox inputInline" })
+            @Html.ValidationMessageFor(m => m.TxEmail)
+        </div>
+
+        <div>
+            @Html.LabelFor(m => m.NmPessoa, new { @class = "labelInline" })
+            @Html.TextBoxFor(m => m.NmPessoa, new { @class = "k-textbox inputInline" })
+            @Html.ValidationMessageFor(m => m.NmPessoa)
+        </div>
+        <div>
+            @Html.LabelFor(m => m.SnPessoa, new { @class = "labelInline" })
+            @Html.TextBoxFor(m => m.SnPessoa, new { @class = "k-textbox inputInline" })
+            @Html.ValidationMessageFor(m => m.SnPessoa)
+        </div>
+
+        <div>
+            @Html.LabelFor(m => m.PwUsuario, new { @class = "labelInline" })
+            @Html.PasswordFor(m => m.PwUsuario, new { @class = "k-textbox inputInline", @id = "registerPwd" })
+        </div>
+        <div>
+            @Html.Label("Confirma Senha", new { @class = "labelInline" })
+            @Html.Password("ConfirmPwUsuario", null, new { @class = "k-textbox inputInline" })
+        </div>
+
+        <div style="height: 80px">
+            <img id="imgUser" height="80" width="80" style="position: absolute; left: 50%" src="~/Images/userNoPhoto.png" />
+        </div>
+
+        <div>
+            @Html.Label("Foto", new { @class = "labelInline" })
+            @(Html.Kendo().Upload()
+                    .Name("file")
+                    .Multiple(false)
+                    .Async(async => async
+                        .SaveUrl(Url.Action("SaveFile", "File"))
+                        .AutoUpload(true)
+                    )
+                    .Messages(m => m.Select("Selecionar Imagem"))
+                    .ShowFileList(false)
+                    .Events(e => e
+                        .Select("Foto_Select")
+                        .Upload("Foto_Upload")
+                        .Success("Foto_Success")
+                    )
+            )
+        </div>
+        @Html.Action("GetInteressePartial", "Interesse")
+    }
+</div>
+<div style="position: absolute; bottom: 0; left: 50%">
+    @(Html.Kendo().Button().Name("btnRegister").Content("Registrar"))
+</div>

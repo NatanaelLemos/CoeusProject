@@ -5,9 +5,11 @@
 <script type="text/javascript">
     var chat;
     var popupNotification;
+    var balloonMy = $('<span style="display: inline-block; background-image: url(\'Images/balloon-my.png\'); background-repeat: no-repeat; background-size: 100% 100%; padding: 1px 2px 10px 5px"></span>');
+    var balloonOther = $('<span style="display: inline-block; background-image: url(\'Images/balloon-other.png\'); background-repeat: no-repeat; background-size: 100% 100%; padding: 1px 2px 10px 5px"></span>');
     var chatTmpl = $('<span></span>');
     var usrTmpl = $('<h3 style="font-size: 7pt; letter-spacing: 1px; text-align: left; font-weight: bold"></h3>');
-    
+
     $(document).ready(function () {
         $('#btnGroupEdit').kendoTooltip({
             position: 'top',
@@ -37,7 +39,16 @@
 
             if (message.IdGrupo && parseInt(message.IdGrupo)) {
                 if (idGrupo && parseInt(idGrupo) && message.IdGrupo == idGrupo) {
-                    var chatRow = chatTmpl.clone().appendTo('#chat');
+                    var balloon = {};
+                    var idUsuarioLogadoRight = parseInt('@(CoeusProject.Facade.AccountFacade.GetLoggedInUser().IdUsuario)');
+
+                    if (idUsuarioLogadoRight == message.IdUsuario) {
+                        balloon = balloonMy.clone();
+                    } else {
+                        balloon = balloonOther.clone();
+                    }
+
+                    var chatRow = balloon.appendTo('#chat');
                     var usrName = usrTmpl.clone().appendTo(chatRow).html(message.NmPessoa + "(" + message.DtMensagem + "): <br />");
                     var msg = chatTmpl.clone().appendTo(chatRow).html(message.TxMensagem);
 
@@ -68,13 +79,29 @@
     }
 
     function cmbNmGrupo_Select(e) {
-        if (!e || !e.item ) {
+        if (!e || !e.item) {
             $('#chat').html('');
             return;
         }
 
         var dataItem = this.dataItem(e.item.index());
         RefreshChat(dataItem.IdGrupo);
+    }
+
+    function btnHideChat_Click(e) {
+        $('#divRightSide').addClass("invisible");
+        $('#divContent').css('right', '0');
+
+        $('#btnHideChat').addClass('invisible');
+        $('#btnShowChat').removeClass('invisible');
+    }
+
+    function btnShowChat_Click(e) {
+        $('#divRightSide').removeClass("invisible");
+        $('#divContent').css('right', '225px');
+
+        $('#btnShowChat').addClass('invisible');
+        $('#btnHideChat').removeClass('invisible');
     }
 
     function btnSendMessage_Click(e) {
@@ -126,8 +153,17 @@
                 idGrupo: idGrupo
             },
             success: function (data) {
+                var balloon = {};
+                var idUsuarioLogadoRight = parseInt('@(CoeusProject.Facade.AccountFacade.GetLoggedInUser().IdUsuario)');
+
                 data.forEach(function (row) {
-                    var chatRow = chatTmpl.clone().appendTo('#chat');
+                    if (idUsuarioLogadoRight == row.IdUsuario) {
+                        balloon = balloonMy.clone();
+                    } else {
+                        balloon = balloonOther.clone();
+                    }
+
+                    var chatRow = balloon.appendTo('#chat');
                     var usrName = usrTmpl.clone().appendTo(chatRow).html(row.NmPessoa + "(" + row.DtMensagem + "): <br />");
                     var msg = chatTmpl.clone().appendTo(chatRow).html(row.TxMensagem);
                 });
@@ -141,52 +177,62 @@
     }
 </script>
 
-<div id="divRightSide" class="divRightSide">
+@(Html.Kendo().Button()
+    .Name("btnShowChat")
+    .Content("◄")
+        .HtmlAttributes(new { @type = "button", @class = "invisible", @style = "position: absolute; top: 45px; right: 0; height: 20px; width: 20px; padding: 0; z-index: 9999" })
+    .Events(e => e.Click("btnShowChat_Click")))
+
+<div style="position: absolute; top: 5px; right: 0; width: 220px">
     @(Html.Kendo().ComboBox().Name("cmbNmGrupo")
-        .DataTextField("NmGrupo")
-        .DataValueField("IdGrupo")
-        .Suggest(true)
-        .MinLength(0)
-        .Height(400)
-        .DataSource(ds => ds.Read(read => read.Action("GetGrupoWhereNmGrupoStartsWith", "Grupo")
+            .DataTextField("NmGrupo")
+            .DataValueField("IdGrupo")
+            .Suggest(true)
+            .MinLength(0)
+            .Height(400)
+            .DataSource(ds => ds.Read(read => read.Action("GetGrupoWhereNmGrupoStartsWith", "Grupo")
             .Data("cmbNmGrupo_AdditionalData")).ServerFiltering(true))
-        .Filter(FilterType.StartsWith)
-        .AutoBind(true)
-        .Events(e => e.Select("cmbNmGrupo_Select"))
-        .HtmlAttributes(new { @placeholder = "Buscar por grupo", @style = "width: 100%" })
+            .Filter(FilterType.StartsWith)
+            .AutoBind(true)
+            .Events(e => e.Select("cmbNmGrupo_Select"))
+            .HtmlAttributes(new { @placeholder = "Buscar por grupo", @style = "width: 100%" })
     )
+</div>
+<div id="divRightSide" class="divRightSide">
+    @(Html.Kendo().Button().Name("btnHideChat")
+        .Content("►")
+        .HtmlAttributes(new { @style = "float: right; height: 20px; width: 100%; padding: 0", @type = "button" })
+        .Events(e => e.Click("btnHideChat_Click")))
 
-    <div style="height: 100%">
-        <div id="chat" class="divChat"></div>
+    <div id="chat" class="divChat"></div>
 
-        <div class="divSubmitChat">
-            @Html.TextArea("txtMessage", new { @style = "width: 95%; resize: none; height: 55px" })
+    <div class="divSubmitChat">
+        @Html.TextArea("txtMessage", new { @style = "width: 95%; resize: none; height: 55px" })
 
-            @(Html.Kendo().Button().Name("btnSendMessage")
+        @(Html.Kendo().Button().Name("btnSendMessage")
                 .Content("<img src='/Images/sendMessage.png' alt='Send Message'/>")
                 .HtmlAttributes(new { @style = "float: right;", @type = "button" })
                 .Events(e => e.Click("btnSendMessage_Click")))
 
-            @(Html.Kendo().Button().Name("btnGroupAdd")
+        @(Html.Kendo().Button().Name("btnGroupAdd")
                 .Content("<img src='/Images/groupAdd.png' alt='Add New Group'/>")
                 .HtmlAttributes(new { @style = "float: right;", @type = "button" })
                 .Events(e => e.Click("btnGroupAdd_Click")))
 
-            @(Html.Kendo().Button().Name("btnGroupEdit")
+        @(Html.Kendo().Button().Name("btnGroupEdit")
                 .Content("<img src='/Images/groupEdit.png' alt='Edit Group'/>")
                 .HtmlAttributes(new { @style = "float: right;", @type = "button" })
                 .Events(e => e.Click("btnGroupEdit_Click")))
-        </div>
     </div>
     @(Html.Kendo().Window().Name("wndGroup")
         .Modal(true)
         .Title("Grupo")
         .Draggable(true)
         .Content(@<text><div id="wndGroupContent"></div></text>)
-                .Events(e => e.Close("wndGroup_Close($(this))"))
-                .Visible(false)
-                .Height(330)
-                .Width(600)
+                                        .Events(e => e.Close("wndGroup_Close($(this))"))
+                                        .Visible(false)
+                                        .Height(330)
+                                        .Width(600)
     )
 
     <span id="spnPopupNotification"></span>

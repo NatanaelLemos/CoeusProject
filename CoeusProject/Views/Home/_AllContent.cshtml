@@ -9,7 +9,7 @@
         width: 50%;
     }
 
-    #tblAllContent a{
+    #tblAllContent a {
         cursor: pointer;
     }
 </style>
@@ -33,23 +33,24 @@
             if (index % 2 == 0)
             {
                 <text>
-                    <tr>
+                    <tr style="width: 100%">
                 </text>
             }
             <text>
-                <td>
+                <td style="width: 50%; max-width: 10px;">
                     <h4>
-                        @{if (objeto.TpObjeto == TipoObjeto.Artigo)
-                        { <img src="../../Images/objectTypeArticlepng.png" alt="A" />
-                            <a onclick="ContentArtigo_Click(@objeto.IdArtigo)">@objeto.NmObjeto</a>
-                        }
-                        else
-                        { <img src="../../Images/objectTypeVideo.png" alt="V" />
-                            <a onclick="ContentVideo_Click(@objeto.IdVideo)">@objeto.NmObjeto</a>
-                        }}
-
+                            @{if (objeto.TpObjeto == TipoObjeto.Artigo)
+                            { <img src="../../Images/objectTypeArticlepng.png" alt="A" />
+                                <a onclick="ContentArtigo_Click(@objeto.IdArtigo)">@objeto.NmObjeto</a>
+                            }
+                            else
+                            { <img src="../../Images/objectTypeVideo.png" alt="V" />
+                                <a onclick="ContentVideo_Click(@objeto.IdVideo)">@objeto.NmObjeto</a>
+                            }}
                     </h4>
-                    @objeto.TxDescricao
+                    <div style="text-wrap: avoid; word-wrap: break-word">
+                        @objeto.TxDescricao
+                    </div>
                 </td>
             </text>
             if (index % 2 != 0)

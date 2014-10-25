@@ -18,6 +18,17 @@
     return o;
 };
 
+function kendoWait(){
+    var kendoWaitWindow = $('<div id="divWaitWindow">').kendoWindow({
+        title: 'Aguarde',
+        resizable: false,
+        modal: true,
+        actions: {}
+    });
+    kendoWaitWindow.data('kendoWindow').content('<img src="../Images/loadingSpinner.gif" width="110" height="110" alt="" />').center().open();
+    return kendoWaitWindow.data('kendoWindow');
+}
+
 $.ajaxPost = function (url, data, validatingForm, callBack) {
     if (validatingForm) {
         var validator = $(validatingForm).kendoValidator().data("kendoValidator");
@@ -32,14 +43,22 @@ $.ajaxPost = function (url, data, validatingForm, callBack) {
         };
     }
 
+    var kendoWaitWindow = kendoWait();
+
+    var doCallback = function (e) {
+        kendoWaitWindow.close();
+        callBack(e);
+    }
+
     $.ajax({
         type: 'POST',
         async: false,
         contentType: "application/json",
         url: url,
         data: JSON.stringify(data),
-        success: callBack,
+        success: doCallback,
         error: function (error) {
+            kendoWaitWindow.close();
             kendoAlert(error.statusText);
         }
     });

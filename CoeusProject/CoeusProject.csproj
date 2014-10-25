@@ -1213,10 +1213,16 @@
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="Images\balloon-my.png" />
+    <Content Include="Images\balloon-other.png" />
     <Content Include="Images\close.png" />
     <Content Include="Images\configure.png" />
     <Content Include="Images\groupAdd.png" />
     <Content Include="Images\groupEdit.png" />
+    <Content Include="Images\loadingSpinner.gif" />
+    <Content Include="Images\login.png" />
+    <Content Include="Images\login.svg" />
+    <Content Include="Images\logo.png" />
     <Content Include="Images\noPoster.png" />
     <Content Include="Images\objectTypeArticlepng.png" />
     <Content Include="Images\objectTypeVideo.png" />
@@ -1289,8 +1295,6 @@
     <Content Include="Content\kendo\web\datasource\top250movies.json" />
     <Content Include="Content\kendo\web\images\kendoui.ttf" />
     <Content Include="Content\kendo\web\images\kendoui.woff" />
-    <Content Include="Content\LiberationMono-Bold.ttf" />
-    <Content Include="Content\LiberationMono-Regular.ttf" />
     <Content Include="Content\kendo.coeus.css" />
     <Content Include="Content\font\vjs.eot" />
     <Content Include="Content\font\vjs.ttf" />
@@ -1299,6 +1303,8 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>CoeusProjectContext.Designer.cs</LastGenOutput>
     </EntityDeploy>
+    <Content Include="Content\SourceCodePro-Bold.ttf" />
+    <Content Include="Content\SourceCodePro-Regular.ttf" />
     <None Include="Properties\PublishProfiles\Chimera Publish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -1822,6 +1828,7 @@
     <Content Include="Views\Video\_VideoEditPartial.cshtml" />
     <Content Include="Views\Video\_VideoWatchPartial.cshtml" />
     <Content Include="Views\Home\_AllContent.cshtml" />
+    <Content Include="Views\Account\_RegisterPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

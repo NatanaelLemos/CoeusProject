@@ -16,6 +16,10 @@
 
 @if (loggedInUser != null)
 {
+    <div>
+
+    </div>
+    
     @Html.Partial("_LeftPartial", loggedInUser)
     <div style="position: absolute; top: 0; bottom: 0; left: 205px; right: 225px" id="divContent">
         @Html.Action("FeedContent","Home")

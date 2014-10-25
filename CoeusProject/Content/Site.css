@@ -1,19 +1,19 @@
 ﻿/*#region Font Declaration*/
 @font-face {
     font-family: "KoiosFont";
-    src: url("LiberationMono-Regular.ttf") format('truetype');
+    src: url("SourceCodePro-Regular.ttf") format('opentype');
 }
 
 @font-face {
     font-family: "KoiosFontBold";
-    src: url("LiberationMono-Bold.ttf") format('truetype');
+    src: url("SourceCodePro-Bold.ttf") format('opentype');
 }
 /*#endregion*/
 
 /*#region General Attributes*/
 html {
     height: 100%;
-    font-family: "KoiosFont";
+    font-family: "KoiosFont", Calibri, Verdana, sans-serif, Arial;
     font-size: 14px;
     letter-spacing: 2px;
     background: -moz-linear-gradient( #dadada, #eeefef);
@@ -94,17 +94,22 @@ input[type=text], input[type=password] {
 
 .invisible {
     display: none;
-    visibility:hidden;
+    visibility: hidden;
     width: 0;
     height: 0;
+    position: absolute;
+    left: -10px;
+    top: -10px;
 }
 /*#endregion*/
 
 /*#region divLeftSide*/
 div.divLeftSide {
-    position: fixed;
+    position: absolute;
+    top: 45px;
+    bottom: 0;
+    left: 0;
     width: 200px;
-    height: 99%;
     margin: 3px 0 1px 1px;
     border: 1px solid gray;
     border-radius: 5px;
@@ -125,11 +130,11 @@ div.divLeftSide {
 
 /*#region divRightSide*/
 div.divRightSide {
-    float: right;
-    position: fixed;
-    right: 1px;
+    position: absolute;
+    right: 0;
+    top: 45px;
+    bottom: 0;
     width: 220px;
-    height: 99%;
     margin: 3px 1px 1px 0;
     border: 1px solid gray;
     border-radius: 5px;
@@ -147,7 +152,7 @@ div.divRightSide {
     overflow: auto;
     position: absolute;
     right: 1px;
-    top: 40px;
+    top: 20px;
 }
 /*#endregion*/
 
@@ -159,6 +164,13 @@ div.divRightSide {
     right: 0;
     bottom: 20px;
     left: 0;
+}
+
+#divContent {
+    transition-duration: 0.5s;
+    -moz-transition-duration: 0.5s;
+    -webkit-transition-duration: 0.5s;
+    -o-transition-duration: 0.5s;
 }
 
 #tbsIndex > * {
@@ -182,8 +194,43 @@ div.divRightSide {
     margin: 0;
     padding: 0;
     overflow: hidden;
-
 }
+
+.k-window-titlebar {
+    background-color: transparent;
+    border: 0 none;
+}
+
+.k-tabstrip-items {
+    float: left;
+}
+
+.k-tabstrip-items .k-item {
+    background-color: transparent;
+    border: 1px solid black;
+    vertical-align: bottom;
+    width: 100px;
+}
+
+    .k-tabstrip-items .k-item:hover {
+        background-color: #BBB;
+        border-color: #222277;
+    }
+
+.k-tabstrip-items .k-state-active, .k-ie7 .k-tabstrip-items .k-state-active {
+    background-color: #e4e4e4;
+    font-weight: bolder;
+    color: #444499;
+    border: 3px solid #444499;
+}
+
+    .k-tabstrip-items .k-state-active:hover, .k-ie7 .k-tabstrip-items .k-state-active:hover {
+        background-color: #e4e4e4;
+        font-weight: bolder;
+        color: #444499;
+        border: 3px solid #444499;
+    }
+
 /*endregion*/
 
 .divInline {
