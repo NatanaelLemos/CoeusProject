@@ -18,6 +18,7 @@
 <script>
     function btnVoltarMainVideos_Click(e) {
         $('#divContent').load('@Url.Action("GetMainVideos", "Video")', { idUsuario: idDonoVideo });
+        $('#divInteressesVideo').html('');
     }
 
     function btnEditVideo_Click(e) {
@@ -34,6 +35,7 @@
             $('#wndVideoEdit').data('kendoWindow').close();
             $('#divContent').load('@Url.Action("GetMainVideos", "Video")', { idUsuario: idDonoVideo });
             $('#gridVideos').data('kendoGrid').dataSource.read();
+            $('#divInteressesVideo').html('');
         }
 
         if (idVideoEdit) {
@@ -98,6 +100,8 @@
             position: 'bottom',
             content: 'Salvar'
         });
+
+        $('#divInteressesVideo').load('@Url.Action("GetInteressePartial", "Interesse")');
     });
 </script>
 
@@ -110,15 +114,15 @@
 @{
     if (Model == null || Model.IdVideo == 0)
     {
-        @:<h3 style="margin: 3px 0 0 0">Novo Vídeo</h3>
+        @:<h3 style="margin: 3px 0 0 0; position: absolute; top: 20px; left: 0">Novo Vídeo</h3>
     }
     else
     {
-        @:<h3 style="margin: 3px 0 0 0">@Model.Objeto.NmObjeto</h3>
+        @:<h3 style="margin: 3px 0 0 0; position: absolute; top: 20px; left: 0">@Model.Objeto.NmObjeto</h3>
     }
 }
 
-<div class="k-header" style="height: 50px">
+<div class="k-header" style="height: 50px; position:absolute; top: 45px; left: 0; right: 0">
     <div style="margin-top: 10px; display: inline-block">
         @(Html.Kendo().Button().Name("btnVoltarMainVideos")
             .Content("<img src='Images/undo.png' width='16' height='16' />")
@@ -175,9 +179,10 @@
 
         Descrição:
         @(Html.TextBox("txDescricaoObjeto", "", new { @class = "k-textbox" }))
-        
-        @Html.Action("GetInteressePartial", "Interesse")
-            
+
+<div id="divInteressesVideo">
+</div>
+
         @(Html.Kendo().Button().Name("btnSalvarVideo")
             .Content("Salvar")
             .HtmlAttributes(new { @type = "button" })

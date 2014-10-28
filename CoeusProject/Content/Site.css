@@ -205,11 +205,17 @@ div.divRightSide {
     float: left;
 }
 
+.k-tabstrip-items {
+    text-align: left;
+    width: 350px;
+}
+
 .k-tabstrip-items .k-item {
     background-color: transparent;
     border: 1px solid black;
     vertical-align: bottom;
     width: 100px;
+    margin-top: 5px;
 }
 
     .k-tabstrip-items .k-item:hover {
@@ -222,6 +228,8 @@ div.divRightSide {
     font-weight: bolder;
     color: #444499;
     border: 3px solid #444499;
+    border-bottom: 0 none;
+    margin-top: 4px;
 }
 
     .k-tabstrip-items .k-state-active:hover, .k-ie7 .k-tabstrip-items .k-state-active:hover {
@@ -229,6 +237,7 @@ div.divRightSide {
         font-weight: bolder;
         color: #444499;
         border: 3px solid #444499;
+        border-bottom: 0 none;
     }
 
 /*endregion*/

@@ -6,26 +6,40 @@
 <script src="~/Scripts/video.js"></script>
 
 <style type="text/css">
-    
+
 </style>
 
 <script>
     function btnVoltarMainVideos_Click(e) {
         $('#divContent').load('@Url.Action("GetMainVideos", "Video")', { idUsuario: idDonoVideo });
     }
+
+    $(document).ready(function () {
+        @{if ((Model!= null && Model.IdVideo > 0) && (Model.Objeto.IdUsuario != CoeusProject.Facade.AccountFacade.GetLoggedInUser().IdUsuario)){<text>
+        $.get('@Url.Action("GetUsuarioByObjeto", "Account")', { idObjeto: '@Model.IdObjeto' }, function (data) {
+            $('#spnCreator').html("<div style='display:inline-block'><img src='~/User_Data/" + data.NmThumbFoto +
+                "'/></div><div style='float:right; text-align: right'><span>" + data.NmPessoa + "</span><br /><span>" +
+                data.NmThumbFoto + "</span></div>");
+        });
+        </text>}}
+    });
 </script>
 
 
-<div class="k-header" style="height: 30px">
+<div class="k-header" style="height: 30px; margin-top: 45px">
     @(Html.Kendo().Button().Name("btnVoltarMainVideos")
             .Content("<img src='Images/undo.png' width='16' height='16' />")
             .HtmlAttributes(new { @type = "button", @style = "float: left" })
             .Events(e => e.Click("btnVoltarMainVideos_Click"))
     )
-    <h3>@Model.Objeto.NmObjeto</h3>
+    <h3 style="margin: 3px 0 0 0; position: absolute; top: 20px; left: 0">@Model.Objeto.NmObjeto</h3>
+    @{if (Model != null && Model.IdVideo > 0)
+    {
+        <span id="spnCreator" style="position: absolute; top: 5px; right: 0; height:44px; width:200px"></span>
+    }}
 </div>
 
-<div style="position: absolute; bottom: 105px; top: 60px; left: 0; right: 0">
+<div style="position: absolute; top: 80px; right: 50%">
     <video id="vidVideo" class="video-js vjs-default-skin" controls preload="none" width="400" height="225"
            poster="~/User_Data/@Model.TxUrlPoster"
            data-setup="{}">
@@ -41,6 +55,19 @@
         <p class="vjs-no-js">Para assistir à este vídeo, habilite a execução de JavaScript e considere atualizar seu web browser para um <a href="http://videojs.com/html5-video-support/" target="_blank">que suporte vídeos HTML5</a></p>
     </video>
 </div>
+@{if (Model.Objeto.IdUsuario != CoeusProject.Facade.AccountFacade.GetLoggedInUser().IdUsuario)
+{
+    <div style="position: absolute; bottom: 0">
+        <h5 style="display: inline-block">
+            Avalie esse vídeo
+        </h5>
+        @Html.RadioButton("rbtAvaliacao", 1, false, new { @style = "background-color:red" }) 1
+        @Html.RadioButton("rbtAvaliacao", 2, false, new { @style = "background-color:orange" }) 2
+        @Html.RadioButton("rbtAvaliacao", 3, false, new { @style = "background-color:yellow" }) 3
+        @Html.RadioButton("rbtAvaliacao", 4, false, new { @style = "background-color:brown" }) 4
+        @Html.RadioButton("rbtAvaliacao", 5, false, new { @style = "background-color:green" }) 5
+    </div>
+}}
 
 <div style="position: absolute; bottom: 0; left: 20px; right: 20px; height: 100px; overflow:auto">
     @Model.Objeto.TxDescricao

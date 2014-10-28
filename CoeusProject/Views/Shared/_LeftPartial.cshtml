@@ -10,6 +10,10 @@
         });
 
         $('#lnkHome').click(function (e) {
+            if ($('#divInteressesItens').length > 0) {
+                $('#divInteressesItens').html('');
+            }
+
             e.preventDefault();
             var kendoWaitWindow = kendoWait();
             var loaded = false;
@@ -62,13 +66,13 @@
 @(Html.Kendo().Button()
     .Name("btnShowLeftContent")
     .Content("►")
-    .HtmlAttributes(new { @type = "button", @class = "invisible", @style = "position: absolute; top: 45px; left: 0; height: 20px; width: 20px; padding: 0; z-index: 9999" })
+    .HtmlAttributes(new { @type = "button", @class = "invisible", @style = "position: absolute; top: 45px; left: 0; height: 20px; width: 20px; padding: 0; z-index: 9999; background-color: transparent; background-image: none; border: 0 none" })
     .Events(e => e.Click("btnShowLeftContent_Click")))
 
 <div id="divLeftSide" class="divLeftSide">
     @(Html.Kendo().Button().Name("btnHideLeftContent")
         .Content("◄")
-        .HtmlAttributes(new { @style = "float: left; height: 20px; width: 100%; padding: 0", @type = "button" })
+                .HtmlAttributes(new { @style = "float: left; height: 20px; width: 100%; padding: 0; z-index: 9999; background-color: transparent; background-image: none; border: 0 none; text-align: left", @type = "button" })
         .Events(e => e.Click("btnHideLeftContent_Click")))
 
     <div id="divLeftContent">

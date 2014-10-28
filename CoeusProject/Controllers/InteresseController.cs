@@ -14,11 +14,21 @@ namespace CoeusProject.Controllers
         CoeusProjectContext _context = new CoeusProjectContext();
         public ActionResult GetInteressePartial()
         {
-            return View("_InteressePartial");
+            return View("_InteressePartial", DateTime.Now.Ticks);
         }
 
         public ActionResult GetInteresseItem(int index)
         {
+            if (index == -1)
+            {
+                long longIndex = DateTime.Now.Year + DateTime.Now.Month + DateTime.Now.Day + DateTime.Now.Hour + DateTime.Now.Minute + DateTime.Now.Second + DateTime.Now.Millisecond;
+
+                if (longIndex > int.MaxValue -1)
+                {
+                    longIndex -= int.MaxValue;
+                }
+                index = Convert.ToInt32(longIndex);
+            }
             return View("_InteresseItemPartial", ++index);
         }
 

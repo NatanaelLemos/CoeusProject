@@ -17,6 +17,7 @@
 <script>
     function btnVoltarMainArtigos_Click(e) {
         $('#divContent').load('@Url.Action("GetMainArtigos", "Artigo")', { idUsuario: idDonoArtigo });
+        $('#divInteressesArtigo').html('');
     }
 
     function btnEditArtigo_Click(e) {
@@ -33,10 +34,11 @@
             $('#wndArtigoEdit').data('kendoWindow').close();
             $('#divContent').load('@Url.Action("GetMainArtigos", "Artigo")', { idUsuario: idDonoArtigo });
             $('#gridArtigos').data('kendoGrid').dataSource.read();
+            $('#divInteressesArtigo').html('');
         }
 
         if (idArtigoEdit) {
-            $.ajaxPost('@Url.Action("Edit","Artigo")', {
+            $.ajaxPost('@Url.Action("Edit", "Artigo")', {
                 idArtigo: idArtigoEdit,
                 nmObjeto: $('#txNomeObjeto').val(),
                 txDescricao: $('#txDescricaoObjeto').val(),
@@ -44,7 +46,7 @@
                 tags: interesses
             }, null, ArtigoEditPartial_Close);
         } else {
-            $.ajaxPost('@Url.Action("Create","Artigo")', {
+            $.ajaxPost('@Url.Action("Create", "Artigo")', {
                 nmObjeto: $('#txNomeObjeto').val(),
                 txDescricao: $('#txDescricaoObjeto').val(),
                 txArtigo: $('#artigoEditor').data('kendoEditor').value(),
@@ -63,19 +65,30 @@
             position: 'bottom',
             content: 'Salvar'
         });
+
+        @{if ((Model!= null && Model.IdArtigo > 0) && (Model.Objeto.IdUsuario != CoeusProject.Facade.AccountFacade.GetLoggedInUser().IdUsuario)){<text>
+        $.get('@Url.Action("GetUsuarioByObjeto", "Account")', { idObjeto: '@Model.IdObjeto' }, function (data) {
+            $('#spnCreator').html("<div style='display:inline-block'><img src='~/User_Data/" + data.NmThumbFoto +
+                "'/></div><div style='float:right; text-align: right'><span>" + data.NmPessoa + "</span><br /><span>" +
+                data.NmThumbFoto + "</span></div>");
+        });
+        </text>}}
+
+        $('#divInteressesArtigo').load('@Url.Action("GetInteressePartial", "Interesse")');
     });
 </script>
 
-@{
-    if (Model == null || Model.IdArtigo == 0)
-    {
-        @:<h3 style="margin: 3px 0 0 0">Novo Artigo</h3>
+@{if (Model == null || Model.IdArtigo == 0)
+{
+    @:<h3 style="margin: 3px 0 0 0; position: absolute; top: 20px; left: 0">Novo Artigo</h3>
     }
-    else
-    {
-        @:<h3 style="margin: 3px 0 0 0">@Model.Objeto.NmObjeto</h3>
-    }
-}
+else
+{
+    @:<h3 style="margin: 3px 0 0 0; position: absolute; top: 20px; left: 0">@Model.Objeto.NmObjeto</h3>
+
+    <span id="spnCreator" style="position: absolute; top: 5px; right: 0; height:44px; width:200px"></span>
+}}
+
 <div style="position:absolute; top: 45px; right: 0; bottom: 0; left: 0">
     @Html.HiddenFor(m => m.IdArtigo, new { @id = "idArtigoEdit" })
     @Html.HiddenFor(m => m.Objeto.NmObjeto, new { @id = "hidNmObjeto" })
@@ -86,67 +99,76 @@
         @(Html.Kendo().EditorFor(model => model.TxArtigo).Name("artigoEditor")
             .HtmlAttributes(new { @style = "height: 100%; " })
             .Tools(tool => tool.Clear()
-                    .CustomButton(cb => cb.Name("btnCancelar").Exec("btnVoltarMainArtigos_Click").ToolTip("Cancelar"))
-                    .CustomButton(cb => cb.Name("btnEdit").Exec("btnEditArtigo_Click").ToolTip("Salvar"))
-                    .Separator()
-                    .Bold()
-                    .Italic()
-                    .Underline()
-                    .Strikethrough()
-                    .JustifyLeft()
-                    .JustifyCenter()
-                    .JustifyRight()
-                    .JustifyFull()
-                    .InsertUnorderedList()
-                    .InsertOrderedList()
-                    .Indent()
-                    .Outdent()
-                    .SubScript()
-                    .SuperScript()
-                    .Separator()
-                    .InsertImage()
-                    .CreateLink()
-                    .TableEditing()
+                .CustomButton(cb => cb.Name("btnCancelar").Exec("btnVoltarMainArtigos_Click").ToolTip("Cancelar"))
+                .CustomButton(cb => cb.Name("btnEdit").Exec("btnEditArtigo_Click").ToolTip("Salvar"))
+                .Separator()
+                .Bold()
+                .Italic()
+                .Underline()
+                .Strikethrough()
+                .JustifyLeft()
+                .JustifyCenter()
+                .JustifyRight()
+                .JustifyFull()
+                .InsertUnorderedList()
+                .InsertOrderedList()
+                .Indent()
+                .Outdent()
+                .SubScript()
+                .SuperScript()
+                .Separator()
+                .InsertImage()
+                .CreateLink()
+                .TableEditing()
+                .FontName()
+                .FontSize()
+                .FontColor()
             ))
     }
-      else
-      {
+    else
+    {
         <div style="position: absolute; top: 0; right: 0; bottom: 40px; left: 0">
             @(Html.Kendo().EditorFor(model => model.TxArtigo).Name("artigoEditor")
-                .HtmlAttributes(new { @style = "width: 100%; height: 100%" })
-                .Tools(tool => tool.Clear()
-                )
+                    .HtmlAttributes(new { @style = "width: 100%; height: 100%" })
+                    .Tools(tool => tool.Clear())
             )
         </div>
 
-        <h4>
-            Avalie esse artigo
-        </h4>
-        
+        <div style="position: absolute; bottom: 0">
+            <h5 style="display: inline-block">
+                Avalie esse artigo
+            </h5>
+            @Html.RadioButton("rbtAvaliacao", 1, false, new { @style = "background-color:red" }) 1
+            @Html.RadioButton("rbtAvaliacao", 2, false, new { @style = "background-color:orange" }) 2
+            @Html.RadioButton("rbtAvaliacao", 3, false, new { @style = "background-color:yellow" }) 3
+            @Html.RadioButton("rbtAvaliacao", 4, false, new { @style = "background-color:brown" }) 4
+            @Html.RadioButton("rbtAvaliacao", 5, false, new { @style = "background-color:green" }) 5
+        </div>
+
         <script>
             $($('#artigoEditor').data().kendoEditor.body).attr('contenteditable', false)
         </script>
-      }}
+    }}
 </div>
 
-@(Html.Kendo().Window().Name("wndArtigoEdit")
-    .Content(@<text>
+@(Html.Kendo().Window().Name("wndArtigoEdit").Content(@<text>
         Nome do Artigo:
         @(Html.TextBox("txNomeObjeto", "", new { @class = "k-textbox" }))
 
         Descrição:
         @(Html.TextBox("txDescricaoObjeto", "", new { @class = "k-textbox" }))
-
-        @Html.Action("GetInteressePartial", "Interesse")
+        
+        <div id="divInteressesArtigo">
+        </div>
 
         @(Html.Kendo().Button().Name("btnSalvarArtigo")
             .Content("Salvar")
             .HtmlAttributes(new { @type = "button" })
             .Events(e => e.Click("btnSalvarArtigo_Click"))
         )
-    </text>)
-    .Visible(false)
-    .Title("Edição")
-    .Modal(true)
-    .Resizable(r=>r.Enabled(false))
+</text>)
+                    .Visible(false)
+                    .Title("Edição")
+                    .Modal(true)
+                    .Resizable(r => r.Enabled(false))
 )

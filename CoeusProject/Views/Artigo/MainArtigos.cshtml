@@ -14,23 +14,25 @@
     }
 </script>
 
-@(Html.Kendo().Grid<CoeusProject.Models.Artigo>()
-    .Name("gridMainArtigos")
-        .DataSource(dt => 
-            dt.Ajax().Read(r => r.Action("AjaxReadArtigos", "Artigo").Data("gridArtigos_Data"))
-            .Model(model=>model.Id("IdArtigo"))
-            .Destroy("Delete","Artigo")
-        )
-    .Selectable(select => select.Mode(GridSelectionMode.Single))
-    .Columns(c => 
-    {
-        c.Bound(m => m.Objeto.NmObjeto).Title("Artigos de " + (new CoeusProject.Models.CoeusProjectContext().Usuarios.Where(u=>u.IdUsuario == Model)
-            .FirstOrDefault().Decrypt().NmPessoa));
-        c.Command(command => command.Destroy().Text(" ")).Width(20);
-    })
-    .Editable(e=>e.DisplayDeleteConfirmation(false))
-    .Events(e=>e.Remove("gridMainArtigos_Remove"))
-)
+<div style="margin-top: 45px">
+    @(Html.Kendo().Grid<CoeusProject.Models.Artigo>()
+        .Name("gridMainArtigos")
+            .DataSource(dt =>
+                dt.Ajax().Read(r => r.Action("AjaxReadArtigos", "Artigo").Data("gridArtigos_Data"))
+                .Model(model => model.Id("IdArtigo"))
+                .Destroy("Delete", "Artigo")
+            )
+        .Selectable(select => select.Mode(GridSelectionMode.Single))
+        .Columns(c =>
+        {
+            c.Bound(m => m.Objeto.NmObjeto).Title("Artigos de " + (new CoeusProject.Models.CoeusProjectContext().Usuarios.Where(u => u.IdUsuario == Model)
+                .FirstOrDefault().Decrypt().NmPessoa));
+            c.Command(command => command.Destroy().Text(" ")).Width(20);
+        })
+        .Editable(e => e.DisplayDeleteConfirmation(false))
+        .Events(e => e.Remove("gridMainArtigos_Remove"))
+    )
+</div>
 
 <script>
     $(document).ready(function () {

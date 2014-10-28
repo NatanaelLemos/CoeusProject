@@ -13,22 +13,24 @@
     }
 </script>
 
-@(Html.Kendo().Grid<CoeusProject.Models.Video>()
-    .Name("gridMainVideos")
-    .DataSource(dt => dt.Ajax().Read(r => r.Action("AjaxReadVideos", "Video").Data("gridVideos_Data"))
-        .Model(model=>model.Id("IdVideo"))
-        .Destroy("Delete","Video")
+<div style="margin-top: 45px">
+    @(Html.Kendo().Grid<CoeusProject.Models.Video>()
+        .Name("gridMainVideos")
+        .DataSource(dt => dt.Ajax().Read(r => r.Action("AjaxReadVideos", "Video").Data("gridVideos_Data"))
+            .Model(model => model.Id("IdVideo"))
+            .Destroy("Delete", "Video")
+        )
+        .Selectable(select => select.Mode(GridSelectionMode.Single))
+        .Columns(c =>
+        {
+            c.Bound(m => m.Objeto.NmObjeto).Title("Vídeos de " + (new CoeusProject.Models.CoeusProjectContext().Usuarios.Where(u => u.IdUsuario == Model)
+                .FirstOrDefault().Decrypt().NmPessoa));
+            c.Command(command => command.Destroy().Text(" ")).Width(20);
+        })
+        .Editable(e => e.DisplayDeleteConfirmation(false))
+        .Events(e => e.Remove("gridMainVideos_Remove"))
     )
-    .Selectable(select => select.Mode(GridSelectionMode.Single))
-    .Columns(c =>
-    {
-        c.Bound(m => m.Objeto.NmObjeto).Title("Vídeos de " + (new CoeusProject.Models.CoeusProjectContext().Usuarios.Where(u => u.IdUsuario == Model)
-            .FirstOrDefault().Decrypt().NmPessoa));
-        c.Command(command => command.Destroy().Text(" ")).Width(20);
-    })
-    .Editable(e=>e.DisplayDeleteConfirmation(false))
-    .Events(e => e.Remove("gridMainVideos_Remove"))
-)
+</div>
 
 <script>
     $(document).ready(function () {

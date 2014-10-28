@@ -86,6 +86,11 @@ namespace CoeusProject.Controllers
                 System.IO.File.Delete(physicalPathPoster + ".png");
             }
 
+            if (System.IO.File.Exists(physicalPathPoster))
+            {
+                System.IO.File.Delete(physicalPathPoster);
+            }
+
             System.IO.File.Copy(Server.MapPath("~/Images/noPoster.png"), physicalPathPoster);
             return View("_VideoEditPartial", video);
         }

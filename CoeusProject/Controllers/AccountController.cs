@@ -195,6 +195,27 @@ namespace CoeusProject.Controllers
             return new HttpStatusCodeResult(HttpStatusCode.NotAcceptable, ErrorFacade.GetErrorMessage(ModelState));
         }
 
+        public ActionResult GetUsuarioByObjeto(Int32 idObjeto)
+        {
+            Objeto objeto = _context.Objetos.Where(o => o.IdObjeto == idObjeto)
+                .Include(o => o.Usuario).FirstOrDefault();
+
+            if(objeto == null || objeto.Usuario == null)
+            {
+                return Json("", JsonRequestBehavior.AllowGet);
+            }
+
+            objeto.Decrypt().Usuario.Decrypt();
+
+            return Json(new 
+            { 
+                IdUsuario = objeto.Usuario.IdUsuario,
+                NmPessoa = objeto.Usuario.NmPessoa,
+                NmFoto = objeto.Usuario.NmFoto,
+                NmThumbFoto = objeto.Usuario.NmThumbFoto
+            }, JsonRequestBehavior.AllowGet);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

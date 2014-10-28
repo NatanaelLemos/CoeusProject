@@ -1,13 +1,12 @@
-﻿@{Layout = null;}
-
-<div id="divInteressesItens" style="height: 150px; width:315px; margin: auto auto 10px auto; overflow: auto">
-</div>
+﻿@model long?
+@{Layout = null;}
+@{String nomDiv = "divInteressesItens" + Model.Value.ToString();}
 
 <script type="text/javascript">
     var interesses = [];
 
     $(document).ready(function () {
-        $('#divInteressesItens').html('');
+        $('#@nomDiv').html('');
         btnAddInteresse_Click(null);
     })
 
@@ -17,24 +16,24 @@
         $.get('@Url.Action("GetInteresseItem","Interesse")', {
             index: eIndex
         }, function (page) {
-            $('#divInteressesItens').append(page);
+            $('#@nomDiv').append(page);
 
             $('#btnAddInteresse' + eIndex).addClass('invisible');
             $('#btnRemoveInteresse' + eIndex).removeClass('invisible');
 
-            $("#divInteressesItens").scrollTop($("#divInteressesItens")[0].scrollHeight);
+            $('#@nomDiv').scrollTop($("#@nomDiv")[0].scrollHeight);
         });
     }
 
     function btnRemoveInteresse_Click(e) {
         var eIndex = parseInt($(e.sender.element[0]).data("index"));
-        
+
         interesses = $.grep(interesses, function (interesse) {
             return interesse.IxInteresse != eIndex;
         });
 
         $('#divInteresse' + eIndex).remove();
-        $("#divInteressesItens").scrollTop($("#divInteressesItens")[0].scrollHeight);
+        $('#@nomDiv').scrollTop($("#@nomDiv")[0].scrollHeight);
     }
 
     function cmbInteresse_AdditionalData(e) {
@@ -64,3 +63,6 @@
         });
     }
 </script>
+
+<div id='@nomDiv' style="height: 150px; width:315px; margin: auto auto 10px auto; overflow: auto">
+</div>
