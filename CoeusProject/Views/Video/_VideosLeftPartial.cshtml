@@ -14,7 +14,7 @@
     }
 
     function btnNovoVideo_Click(e) {
-        $('#divContent').load('@Url.Action("CreatePartial","Video")');
+        bindCenterPartial('@Url.Action("CreatePartial","Video")');
     }
 
     $(document).ready(function () {

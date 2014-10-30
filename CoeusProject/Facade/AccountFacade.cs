@@ -20,14 +20,16 @@ namespace CoeusProject.Facade
             FormsAuthentication.SignOut();
         }
 
-        public static Usuario GetLoggedInUser()
+        public static Usuario GetLoggedInUser(CoeusProjectContext context = null)
         {
             String idUsuario = HttpContext.Current.User.Identity.Name;
 
             if (!String.IsNullOrEmpty(idUsuario) && Convert.ToInt32(idUsuario) > 0)
             {
                 Int32 idUsuarioInteger = Convert.ToInt32(idUsuario);
-                CoeusProjectContext context = new CoeusProjectContext();
+                
+                context = context ?? new CoeusProjectContext();
+
                 Usuario usuario = context.Usuarios.Where(u => u.IdUsuario == idUsuarioInteger)
                                                     .Include(u=>u.Grupos)
                                                     .Include(u=>u.Temas).FirstOrDefault();

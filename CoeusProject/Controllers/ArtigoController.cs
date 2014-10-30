@@ -39,6 +39,7 @@ namespace CoeusProject.Controllers
                                             {
                                                 IdObjeto = a.Objeto.IdObjeto,
                                                 NmObjeto = a.Objeto.NmObjeto,
+                                                QtAcessos = a.Objeto.QtAcessos,
                                                 TxDescricao = a.Objeto.TxDescricao
                                             }
                                         }).ToDataSourceResult(request);
@@ -92,6 +93,16 @@ namespace CoeusProject.Controllers
                 }
 
                 _context.Artigos.Add(artigo.Encrypt(_context));
+
+                Grupo artigoGrupo = new Grupo()
+                {
+                    IdObjeto = artigo.IdObjeto,
+                    Salt = Salt.GetSalt(),
+                    Usuarios = new List<Usuario> { AccountFacade.GetLoggedInUser(_context).Encrypt(_context) },
+                    NmGrupo = nmObjeto
+                };
+
+                _context.Grupos.Add(artigoGrupo.Encrypt(_context));
                 _context.SaveChanges();
                 return new HttpStatusCodeResult(HttpStatusCode.OK);
             }
@@ -108,6 +119,13 @@ namespace CoeusProject.Controllers
             if (artigo == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.NotAcceptable, "Artigo não encontrado");
+            }
+
+            if (artigo.Objeto.IdUsuario != AccountFacade.GetLoggedInUser().IdUsuario)
+            {
+                artigo.Objeto.QtAcessos++;
+                _context.Entry(artigo).State = EntityState.Modified;
+                _context.SaveChanges();
             }
 
             artigo.Decrypt();

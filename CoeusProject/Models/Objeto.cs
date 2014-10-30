@@ -32,6 +32,8 @@ namespace CoeusProject.Models
         public Int32 IdSalt { get; set; }
         public virtual Salt Salt { get; set; }
 
+        public int QtAcessos { get; set; }
+
         public Objeto Encrypt(CoeusProjectContext Context = null)
         {
             if (this.Salt == null)

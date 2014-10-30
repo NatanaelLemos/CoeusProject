@@ -14,7 +14,7 @@
     }
 
     function btnNovoArtigo_Click(e) {
-        $('#divContent').load('@Url.Action("CreatePartial","Artigo")');
+        bindCenterPartial('@Url.Action("CreatePartial","Artigo")');
     }
 
     $(document).ready(function () {

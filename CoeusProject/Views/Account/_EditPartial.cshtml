@@ -6,6 +6,8 @@
     var redirect = false;
 
     $(document).ready(function () {
+        $('#divInteressesUser').load('@Url.Action("GetInteressePartial", "Interesse")');
+
         $('#btnEdit').kendoTooltip({
             position: 'top',
             content: 'Salvar'
@@ -120,6 +122,6 @@
             )
         </div>
 
-        @Html.Action("GetInteressePartial", "Interesse")
+        <div id="divInteressesUser"></div>
     </div>
 }

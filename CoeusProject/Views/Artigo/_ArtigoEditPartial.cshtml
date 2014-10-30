@@ -66,13 +66,19 @@
             content: 'Salvar'
         });
 
-        @{if ((Model!= null && Model.IdArtigo > 0) && (Model.Objeto.IdUsuario != CoeusProject.Facade.AccountFacade.GetLoggedInUser().IdUsuario)){<text>
-        $.get('@Url.Action("GetUsuarioByObjeto", "Account")', { idObjeto: '@Model.IdObjeto' }, function (data) {
-            $('#spnCreator').html("<div style='display:inline-block'><img src='~/User_Data/" + data.NmThumbFoto +
-                "'/></div><div style='float:right; text-align: right'><span>" + data.NmPessoa + "</span><br /><span>" +
-                data.NmThumbFoto + "</span></div>");
-        });
-        </text>}}
+        @{if ((Model!= null && Model.IdArtigo > 0)){
+        <text>
+        $('#cmbNmGrupo').data('kendoComboBox').dataSource.add({IdGrupo: '999', NmGrupo: 'Este Artigo'});
+        $('#cmbNmGrupo').data('kendoComboBox').value('999');
+        </text>
+
+              if (Model.Objeto.IdUsuario != CoeusProject.Facade.AccountFacade.GetLoggedInUser().IdUsuario){<text>
+                    $.get('@Url.Action("GetUsuarioByObjeto", "Account")', { idObjeto: '@Model.IdObjeto' }, function (data) {
+                        $('#spnCreator').html("<div style='display:inline-block'><img src='~/User_Data/" + data.NmThumbFoto +
+                            "'/></div><div style='float:right; text-align: right'><span>" + data.NmPessoa + "</span><br /><span>" +
+                            data.NmThumbFoto + "</span></div>");
+                    });
+        </text>}}}
 
         $('#divInteressesArtigo').load('@Url.Action("GetInteressePartial", "Interesse")');
     });
@@ -151,24 +157,25 @@ else
     }}
 </div>
 
-@(Html.Kendo().Window().Name("wndArtigoEdit").Content(@<text>
-        Nome do Artigo:
-        @(Html.TextBox("txNomeObjeto", "", new { @class = "k-textbox" }))
+@{Html.Kendo().Window().Name("wndArtigoEdit").Content(@<text>
+            Nome do Artigo:
+            @(Html.TextBox("txNomeObjeto", "", new { @class = "k-textbox" }))
 
-        Descrição:
-        @(Html.TextBox("txDescricaoObjeto", "", new { @class = "k-textbox" }))
-        
-        <div id="divInteressesArtigo">
-        </div>
+            Descrição:
+            @(Html.TextBox("txDescricaoObjeto", "", new { @class = "k-textbox" }))
 
-        @(Html.Kendo().Button().Name("btnSalvarArtigo")
-            .Content("Salvar")
-            .HtmlAttributes(new { @type = "button" })
-            .Events(e => e.Click("btnSalvarArtigo_Click"))
-        )
-</text>)
-                    .Visible(false)
-                    .Title("Edição")
-                    .Modal(true)
-                    .Resizable(r => r.Enabled(false))
-)
+            <div id="divInteressesArtigo">
+            </div>
+
+            @(Html.Kendo().Button().Name("btnSalvarArtigo")
+                .Content("Salvar")
+                .HtmlAttributes(new { @type = "button" })
+                .Events(e => e.Click("btnSalvarArtigo_Click"))
+            )
+    </text>)
+    .Visible(false)
+    .Title("Edição")
+    .Modal(true)
+    .Resizable(r => r.Enabled(false))
+    .Render();
+}

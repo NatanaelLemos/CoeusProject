@@ -39,7 +39,8 @@ namespace CoeusProject.Controllers
                 {
                     IdObjeto = v.Objeto.IdObjeto,
                     NmObjeto = v.Objeto.NmObjeto,
-                    TxDescricao = v.Objeto.TxDescricao
+                    TxDescricao = v.Objeto.TxDescricao,
+                    QtAcessos = v.Objeto.QtAcessos
                 }
             }).ToDataSourceResult(request);
 
@@ -142,6 +143,13 @@ namespace CoeusProject.Controllers
             if (video == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.NotAcceptable, "Vídeo não encontrado");
+            }
+
+            if (video.Objeto.IdUsuario != AccountFacade.GetLoggedInUser().IdUsuario)
+            {
+                video.Objeto.QtAcessos++;
+                _context.Entry(video).State = EntityState.Modified;
+                _context.SaveChanges();
             }
 
             video.Decrypt();

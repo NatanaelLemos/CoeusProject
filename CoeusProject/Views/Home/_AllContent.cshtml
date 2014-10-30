@@ -3,13 +3,19 @@
 @{Layout = null;}
 
 <style>
-    #tblAllContent td {
+    .divContentValue {
+        width: 99%; 
+        text-align: left;
+        margin: 0 0 5px 5px;
         border: 1px solid gray;
         border-radius: 5px;
-        width: 50%;
     }
 
-    #tblAllContent a {
+        .divContentValue * {
+            margin: 5px 0 2px 6px;
+        }
+
+    .divContentValue a {
         cursor: pointer;
     }
 </style>
@@ -24,40 +30,25 @@
     }
 </script>
 
-<table id="tblAllContent" style="width: 100%">
     @{
-        Int32 index = 0;
-
         foreach (ObjetoVM objeto in Model)
         {
-            if (index % 2 == 0)
-            {
-                <text>
-                    <tr style="width: 100%">
-                </text>
-            }
             <text>
-                <td style="width: 50%; max-width: 10px;">
+                <div class="divContentValue">
                     <h4>
-                            @{if (objeto.TpObjeto == TipoObjeto.Artigo)
-                            { <img src="../../Images/objectTypeArticlepng.png" alt="A" />
-                                <a onclick="ContentArtigo_Click(@objeto.IdArtigo)">@objeto.NmObjeto</a>
-                            }
-                            else
-                            { <img src="../../Images/objectTypeVideo.png" alt="V" />
-                                <a onclick="ContentVideo_Click(@objeto.IdVideo)">@objeto.NmObjeto</a>
-                            }}
+                        @{if (objeto.TpObjeto == TipoObjeto.Artigo)
+                        { <img src="../../Images/objectTypeArticlepng.png" alt="A" />
+                            <a onclick="ContentArtigo_Click(@objeto.IdArtigo)">@objeto.NmObjeto</a>
+                        }
+                        else
+                        { <img src="../../Images/objectTypeVideo.png" alt="V" />
+                            <a onclick="ContentVideo_Click(@objeto.IdVideo)">@objeto.NmObjeto</a>
+                        }}
                     </h4>
-                    <div style="text-wrap: avoid; word-wrap: break-word">
+                    <div style="margin: 0 0 10px 40px; text-wrap: avoid; word-wrap: break-word">
                         @objeto.TxDescricao
                     </div>
-                </td>
+                </div>
             </text>
-            if (index % 2 != 0)
-            {
-                @:</tr>
-            }
-            index++;
         }
     }
-</table>

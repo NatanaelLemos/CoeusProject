@@ -1,0 +1,18 @@
+namespace CoeusProject.Migrations
+{
+    using System;
+    using System.Data.Entity.Migrations;
+    
+    public partial class QtdAcessosObjeto : DbMigration
+    {
+        public override void Up()
+        {
+            AddColumn("dbo.Objeto", "QtAcessos", c => c.Int(nullable: false, defaultValue: 0));
+        }
+        
+        public override void Down()
+        {
+            DropColumn("dbo.Objeto", "QtAcessos");
+        }
+    }
+}

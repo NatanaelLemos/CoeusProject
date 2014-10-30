@@ -34,6 +34,8 @@
     }
 
     $(document).ready(function () {
+        $('#divInteressesUsuario').load('@Url.Action("GetInteressePartial", "Interesse")');
+
         $('#btnRegister').click(function (e) {
             e.preventDefault();
 
@@ -96,9 +98,10 @@
             <img id="imgUser" height="80" width="80" style="position: absolute; left: 50%" src="~/Images/userNoPhoto.png" />
         </div>
 
-        <div>
+        <div style="height:60px; max-height: 100px">
             @Html.Label("Foto", new { @class = "labelInline" })
-            @(Html.Kendo().Upload()
+            <div style="display:inline-block; overflow: hidden; width: 250px; padding: 0 0 0 85px">
+                @(Html.Kendo().Upload()
                     .Name("file")
                     .Multiple(false)
                     .Async(async => async
@@ -112,9 +115,12 @@
                         .Upload("Foto_Upload")
                         .Success("Foto_Success")
                     )
-            )
+                    .HtmlAttributes(new { style = "height: 0; width: 0;" })
+                )
+            </div>
         </div>
-        @Html.Action("GetInteressePartial", "Interesse")
+
+    <span id="divInteressesUsuario"></span>
     }
 </div>
 <div style="position: absolute; bottom: 0; left: 50%">

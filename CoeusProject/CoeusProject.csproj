@@ -242,6 +242,10 @@
     <Compile Include="Migrations\201410172245457_AudioNoMore.Designer.cs">
       <DependentUpon>201410172245457_AudioNoMore.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201410300100591_QtdAcessosObjeto.cs" />
+    <Compile Include="Migrations\201410300100591_QtdAcessosObjeto.Designer.cs">
+      <DependentUpon>201410300100591_QtdAcessosObjeto.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Artigo.cs" />
     <Compile Include="Models\Avaliacao.cs" />
@@ -1877,6 +1881,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201410172245457_AudioNoMore.resx">
       <DependentUpon>201410172245457_AudioNoMore.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201410300100591_QtdAcessosObjeto.resx">
+      <DependentUpon>201410300100591_QtdAcessosObjeto.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

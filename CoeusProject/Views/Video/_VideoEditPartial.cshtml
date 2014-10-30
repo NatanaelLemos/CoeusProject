@@ -172,7 +172,7 @@
 
 </div>
 
-@(Html.Kendo().Window().Name("wndVideoEdit")
+@{Html.Kendo().Window().Name("wndVideoEdit")
     .Content(@<text>
         Nome do Vídeo:
         @(Html.TextBox("txNomeObjeto", "", new { @class = "k-textbox" }))
@@ -180,8 +180,8 @@
         Descrição:
         @(Html.TextBox("txDescricaoObjeto", "", new { @class = "k-textbox" }))
 
-<div id="divInteressesVideo">
-</div>
+        <div id="divInteressesVideo">
+        </div>
 
         @(Html.Kendo().Button().Name("btnSalvarVideo")
             .Content("Salvar")
@@ -192,5 +192,6 @@
     .Visible(false)
     .Title("Edição")
     .Modal(true)
-    .Resizable(r=>r.Enabled(false))
-)
+    .Resizable(r => r.Enabled(false))
+    .Render();
+}

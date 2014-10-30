@@ -14,14 +14,14 @@
             var kendoWaitWindow = kendoWait();
             var loaded = false;
 
-            $('#divContent').load('@Url.Action("GetMainArtigos", "Artigo")', { idUsuario: idUsuarioLogado }, function () {
+            bindCenterPartial('@Url.Action("GetMainArtigos", "Artigo")', { idUsuario: idUsuarioLogado }, function () {
                 if (loaded) {
                     kendoWaitWindow.close();
                 }
                 loaded = true;
             });
 
-            $('#divLeftContent').load('@Url.Action("GetLeftDivArtigos","Artigo")', { idUsuario: idUsuarioLogado }, function () {
+            bindLeftPartial('@Url.Action("GetLeftDivArtigos","Artigo")', { idUsuario: idUsuarioLogado }, function () {
                 if (loaded) {
                     kendoWaitWindow.close();
                 }
@@ -35,13 +35,14 @@
             var kendoWaitWindow = kendoWait();
             var loaded = false;
 
-            $('#divContent').load('@Url.Action("GetMainVideos", "Video")', { idUsuario: idUsuarioLogado }, function () {
+            bindCenterPartial('@Url.Action("GetMainVideos", "Video")', { idUsuario: idUsuarioLogado }, function () {
                 if (loaded) {
                     kendoWaitWindow.close();
                 }
                 loaded = true;
             });
-            $('#divLeftContent').load('@Url.Action("GetLeftDivVideos","Video")', { idUsuario: idUsuarioLogado }, function () {
+
+            bindLeftPartial('@Url.Action("GetLeftDivVideos","Video")', { idUsuario: idUsuarioLogado }, function () {
                 if (loaded) {
                     kendoWaitWindow.close();
                 }

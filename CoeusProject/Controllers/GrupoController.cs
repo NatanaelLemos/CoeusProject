@@ -183,26 +183,20 @@ namespace CoeusProject.Controllers
         {
             Usuario usuarioLogado = AccountFacade.GetLoggedInUser();
 
-            IQueryable<Grupo> grupos = null;
+            List<Grupo> grupos = _context.Grupos.Where(g => g.Usuarios.Any(u => u.IdUsuario == usuarioLogado.IdUsuario) && g.IdObjeto == null)
+                                       .Include(g => g.Usuarios).Decrypt();
 
-            /*if (String.IsNullOrEmpty(nmGrupo))
-            {*/
-                grupos = _context.Grupos.Where(g => g.Usuarios.Any(u => u.IdUsuario == usuarioLogado.IdUsuario) && g.IdObjeto == null)
-                                                            .Include(g => g.Usuarios);
-            /*}
-            else
+            if (!String.IsNullOrEmpty(nmGrupo))
             {
-                grupos = _context.Grupos.Where(g => g.Usuarios.Any(u => u.IdUsuario == usuarioLogado.IdUsuario) && g.IdObjeto == null
-                                                                         && g.NmGrupo.StartsWith(nmGrupo))
-                                                            .Include(g => g.Usuarios);
-            }*/
+                grupos = grupos.Where(g => g.NmGrupo.StartsWith(nmGrupo)).ToList();
+            }
 
             if (grupos == null)
             {
                 return Json("", JsonRequestBehavior.AllowGet);
             }
 
-            return Json(grupos.Decrypt().Select(g => new
+            return Json(grupos.Select(g => new
             {
                 IdGrupo = g.IdGrupo,
                 NmGrupo = g.NmGrupo

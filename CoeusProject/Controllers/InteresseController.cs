@@ -12,6 +12,8 @@ namespace CoeusProject.Controllers
     public class InteresseController : Controller
     {
         CoeusProjectContext _context = new CoeusProjectContext();
+
+        [OutputCache(Duration=0)]
         public ActionResult GetInteressePartial()
         {
             return View("_InteressePartial", DateTime.Now.Ticks);
