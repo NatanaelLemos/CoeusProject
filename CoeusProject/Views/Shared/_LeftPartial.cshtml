@@ -31,6 +31,10 @@
                 loaded = true;
             });
         });
+
+        $.get('@Url.Action("GetUsuarioRanking", "Account")?idUsuario=@Model.IdUsuario', {}, function (data) {
+            $('#spnRankUserLoggedIn').html("Rank: " + data);
+        });
     });
 
     function btnConfigure_Click(e) {
@@ -86,6 +90,7 @@
         )
         <div id="divNmUsuario" style="display: inline-block">
             @Model.NmPessoa
+            <span style="display: block; text-align: left" id="spnRankUserLoggedIn"></span>
         </div>
     </div>
 </div>

@@ -216,6 +216,14 @@ namespace CoeusProject.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult GetUsuarioRanking(Int32 idUsuario)
+        {
+            Usuario usuario = _context.Usuarios.Include(u=>u.Objetos).Where(u => u.IdUsuario == idUsuario).FirstOrDefault();
+            if (usuario == null) return Json("0", JsonRequestBehavior.AllowGet);
+
+            return Json(usuario.Rank(_context).ToString(), JsonRequestBehavior.AllowGet);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

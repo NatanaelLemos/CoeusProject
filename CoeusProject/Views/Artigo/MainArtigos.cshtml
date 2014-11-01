@@ -28,6 +28,7 @@
             c.Bound(m => m.Objeto.NmObjeto).Title("Artigos de " + (new CoeusProject.Models.CoeusProjectContext().Usuarios.Where(u => u.IdUsuario == Model)
                 .FirstOrDefault().Decrypt().NmPessoa));
             c.Bound(m => m.Objeto.QtAcessos).Title("Quantidade de Acessos").Width(50).HeaderHtmlAttributes(new { @style="font-size: 10pt"});
+            c.Bound(m => m.Objeto.VlMediaAvaliacaoCalc).Title("Avaliação Média").Width(50).HeaderHtmlAttributes(new { @style = "font-size: 10pt" });
             c.Command(command => command.Destroy().Text(" ")).Width(20);
         })
         .Editable(e => e.DisplayDeleteConfirmation(false))

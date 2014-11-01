@@ -6,7 +6,49 @@
 <script src="~/Scripts/video.js"></script>
 
 <style type="text/css">
+    #divAvaliacao > label {
+        display: inline-block;
+        margin-right: 5px;
+    }
 
+        #divAvaliacao > label > span {
+            font-weight: bold;
+        }
+
+        #divAvaliacao > label > input {
+            visibility: hidden;
+            position: absolute;
+        }
+
+            #divAvaliacao > label > input + span {
+                cursor: pointer;
+                border: 2px solid transparent;
+            }
+
+            #divAvaliacao > label > input:checked + span {
+                border: 3px solid;
+                border-radius: 5px;
+            }
+
+            #divAvaliacao > label > input[class=rbtnAvaliacaoAv1]:checked + span {
+                border-color: #f00;
+            }
+
+            #divAvaliacao > label > input[class=rbtnAvaliacaoAv2]:checked + span {
+                border-color: #fb4;
+            }
+
+            #divAvaliacao > label > input[class=rbtnAvaliacaoAv3]:checked + span {
+                border-color: #ff0;
+            }
+
+            #divAvaliacao > label > input[class=rbtnAvaliacaoAv4]:checked + span {
+                border-color: #af4;
+            }
+
+            #divAvaliacao > label > input[class=rbtnAvaliacaoAv5]:checked + span {
+                border-color: #0f0;
+            }
 </style>
 
 <script>
@@ -17,12 +59,26 @@
     $(document).ready(function () {
         @{if ((Model!= null && Model.IdVideo > 0) && (Model.Objeto.IdUsuario != CoeusProject.Facade.AccountFacade.GetLoggedInUser().IdUsuario)){<text>
         $.get('@Url.Action("GetUsuarioByObjeto", "Account")', { idObjeto: '@Model.IdObjeto' }, function (data) {
-            $('#spnCreator').html("<div style='display:inline-block'><img src='~/User_Data/" + data.NmThumbFoto +
-                "'/></div><div style='float:right; text-align: right'><span>" + data.NmPessoa + "</span><br /><span>" +
-                data.NmThumbFoto + "</span></div>");
+            $.get('@Url.Action("GetUsuarioRanking", "Account")?idUsuario=@Model.Objeto.IdUsuario', {}, function (rankOwner) {
+                $('#spnCreator').html("<div style='display:inline-block'><img src='~/User_Data/" + data.NmThumbFoto +
+                    "'/></div><div style='float:right; text-align: right'><span>" + data.NmPessoa + "</span><br /><span>Rank: " +
+                    rankOwner + "</span></div>");
+            });
         });
         </text>}}
     });
+
+    function rtbAvaliacao_Click(e) {
+        if (e.length > 0) {
+            var element = e[0];
+            if (element.checked) {
+                $.ajaxPost('@Url.Action("Avaliacao", "Video")', {
+                    idVideo: '@Model.IdVideo',
+                    noAvaliacao: element.value
+                }, false, function () { });
+            }
+        }
+    }
 </script>
 
 
@@ -55,20 +111,37 @@
         <p class="vjs-no-js">Para assistir à este vídeo, habilite a execução de JavaScript e considere atualizar seu web browser para um <a href="http://videojs.com/html5-video-support/" target="_blank">que suporte vídeos HTML5</a></p>
     </video>
 </div>
-@{if (Model.Objeto.IdUsuario != CoeusProject.Facade.AccountFacade.GetLoggedInUser().IdUsuario)
-{
-    <div style="position: absolute; bottom: 0">
-        <h5 style="display: inline-block">
-            Avalie esse vídeo
-        </h5>
-        @Html.RadioButton("rbtAvaliacao", 1, false, new { @style = "background-color:red" }) 1
-        @Html.RadioButton("rbtAvaliacao", 2, false, new { @style = "background-color:orange" }) 2
-        @Html.RadioButton("rbtAvaliacao", 3, false, new { @style = "background-color:yellow" }) 3
-        @Html.RadioButton("rbtAvaliacao", 4, false, new { @style = "background-color:brown" }) 4
-        @Html.RadioButton("rbtAvaliacao", 5, false, new { @style = "background-color:green" }) 5
-    </div>
-}}
 
 <div style="position: absolute; bottom: 0; left: 20px; right: 20px; height: 100px; overflow:auto">
     @Model.Objeto.TxDescricao
+
+    @{if (Model.Objeto.IdUsuario != CoeusProject.Facade.AccountFacade.GetLoggedInUser().IdUsuario)
+    {
+        <div style="position: absolute; bottom: 0" id="divAvaliacao">
+            <h5 style="display: inline-block">
+                Avalie esse vídeo
+            </h5>
+            @{Int32 noAvUsuario = ViewBag.noAvUsuario;}
+            <label>
+                @Html.RadioButton("rbtAvaliacao", 1, (noAvUsuario == 1), new { @onclick = "rtbAvaliacao_Click($(this))", @class = "rbtnAvaliacaoAv1" })
+                <span>1</span>
+            </label>
+            <label>
+                @Html.RadioButton("rbtAvaliacao", 2, (noAvUsuario == 2), new { @onclick = "rtbAvaliacao_Click($(this))", @class = "rbtnAvaliacaoAv2" })
+                <span>2</span>
+            </label>
+            <label>
+                @Html.RadioButton("rbtAvaliacao", 3, (noAvUsuario == 3), new { @onclick = "rtbAvaliacao_Click($(this))", @class = "rbtnAvaliacaoAv3" })
+                <span>3</span>
+            </label>
+            <label>
+                @Html.RadioButton("rbtAvaliacao", 4, (noAvUsuario == 4), new { @onclick = "rtbAvaliacao_Click($(this))", @class = "rbtnAvaliacaoAv4" })
+                <span>4</span>
+            </label>
+            <label>
+                @Html.RadioButton("rbtAvaliacao", 5, (noAvUsuario == 5), new { @onclick = "rtbAvaliacao_Click($(this))", @class = "rbtnAvaliacaoAv5" })
+                <span>5</span>
+            </label>
+        </div>
+    }}
 </div>

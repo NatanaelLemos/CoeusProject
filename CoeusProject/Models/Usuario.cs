@@ -66,6 +66,33 @@ namespace CoeusProject.Models
         public Int32 IdSalt { get; set; }
         public virtual Salt Salt { get; set; }
 
+        public Int32 Rank(CoeusProjectContext context)
+        {
+            if (Objetos == null)
+            {
+                context = context ?? new CoeusProjectContext();
+
+                Objetos = context.Objetos.Where(o => o.IdUsuario == IdUsuario).ToList();
+            }
+
+            if (Objetos == null || Objetos.Count == 0) return 0;
+
+            Int32 sumObjetos = 0;
+            Int32 sumNotas = 0;
+
+            foreach (Objeto objeto in Objetos)
+            {
+                foreach (Avaliacao avaliacao in objeto.Avaliacoes)
+                {
+                    sumNotas += avaliacao.NoAvaliacao;
+                }
+                sumObjetos++;
+            }
+
+            sumObjetos = sumObjetos == 0 ? 1 : sumObjetos;
+            return Convert.ToInt32(Math.Round((decimal)(sumNotas / sumObjetos), 0));
+        }
+
         public Usuario Encrypt(CoeusProjectContext Context = null)
         {
             if (this.Salt == null)

@@ -34,6 +34,30 @@ namespace CoeusProject.Models
 
         public int QtAcessos { get; set; }
 
+        [NotMapped]
+        public Decimal VlMediaAvaliacao
+        {
+            get 
+            {
+                if (Avaliacoes == null || Avaliacoes.Count == 0) return 0;
+
+                Int32 idx = 0;
+                Int32 vlTotalAvaliacao = 0;
+                foreach (Avaliacao av in this.Avaliacoes)
+                {
+                    vlTotalAvaliacao += av.NoAvaliacao;
+                    idx++;
+                }
+
+                idx = idx == 0 ? 1 : idx;
+
+                return Math.Round(((decimal)(vlTotalAvaliacao / idx)), 2);
+            }
+        }
+
+        [NotMapped]
+        public Decimal VlMediaAvaliacaoCalc { get; set; }
+
         public Objeto Encrypt(CoeusProjectContext Context = null)
         {
             if (this.Salt == null)

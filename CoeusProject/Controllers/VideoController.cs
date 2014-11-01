@@ -31,7 +31,10 @@ namespace CoeusProject.Controllers
 
         private JsonResult GetAjaxVideos(DataSourceRequest request, Int32 idUsuario)
         {
-            IQueryable<Video> videos = _context.Videos.Include(v => v.Objeto).Include(v => v.Objeto.Salt).Where(o => o.Objeto.IdUsuario == idUsuario);
+            IQueryable<Video> videos = _context.Videos.Include(v => v.Objeto)
+                                        .Include(v=>v.Objeto.Avaliacoes)
+                                        .Include(v => v.Objeto.Salt)
+                                        .Where(o => o.Objeto.IdUsuario == idUsuario);
             DataSourceResult result = videos.Decrypt().Select(v => new Video
             {
                 IdVideo = v.IdVideo,
@@ -40,6 +43,7 @@ namespace CoeusProject.Controllers
                     IdObjeto = v.Objeto.IdObjeto,
                     NmObjeto = v.Objeto.NmObjeto,
                     TxDescricao = v.Objeto.TxDescricao,
+                    VlMediaAvaliacaoCalc = v.Objeto.VlMediaAvaliacao,
                     QtAcessos = v.Objeto.QtAcessos
                 }
             }).ToDataSourceResult(request);
@@ -145,11 +149,20 @@ namespace CoeusProject.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.NotAcceptable, "Vídeo não encontrado");
             }
 
-            if (video.Objeto.IdUsuario != AccountFacade.GetLoggedInUser().IdUsuario)
+            Usuario usuarioLogado = AccountFacade.GetLoggedInUser();
+            if (video.Objeto.IdUsuario != usuarioLogado.IdUsuario)
             {
                 video.Objeto.QtAcessos++;
                 _context.Entry(video).State = EntityState.Modified;
                 _context.SaveChanges();
+
+                Int32 noAvUsuario = 0;
+                Avaliacao usuarioAvaliacao = video.Objeto.Avaliacoes.Where(a => a.IdUsuario == usuarioLogado.IdUsuario).FirstOrDefault();
+                if (usuarioAvaliacao != null)
+                {
+                    noAvUsuario = usuarioAvaliacao.NoAvaliacao;
+                }
+                ViewBag.noAvUsuario = noAvUsuario;
             }
 
             video.Decrypt();
@@ -192,6 +205,36 @@ namespace CoeusProject.Controllers
             _context.SaveChanges();
 
             return GetAjaxVideos(request, AccountFacade.GetLoggedInUser().IdUsuario);
+        }
+
+        public ActionResult Avaliacao(Int32 idVideo, Int32 noAvaliacao)
+        {
+            Video video = _context.Videos.Where(a => a.IdVideo == idVideo).Include(a => a.Objeto).FirstOrDefault();
+            if (video == null) return new HttpStatusCodeResult(HttpStatusCode.OK);
+
+            Objeto objeto = video.Objeto;
+
+            if (objeto.Avaliacoes == null)
+            {
+                objeto.Avaliacoes = new List<Avaliacao>();
+            }
+
+            Usuario usuarioLogado = AccountFacade.GetLoggedInUser().Encrypt();
+            Avaliacao avaliacao = objeto.Avaliacoes.Where(a => a.IdUsuario == usuarioLogado.IdUsuario).FirstOrDefault();
+
+            if (avaliacao == null)
+            {
+                objeto.Avaliacoes.Add(new Avaliacao { IdUsuario = usuarioLogado.IdUsuario, NoAvaliacao = noAvaliacao });
+            }
+            else
+            {
+                avaliacao.NoAvaliacao = noAvaliacao;
+                _context.Entry(avaliacao).State = EntityState.Modified;
+            }
+
+            _context.SaveChanges();
+
+            return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
 
         protected override void Dispose(bool disposing)

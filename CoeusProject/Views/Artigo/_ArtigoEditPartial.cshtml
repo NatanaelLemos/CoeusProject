@@ -12,6 +12,50 @@
         background-image: url('Images/saveAs.png');
         background-position: 4px 4px;
     }
+
+    #divAvaliacao > label {
+        display: inline-block;
+        margin-right: 5px;
+    }
+
+        #divAvaliacao > label > span {
+            font-weight: bold;
+        }
+
+        #divAvaliacao > label > input { 
+            visibility: hidden;
+            position: absolute;
+        }
+
+            #divAvaliacao > label > input + span { 
+                cursor: pointer;
+                border: 2px solid transparent;
+            }
+
+            #divAvaliacao > label > input:checked + span { 
+                border: 3px solid;
+                border-radius: 5px;
+            }
+
+            #divAvaliacao > label > input[class=rbtnAvaliacaoAv1]:checked + span {
+                border-color: #f00;
+            }
+
+            #divAvaliacao > label > input[class=rbtnAvaliacaoAv2]:checked + span {
+                border-color: #fb4;
+            }
+
+            #divAvaliacao > label > input[class=rbtnAvaliacaoAv3]:checked + span {
+                border-color: #ff0;
+            }
+
+            #divAvaliacao > label > input[class=rbtnAvaliacaoAv4]:checked + span {
+                border-color: #af4;
+            }
+
+            #divAvaliacao > label > input[class=rbtnAvaliacaoAv5]:checked + span {
+                border-color: #0f0;
+            }
 </style>
 
 <script>
@@ -68,20 +112,36 @@
 
         @{if ((Model!= null && Model.IdArtigo > 0)){
         <text>
-        $('#cmbNmGrupo').data('kendoComboBox').dataSource.add({IdGrupo: '999', NmGrupo: 'Este Artigo'});
+        $('#cmbNmGrupo').data('kendoComboBox').dataSource.add({ IdGrupo: '999', NmGrupo: 'Este Artigo' });
         $('#cmbNmGrupo').data('kendoComboBox').value('999');
         </text>
 
               if (Model.Objeto.IdUsuario != CoeusProject.Facade.AccountFacade.GetLoggedInUser().IdUsuario){<text>
-                    $.get('@Url.Action("GetUsuarioByObjeto", "Account")', { idObjeto: '@Model.IdObjeto' }, function (data) {
-                        $('#spnCreator').html("<div style='display:inline-block'><img src='~/User_Data/" + data.NmThumbFoto +
-                            "'/></div><div style='float:right; text-align: right'><span>" + data.NmPessoa + "</span><br /><span>" +
-                            data.NmThumbFoto + "</span></div>");
-                    });
+        $.get('@Url.Action("GetUsuarioByObjeto", "Account")', { idObjeto: '@Model.IdObjeto' }, function (data) {
+
+
+            $.get('@Url.Action("GetUsuarioRanking", "Account")?idUsuario=@Model.Objeto.IdUsuario', {}, function (rankOwner) {
+                $('#spnCreator').html("<div style='display:inline-block'><img src='~/User_Data/" + data.NmThumbFoto +
+                    "'/></div><div style='float:right; text-align: right'><span>" + data.NmPessoa + "</span><br /><span>Rank: " +
+                    rankOwner + "</span></div>");
+            });
+        });
         </text>}}}
 
         $('#divInteressesArtigo').load('@Url.Action("GetInteressePartial", "Interesse")');
     });
+
+    function rtbAvaliacao_Click(e) {
+        if (e.length > 0) {
+            var element = e[0];
+            if (element.checked) {
+                $.ajaxPost('@Url.Action("Avaliacao", "Artigo")', {
+                    idArtigo: '@Model.IdArtigo',
+                    noAvaliacao: element.value
+                }, false, function () { });
+            }
+        }
+    }
 </script>
 
 @{if (Model == null || Model.IdArtigo == 0)
@@ -140,15 +200,33 @@ else
             )
         </div>
 
-        <div style="position: absolute; bottom: 0">
+        <div style="position: absolute; bottom: 0" id="divAvaliacao">
             <h5 style="display: inline-block">
                 Avalie esse artigo
             </h5>
-            @Html.RadioButton("rbtAvaliacao", 1, false, new { @style = "background-color:red" }) 1
-            @Html.RadioButton("rbtAvaliacao", 2, false, new { @style = "background-color:orange" }) 2
-            @Html.RadioButton("rbtAvaliacao", 3, false, new { @style = "background-color:yellow" }) 3
-            @Html.RadioButton("rbtAvaliacao", 4, false, new { @style = "background-color:brown" }) 4
-            @Html.RadioButton("rbtAvaliacao", 5, false, new { @style = "background-color:green" }) 5
+
+            @{Int32 noAvUsuario = ViewBag.noAvUsuario;}
+            <label>
+                @Html.RadioButton("rbtAvaliacao", 1, (noAvUsuario == 1), new { @onclick = "rtbAvaliacao_Click($(this))" , @class="rbtnAvaliacaoAv1"})
+                <span>1</span>
+            </label>
+            <label>
+                @Html.RadioButton("rbtAvaliacao", 2, (noAvUsuario == 2), new { @onclick = "rtbAvaliacao_Click($(this))", @class = "rbtnAvaliacaoAv2" })
+                <span>2</span>
+            </label>
+            <label>
+                @Html.RadioButton("rbtAvaliacao", 3, (noAvUsuario == 3), new { @onclick = "rtbAvaliacao_Click($(this))", @class = "rbtnAvaliacaoAv3" })
+                <span>3</span>
+            </label>
+            <label>
+                @Html.RadioButton("rbtAvaliacao", 4, (noAvUsuario == 4), new { @onclick = "rtbAvaliacao_Click($(this))", @class = "rbtnAvaliacaoAv4" })
+                <span>4</span>
+            </label>
+            <label>
+                @Html.RadioButton("rbtAvaliacao", 5, (noAvUsuario == 5), new { @onclick = "rtbAvaliacao_Click($(this))", @class = "rbtnAvaliacaoAv5" })
+                <span>5</span>
+            </label>
+
         </div>
 
         <script>
@@ -158,21 +236,21 @@ else
 </div>
 
 @{Html.Kendo().Window().Name("wndArtigoEdit").Content(@<text>
-            Nome do Artigo:
-            @(Html.TextBox("txNomeObjeto", "", new { @class = "k-textbox" }))
+        Nome do Artigo:
+        @(Html.TextBox("txNomeObjeto", "", new { @class = "k-textbox" }))
 
-            Descrição:
-            @(Html.TextBox("txDescricaoObjeto", "", new { @class = "k-textbox" }))
+        Descrição:
+        @(Html.TextBox("txDescricaoObjeto", "", new { @class = "k-textbox" }))
 
-            <div id="divInteressesArtigo">
-            </div>
+        <div id="divInteressesArtigo">
+        </div>
 
-            @(Html.Kendo().Button().Name("btnSalvarArtigo")
+        @(Html.Kendo().Button().Name("btnSalvarArtigo")
                 .Content("Salvar")
                 .HtmlAttributes(new { @type = "button" })
                 .Events(e => e.Click("btnSalvarArtigo_Click"))
-            )
-    </text>)
+        )
+</text>)
     .Visible(false)
     .Title("Edição")
     .Modal(true)

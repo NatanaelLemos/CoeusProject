@@ -31,7 +31,10 @@ namespace CoeusProject.Controllers
 
         private JsonResult GetAjaxArtigos(DataSourceRequest request, Int32 idUsuario)
         {
-            IQueryable<Artigo> artigos = _context.Artigos.Include(a => a.Objeto).Include(a => a.Objeto.Salt).Where(o => o.Objeto.IdUsuario == idUsuario);
+            IQueryable<Artigo> artigos = _context.Artigos.Include(a => a.Objeto)
+                                                        .Include(a=>a.Objeto.Avaliacoes)
+                                                        .Include(a => a.Objeto.Salt)
+                                                        .Where(o => o.Objeto.IdUsuario == idUsuario);
             DataSourceResult result = artigos.Decrypt().Select(a => new Artigo
                                         {
                                             IdArtigo = a.IdArtigo,
@@ -40,6 +43,7 @@ namespace CoeusProject.Controllers
                                                 IdObjeto = a.Objeto.IdObjeto,
                                                 NmObjeto = a.Objeto.NmObjeto,
                                                 QtAcessos = a.Objeto.QtAcessos,
+                                                VlMediaAvaliacaoCalc = a.Objeto.VlMediaAvaliacao,
                                                 TxDescricao = a.Objeto.TxDescricao
                                             }
                                         }).ToDataSourceResult(request);
@@ -121,11 +125,21 @@ namespace CoeusProject.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.NotAcceptable, "Artigo não encontrado");
             }
 
-            if (artigo.Objeto.IdUsuario != AccountFacade.GetLoggedInUser().IdUsuario)
+            Usuario usuarioLogado = AccountFacade.GetLoggedInUser();
+
+            if (artigo.Objeto.IdUsuario != usuarioLogado.IdUsuario)
             {
                 artigo.Objeto.QtAcessos++;
                 _context.Entry(artigo).State = EntityState.Modified;
                 _context.SaveChanges();
+
+                Int32 noAvUsuario = 0;
+                Avaliacao usuarioAvaliacao = artigo.Objeto.Avaliacoes.Where(a => a.IdUsuario == usuarioLogado.IdUsuario).FirstOrDefault();
+                if (usuarioAvaliacao != null)
+                {
+                    noAvUsuario = usuarioAvaliacao.NoAvaliacao;
+                }
+                ViewBag.noAvUsuario = noAvUsuario;
             }
 
             artigo.Decrypt();
@@ -176,6 +190,36 @@ namespace CoeusProject.Controllers
             _context.SaveChanges();
 
             return GetAjaxArtigos(request, AccountFacade.GetLoggedInUser().IdUsuario);
+        }
+
+        public ActionResult Avaliacao(Int32 idArtigo, Int32 noAvaliacao)
+        {
+            Artigo artigo = _context.Artigos.Where(a => a.IdArtigo == idArtigo).Include(a=>a.Objeto).FirstOrDefault();
+            if (artigo == null) return new HttpStatusCodeResult(HttpStatusCode.OK);
+
+            Objeto objeto = artigo.Objeto;
+
+            if (objeto.Avaliacoes == null)
+            {
+                objeto.Avaliacoes = new List<Avaliacao>();
+            }
+
+            Usuario usuarioLogado = AccountFacade.GetLoggedInUser().Encrypt();
+            Avaliacao avaliacao = objeto.Avaliacoes.Where(a => a.IdUsuario == usuarioLogado.IdUsuario).FirstOrDefault();
+
+            if (avaliacao == null)
+            {
+                objeto.Avaliacoes.Add(new Avaliacao { IdUsuario = usuarioLogado.IdUsuario, NoAvaliacao = noAvaliacao });
+            }
+            else
+            {
+                avaliacao.NoAvaliacao = noAvaliacao;
+                _context.Entry(avaliacao).State = EntityState.Modified;
+            }
+
+            _context.SaveChanges();
+
+            return new HttpStatusCodeResult(HttpStatusCode.OK);
         }
 
         protected override void Dispose(bool disposing)

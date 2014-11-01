@@ -4,6 +4,10 @@
     @(Html.ActionLink("Meus Artigos", "*", "*", new { @id = "lnkMyArticles" }))
     <br /><br />
     @(Html.ActionLink("Meus Vídeos", "*", "*", new { @id = "lnkMyVideos" }))
+    <br /><br />
+    @(Html.ActionLink("Meus Seguidores", "*", "*", new { @id = "lnkMyFollowers" }))
+    <br /><br />
+    @(Html.ActionLink("Seguindo", "*", "*", new { @id = "lnkFollowing" }))
 </div>
 
 <script>
@@ -30,6 +34,48 @@
         });
 
         $('#lnkMyVideos').click(function (e) {
+            e.preventDefault();
+
+            var kendoWaitWindow = kendoWait();
+            var loaded = false;
+
+            bindCenterPartial('@Url.Action("GetMainVideos", "Video")', { idUsuario: idUsuarioLogado }, function () {
+                if (loaded) {
+                    kendoWaitWindow.close();
+                }
+                loaded = true;
+            });
+
+            bindLeftPartial('@Url.Action("GetLeftDivVideos","Video")', { idUsuario: idUsuarioLogado }, function () {
+                if (loaded) {
+                    kendoWaitWindow.close();
+                }
+                loaded = true;
+            });
+        });
+
+        $('#lnkMyFollowers').click(function (e) {
+            e.preventDefault();
+
+            var kendoWaitWindow = kendoWait();
+            var loaded = false;
+
+            bindCenterPartial('@Url.Action("GetMainVideos", "Video")', { idUsuario: idUsuarioLogado }, function () {
+                if (loaded) {
+                    kendoWaitWindow.close();
+                }
+                loaded = true;
+            });
+
+            bindLeftPartial('@Url.Action("GetLeftDivVideos","Video")', { idUsuario: idUsuarioLogado }, function () {
+                if (loaded) {
+                    kendoWaitWindow.close();
+                }
+                loaded = true;
+            });
+        });
+
+        $('#lnkFollowing').click(function (e) {
             e.preventDefault();
 
             var kendoWaitWindow = kendoWait();
