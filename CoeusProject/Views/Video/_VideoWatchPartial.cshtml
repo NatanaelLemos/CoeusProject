@@ -58,6 +58,8 @@
 
     var showingFollowMenu;
     $(document).ready(function () {
+        JoinObjectChat('@Model.IdObjeto');
+
         showingFollowMenu = false;
         @{if ((Model!= null && Model.IdVideo > 0) && (Model.Objeto.IdUsuario != CoeusProject.Facade.AccountFacade.GetLoggedInUser().IdUsuario)){<text>
         $.get('@Url.Action("GetUsuarioByObjeto", "Account")', { idObjeto: '@Model.IdObjeto' }, function (data) {

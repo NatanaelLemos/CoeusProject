@@ -36,6 +36,7 @@ namespace CoeusProject.Controllers
             if (ModelState.IsValid)
             {
                 List<Usuario> usuarios = _context.Usuarios.Include(u => u.Salt).Decrypt();
+
                 Usuario user = usuarios.Where(u => u.TxEmail == usuario.TxEmail).FirstOrDefault();
 
                 if (user == null || user.PwUsuario != SecurityFacade.Encrypt(usuario.PwUsuario, user.Salt.BtSalt))

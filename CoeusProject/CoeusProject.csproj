@@ -195,61 +195,9 @@
     <Compile Include="Facade\ErrorFacade.cs" />
     <Compile Include="Facade\SecurityFacade.cs" />
     <Compile Include="Hubs\Chat.cs" />
-    <Compile Include="Migrations\201409170154594_Initial.cs" />
-    <Compile Include="Migrations\201409170154594_Initial.Designer.cs">
-      <DependentUpon>201409170154594_Initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201409190316407_Usuario_Sobrenome.cs" />
-    <Compile Include="Migrations\201409190316407_Usuario_Sobrenome.Designer.cs">
-      <DependentUpon>201409190316407_Usuario_Sobrenome.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201409202006408_FotoUsuario.cs" />
-    <Compile Include="Migrations\201409202006408_FotoUsuario.Designer.cs">
-      <DependentUpon>201409202006408_FotoUsuario.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201409210310517_Sequence.cs" />
-    <Compile Include="Migrations\201409210310517_Sequence.Designer.cs">
-      <DependentUpon>201409210310517_Sequence.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201409222302064_ICollection.cs" />
-    <Compile Include="Migrations\201409222302064_ICollection.Designer.cs">
-      <DependentUpon>201409222302064_ICollection.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201409222329114_IdObjeto.cs" />
-    <Compile Include="Migrations\201409222329114_IdObjeto.Designer.cs">
-      <DependentUpon>201409222329114_IdObjeto.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201409222359073_DtMensagem.cs" />
-    <Compile Include="Migrations\201409222359073_DtMensagem.Designer.cs">
-      <DependentUpon>201409222359073_DtMensagem.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201409281446546_Salt.cs" />
-    <Compile Include="Migrations\201409281446546_Salt.Designer.cs">
-      <DependentUpon>201409281446546_Salt.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201410112129132_Video_UrlPoster.cs" />
-    <Compile Include="Migrations\201410112129132_Video_UrlPoster.Designer.cs">
-      <DependentUpon>201410112129132_Video_UrlPoster.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201410122330185_video_artigo_tema.cs" />
-    <Compile Include="Migrations\201410122330185_video_artigo_tema.Designer.cs">
-      <DependentUpon>201410122330185_video_artigo_tema.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201410122333205_video_artigo_tema_correcao.cs" />
-    <Compile Include="Migrations\201410122333205_video_artigo_tema_correcao.Designer.cs">
-      <DependentUpon>201410122333205_video_artigo_tema_correcao.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201410172245457_AudioNoMore.cs" />
-    <Compile Include="Migrations\201410172245457_AudioNoMore.Designer.cs">
-      <DependentUpon>201410172245457_AudioNoMore.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201410300100591_QtdAcessosObjeto.cs" />
-    <Compile Include="Migrations\201410300100591_QtdAcessosObjeto.Designer.cs">
-      <DependentUpon>201410300100591_QtdAcessosObjeto.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201411020025257_Seguidores.cs" />
-    <Compile Include="Migrations\201411020025257_Seguidores.Designer.cs">
-      <DependentUpon>201411020025257_Seguidores.cs</DependentUpon>
+    <Compile Include="Migrations\201411022158376_InitialMigration.cs" />
+    <Compile Include="Migrations\201411022158376_InitialMigration.Designer.cs">
+      <DependentUpon>201411022158376_InitialMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Artigo.cs" />
@@ -1851,47 +1799,8 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201409170154594_Initial.resx">
-      <DependentUpon>201409170154594_Initial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201409190316407_Usuario_Sobrenome.resx">
-      <DependentUpon>201409190316407_Usuario_Sobrenome.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201409202006408_FotoUsuario.resx">
-      <DependentUpon>201409202006408_FotoUsuario.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201409210310517_Sequence.resx">
-      <DependentUpon>201409210310517_Sequence.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201409222302064_ICollection.resx">
-      <DependentUpon>201409222302064_ICollection.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201409222329114_IdObjeto.resx">
-      <DependentUpon>201409222329114_IdObjeto.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201409222359073_DtMensagem.resx">
-      <DependentUpon>201409222359073_DtMensagem.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201409281446546_Salt.resx">
-      <DependentUpon>201409281446546_Salt.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201410112129132_Video_UrlPoster.resx">
-      <DependentUpon>201410112129132_Video_UrlPoster.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201410122330185_video_artigo_tema.resx">
-      <DependentUpon>201410122330185_video_artigo_tema.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201410122333205_video_artigo_tema_correcao.resx">
-      <DependentUpon>201410122333205_video_artigo_tema_correcao.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201410172245457_AudioNoMore.resx">
-      <DependentUpon>201410172245457_AudioNoMore.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201410300100591_QtdAcessosObjeto.resx">
-      <DependentUpon>201410300100591_QtdAcessosObjeto.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201411020025257_Seguidores.resx">
-      <DependentUpon>201411020025257_Seguidores.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201411022158376_InitialMigration.resx">
+      <DependentUpon>201411022158376_InitialMigration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

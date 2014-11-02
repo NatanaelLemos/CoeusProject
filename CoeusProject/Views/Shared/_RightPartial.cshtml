@@ -67,6 +67,20 @@
 
     });
 
+    function JoinObjectChat(idObject) {
+        var cmbNmGrupo = $('#cmbNmGrupo').data('kendoComboBox');
+
+        chat.server.joinObjectChat(idObject);
+
+        $.ajaxPost('@Url.Action("AddObjectGroup", "Grupo")', { idObjeto: idObject }, false, function (data) {
+            var dataSource = new kendo.data.DataSource({ data: data });
+
+            cmbNmGrupo.setDataSource(dataSource);
+            cmbNmGrupo.value(data[data.length - 1].IdGrupo);
+            RefreshChat(data[data.length - 1].IdGrupo);
+        });
+    }
+
     function wndGroup_Close(e) {
         $('#wndGroupContent').html('');
     }

@@ -46,8 +46,8 @@ $.ajaxPost = function (url, data, validatingForm, callBack) {
     var kendoWaitWindow = kendoWait();
 
     var doCallback = function (e) {
-        kendoWaitWindow.close();
         callBack(e);
+        kendoWaitWindow.close();
     }
 
     $.ajax({

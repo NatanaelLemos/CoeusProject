@@ -114,8 +114,7 @@
 
         @{if ((Model!= null && Model.IdArtigo > 0)){
         <text>
-        $('#cmbNmGrupo').data('kendoComboBox').dataSource.add({ IdGrupo: '999', NmGrupo: 'Este Artigo' });
-        $('#cmbNmGrupo').data('kendoComboBox').value('999');
+        JoinObjectChat('@Model.IdObjeto');
         </text>
 
               if (Model.Objeto.IdUsuario != CoeusProject.Facade.AccountFacade.GetLoggedInUser().IdUsuario){<text>

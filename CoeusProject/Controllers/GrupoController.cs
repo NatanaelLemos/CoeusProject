@@ -203,6 +203,33 @@ namespace CoeusProject.Controllers
             }), JsonRequestBehavior.AllowGet);
         }
 
+        public ActionResult AddObjectGroup(Int32 idObjeto)
+        {
+            Int32 idUsuarioLogado = AccountFacade.GetLoggedInUser().IdUsuario;
+            List<Grupo> gruposFilter = _context.Grupos.Where(g => g.IdObjeto == null &&
+                                        g.Usuarios.Any(u => u.IdUsuario == idUsuarioLogado)).OrderBy(g => g.NmGrupo).Decrypt();
+
+            Usuario usuarioLogado = AccountFacade.GetLoggedInUser();
+
+            Grupo grupoObj = null;
+
+            while (grupoObj == null)
+            {
+                grupoObj = _context.Grupos.Include(g => g.Usuarios).Include(g=>g.Salt)
+                            .Where(g => g.IdObjeto != null && g.IdObjeto == idObjeto).FirstOrDefault();
+
+                _context = new CoeusProjectContext();
+            }
+
+            gruposFilter.Add(grupoObj.Decrypt());
+
+            return Json(gruposFilter.Select(s => new Grupo
+            {
+                IdGrupo = s.IdGrupo,
+                NmGrupo = s.NmGrupo
+            }));
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
