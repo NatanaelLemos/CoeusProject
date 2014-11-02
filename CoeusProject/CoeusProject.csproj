@@ -185,6 +185,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InteresseController.cs" />
     <Compile Include="Controllers\MessageController.cs" />
+    <Compile Include="Controllers\SeguidorController.cs" />
     <Compile Include="Controllers\VideoController.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Facade\AccountFacade.cs" />
@@ -245,6 +246,10 @@
     <Compile Include="Migrations\201410300100591_QtdAcessosObjeto.cs" />
     <Compile Include="Migrations\201410300100591_QtdAcessosObjeto.Designer.cs">
       <DependentUpon>201410300100591_QtdAcessosObjeto.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201411020025257_Seguidores.cs" />
+    <Compile Include="Migrations\201411020025257_Seguidores.Designer.cs">
+      <DependentUpon>201411020025257_Seguidores.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Artigo.cs" />
@@ -1820,7 +1825,6 @@
     <Content Include="Views\Grupo\_SearchUsersPartial.cshtml" />
     <Content Include="Scripts\kendo\jquery.min.map" />
     <Content Include="Views\Home\_LeftContentPartial.cshtml" />
-    <Content Include="Views\Home\Artigo.cshtml" />
     <Content Include="Views\Artigo\MainArtigos.cshtml" />
     <Content Include="Views\Artigo\_ArtigosLeftPartial.cshtml" />
     <Content Include="Views\Artigo\_ArtigoEditPartial.cshtml" />
@@ -1833,6 +1837,7 @@
     <Content Include="Views\Video\_VideoWatchPartial.cshtml" />
     <Content Include="Views\Home\_AllContent.cshtml" />
     <Content Include="Views\Account\_RegisterPartial.cshtml" />
+    <Content Include="Views\Seguidor\_SeguidorPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1884,6 +1889,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201410300100591_QtdAcessosObjeto.resx">
       <DependentUpon>201410300100591_QtdAcessosObjeto.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201411020025257_Seguidores.resx">
+      <DependentUpon>201411020025257_Seguidores.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

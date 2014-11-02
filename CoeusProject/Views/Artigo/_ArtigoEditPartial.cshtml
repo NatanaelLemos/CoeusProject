@@ -22,17 +22,17 @@
             font-weight: bold;
         }
 
-        #divAvaliacao > label > input { 
+        #divAvaliacao > label > input {
             visibility: hidden;
             position: absolute;
         }
 
-            #divAvaliacao > label > input + span { 
+            #divAvaliacao > label > input + span {
                 cursor: pointer;
                 border: 2px solid transparent;
             }
 
-            #divAvaliacao > label > input:checked + span { 
+            #divAvaliacao > label > input:checked + span {
                 border: 3px solid;
                 border-radius: 5px;
             }
@@ -99,7 +99,9 @@
         }
     }
 
+    var showingFollowMenu;
     $(document).ready(function () {
+        showingFollowMenu = false;
         $('#btnCancelarEditArtigo').kendoTooltip({
             position: 'bottom',
             content: 'Cancelar'
@@ -121,15 +123,36 @@
 
 
             $.get('@Url.Action("GetUsuarioRanking", "Account")?idUsuario=@Model.Objeto.IdUsuario', {}, function (rankOwner) {
-                $('#spnCreator').html("<div style='display:inline-block'><img src='~/User_Data/" + data.NmThumbFoto +
+                $('#spnCreator').html("<div id='divOwnerArtigo' style='display:inline-block; cursor: pointer'><img src='~/User_Data/" + data.NmThumbFoto +
                     "'/></div><div style='float:right; text-align: right'><span>" + data.NmPessoa + "</span><br /><span>Rank: " +
                     rankOwner + "</span></div>");
+
+                $('#divOwnerArtigo').click(function () {
+                    if ($('#divFollowCreator').length > 0) {
+                        $('#divFollowCreator').remove();
+                    }
+
+                    if (!showingFollowMenu) {
+                        $('#spnCreator').append('<div id="divFollowCreator" ' +
+                            'style="position: absolute; top: 40px; right: 5px; width: 160px; text-align: left;' +
+                            'z-index: 9999; background-color: #AAA; cursor: pointer" onclick = "divFollowCreator_Click()">' +
+                            'Seguir</div>');
+                    }
+                    showingFollowMenu = !showingFollowMenu;
+                });
             });
         });
+
         </text>}}}
 
         $('#divInteressesArtigo').load('@Url.Action("GetInteressePartial", "Interesse")');
     });
+
+    function divFollowCreator_Click() {
+        $.ajaxPost('@Url.Action("Follow", "Seguidor")', { idObjeto: '@Model.IdObjeto' }, false, function () {
+            $('#divFollowCreator').remove();
+        });
+    }
 
     function rtbAvaliacao_Click(e) {
         if (e.length > 0) {
@@ -151,6 +174,9 @@
 else
 {
     @:<h3 style="margin: 3px 0 0 0; position: absolute; top: 20px; left: 0">@Model.Objeto.NmObjeto</h3>
+
+
+
 
     <span id="spnCreator" style="position: absolute; top: 5px; right: 0; height:44px; width:200px"></span>
 }}
@@ -207,7 +233,7 @@ else
 
             @{Int32 noAvUsuario = ViewBag.noAvUsuario;}
             <label>
-                @Html.RadioButton("rbtAvaliacao", 1, (noAvUsuario == 1), new { @onclick = "rtbAvaliacao_Click($(this))" , @class="rbtnAvaliacaoAv1"})
+                @Html.RadioButton("rbtAvaliacao", 1, (noAvUsuario == 1), new { @onclick = "rtbAvaliacao_Click($(this))", @class = "rbtnAvaliacaoAv1" })
                 <span>1</span>
             </label>
             <label>

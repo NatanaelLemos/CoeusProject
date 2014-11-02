@@ -58,20 +58,9 @@
             e.preventDefault();
 
             var kendoWaitWindow = kendoWait();
-            var loaded = false;
 
-            bindCenterPartial('@Url.Action("GetMainVideos", "Video")', { idUsuario: idUsuarioLogado }, function () {
-                if (loaded) {
-                    kendoWaitWindow.close();
-                }
-                loaded = true;
-            });
-
-            bindLeftPartial('@Url.Action("GetLeftDivVideos","Video")', { idUsuario: idUsuarioLogado }, function () {
-                if (loaded) {
-                    kendoWaitWindow.close();
-                }
-                loaded = true;
+            bindCenterPartial('@Url.Action("GetFollowersIndex", "Seguidor")', { idUsuario: idUsuarioLogado }, function () {
+                kendoWaitWindow.close();
             });
         });
 
@@ -79,20 +68,9 @@
             e.preventDefault();
 
             var kendoWaitWindow = kendoWait();
-            var loaded = false;
 
-            bindCenterPartial('@Url.Action("GetMainVideos", "Video")', { idUsuario: idUsuarioLogado }, function () {
-                if (loaded) {
-                    kendoWaitWindow.close();
-                }
-                loaded = true;
-            });
-
-            bindLeftPartial('@Url.Action("GetLeftDivVideos","Video")', { idUsuario: idUsuarioLogado }, function () {
-                if (loaded) {
-                    kendoWaitWindow.close();
-                }
-                loaded = true;
+            bindCenterPartial('@Url.Action("GetFollowingIndex", "Seguidor")', { idUsuario: idUsuarioLogado }, function () {
+                kendoWaitWindow.close();
             });
         });
     });

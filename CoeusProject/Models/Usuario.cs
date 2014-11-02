@@ -62,6 +62,8 @@ namespace CoeusProject.Models
 
         public virtual ICollection<Tema> Temas { get; set; }
 
+        public virtual ICollection<Usuario> Seguidores { get; set; }
+
         [ForeignKey("Salt")]
         public Int32 IdSalt { get; set; }
         public virtual Salt Salt { get; set; }

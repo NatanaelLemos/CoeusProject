@@ -1,0 +1,16 @@
+﻿@using CoeusProject.Models
+@using Kendo.Mvc.UI
+@{Layout = null;}
+@model IEnumerable<Usuario>
+
+<div style="margin-top: 45px">
+    @(Html.Kendo().Grid(Model).Name("followGrid")
+        .Selectable(s => s.Mode(GridSelectionMode.Single))
+        .Columns(c =>
+        {
+            c.Bound(m => m.NmFoto).Title(" ").ClientTemplate("<img src='User_Data/#=NmFoto#'/>").Width(35);
+            c.Bound(m => m.NmPessoa).Title("Nome do usuário");
+        })
+        .DataSource(d => d.Custom())
+    )
+</div>

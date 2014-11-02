@@ -39,19 +39,26 @@ namespace CoeusProject
             return mensagensRet;
         }
 
-        public static List<Usuario> Decrypt(this IQueryable<Usuario> usuarios)
+        public static List<Usuario> Decrypt(this IQueryable<Usuario> usuarios, CoeusProjectContext context = null)
         {
+            if (context == null) context = new CoeusProjectContext();
+
             List<Usuario> usuariosRet = new List<Usuario>();
             foreach (Usuario usuario in usuarios)
             {
-                usuariosRet.Add(usuario.Decrypt());
+                usuariosRet.Add(usuario.Decrypt(context));
             }
             return usuariosRet;
         }
 
-        public static List<Usuario> Decrypt(this ICollection<Usuario> usuarios)
+        public static List<Usuario> Decrypt(this ICollection<Usuario> usuarios, CoeusProjectContext context = null)
         {
-            return usuarios.AsQueryable<Usuario>().Decrypt();
+            return usuarios.AsQueryable<Usuario>().Decrypt(context);
+        }
+
+        public static List<Usuario> Decrypt(this IEnumerable<Usuario> usuarios, CoeusProjectContext context = null)
+        {
+            return usuarios.AsQueryable<Usuario>().Decrypt(context);
         }
 
         public static List<Usuario> Encrypt(this IQueryable<Usuario> usuarios)

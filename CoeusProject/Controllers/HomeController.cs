@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Data.Entity;
 
 namespace CoeusProject.Controllers
 {
@@ -37,6 +38,12 @@ namespace CoeusProject.Controllers
                                     .Where(o => o.Temas.Any(t => idUsuarioTemas.Contains(t.IdTema)) ||
                                                 o.IdUsuario == usuarioLogado.IdUsuario);
 
+            IQueryable<Usuario> seguindo = _context.Usuarios.Include(u=>u.Objetos)
+                                            .Where(u => u.Seguidores.All(s => s.IdUsuario == usuarioLogado.IdUsuario));
+
+            IQueryable<Objeto> objetosSeguindo = seguindo.SelectMany(s=>s.Objetos);
+
+            objetos = objetos.Union(objetosSeguindo).OrderByDescending(o=>o.IdObjeto);
             return objetos.Decrypt().Select(o => new ObjetoVM(o));
         }
 
