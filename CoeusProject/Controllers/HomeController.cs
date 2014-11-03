@@ -39,10 +39,10 @@ namespace CoeusProject.Controllers
                                                 o.IdUsuario == usuarioLogado.IdUsuario);
 
             IQueryable<Usuario> seguindo = _context.Usuarios.Include(u=>u.Objetos)
-                                            .Where(u => u.Seguidores.All(s => s.IdUsuario == usuarioLogado.IdUsuario));
+                                            .Where(u => u.Seguidores.Any(s => s.IdUsuario == usuarioLogado.IdUsuario));
 
             IQueryable<Objeto> objetosSeguindo = seguindo.SelectMany(s=>s.Objetos);
-
+            
             objetos = objetos.Union(objetosSeguindo).OrderByDescending(o=>o.IdObjeto);
             return objetos.Decrypt().Select(o => new ObjetoVM(o));
         }

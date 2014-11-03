@@ -1,0 +1,24 @@
+﻿@using Kendo.Mvc.UI
+@{Layout = null;}
+
+@{String tpObjeto = ViewBag.TpObjeto;}
+Nome do @tpObjeto:
+@(Html.TextBox("txNomeObjeto" + tpObjeto, "", new { @class = "k-textbox" }))
+
+Descrição:
+@(Html.TextBox("txDescricaoObjeto" + tpObjeto, "", new { @class = "k-textbox" }))
+
+<div id="divInteressesArtigo@(tpObjeto)">
+</div>
+
+@(Html.Kendo().Button().Name("btnSalvarObjeto" + tpObjeto)
+                .Content("Salvar")
+                .HtmlAttributes(new { @type = "button" })
+                .Events(e => e.Click("btnSalvarObjeto_Click"))
+)
+
+<script>
+    $(document).ready(function () {
+        $('#divInteressesArtigo@(tpObjeto)').load('@Url.Action("GetInteressePartial", "Interesse")');
+    })
+</script>

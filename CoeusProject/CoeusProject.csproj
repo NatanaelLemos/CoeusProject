@@ -1786,6 +1786,7 @@
     <Content Include="Views\Home\_AllContent.cshtml" />
     <Content Include="Views\Account\_RegisterPartial.cshtml" />
     <Content Include="Views\Seguidor\_SeguidorPartial.cshtml" />
+    <Content Include="Views\Shared\_ObjetoPopupPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

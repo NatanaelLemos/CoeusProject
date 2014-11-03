@@ -110,11 +110,17 @@ namespace CoeusProject.Controllers
                     return new HttpStatusCodeResult(HttpStatusCode.NotAcceptable, "É necessário selecionar ao menos 1 tema para o vídeo");
                 }
 
+                Usuario usuarioLogado = AccountFacade.GetLoggedInUser();
+
+                List<Objeto> objetos = (new CoeusProjectContext()).Objetos.Where(o => o.IdUsuario == usuarioLogado.IdUsuario).Decrypt();
+
+                if (objetos.Where(o => o.NmObjeto == nmObjeto).Count() > 0) return new HttpStatusCodeResult(HttpStatusCode.OK);
+
                 Video video = new Video()
                 {
                     Objeto = new Objeto()
                     {
-                        IdUsuario = AccountFacade.GetLoggedInUser().IdUsuario,
+                        IdUsuario = usuarioLogado.IdUsuario,
                         Salt = Salt.GetSalt(),
                         NmObjeto = nmObjeto,
                         TxDescricao = txDescricao
@@ -193,18 +199,32 @@ namespace CoeusProject.Controllers
 
         public ActionResult Delete(DataSourceRequest request, Video video)
         {
-            Video deletedVideo = _context.Videos.Where(v => v.IdVideo == video.IdVideo).FirstOrDefault();
-            Objeto deletedObject = _context.Objetos.Where(o => o.IdObjeto == deletedVideo.IdObjeto).FirstOrDefault();
+            Video videoDel = _context.Videos.Where(v => v.IdVideo == video.IdVideo).FirstOrDefault();
+            if (videoDel == null) return new HttpStatusCodeResult(HttpStatusCode.Forbidden, "Vídeo não encontrado");
 
-            deletedVideo.Decrypt();
+            Objeto objeto = _context.Objetos.Include(o => o.Temas).Where(o => o.IdObjeto == videoDel.IdObjeto).FirstOrDefault();
+            if (objeto.Temas != null)
+            {
+                objeto.Temas.Clear();
+            }
 
-            FileController.RemoveFile(deletedVideo.TxUrl);
-            _context.Videos.Remove(deletedVideo);
-            _context.Objetos.Remove(deletedObject);
+            Grupo grupo = _context.Grupos.Include(g => g.Usuarios).Where(g => g.IdObjeto != null && g.IdObjeto == objeto.IdObjeto).FirstOrDefault();
+            if (grupo != null)
+            {
+                if (grupo.Usuarios != null)
+                {
+                    grupo.Usuarios.Clear();
+                }
+                _context.Grupos.Remove(grupo);
+            }
+
+            _context.Videos.Remove(videoDel);
+            _context.Objetos.Remove(objeto);
 
             _context.SaveChanges();
 
             return GetAjaxVideos(request, AccountFacade.GetLoggedInUser().IdUsuario);
+        
         }
 
         public ActionResult Avaliacao(Int32 idVideo, Int32 noAvaliacao)
@@ -235,6 +255,12 @@ namespace CoeusProject.Controllers
             _context.SaveChanges();
 
             return new HttpStatusCodeResult(HttpStatusCode.OK);
+        }
+
+        public ActionResult GetObjetoPopup()
+        {
+            ViewBag.TpObjeto = "Video";
+            return View("~/Views/Shared/_ObjetoPopupPartial.cshtml");
         }
 
         protected override void Dispose(bool disposing)

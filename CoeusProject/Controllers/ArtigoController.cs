@@ -32,7 +32,7 @@ namespace CoeusProject.Controllers
         private JsonResult GetAjaxArtigos(DataSourceRequest request, Int32 idUsuario)
         {
             IQueryable<Artigo> artigos = _context.Artigos.Include(a => a.Objeto)
-                                                        .Include(a=>a.Objeto.Avaliacoes)
+                                                        .Include(a => a.Objeto.Avaliacoes)
                                                         .Include(a => a.Objeto.Salt)
                                                         .Where(o => o.Objeto.IdUsuario == idUsuario);
             DataSourceResult result = artigos.Decrypt().Select(a => new Artigo
@@ -77,11 +77,17 @@ namespace CoeusProject.Controllers
                     return new HttpStatusCodeResult(HttpStatusCode.NotAcceptable, "É necessário selecionar ao menos 1 tema para o artigo");
                 }
 
+                Usuario usuarioLogado = AccountFacade.GetLoggedInUser();
+
+                List<Objeto> objetos = (new CoeusProjectContext()).Objetos.Where(o => o.IdUsuario == usuarioLogado.IdUsuario).Decrypt();
+
+                if (objetos.Where(o => o.NmObjeto == nmObjeto).Count() > 0) return new HttpStatusCodeResult(HttpStatusCode.OK);
+
                 Artigo artigo = new Artigo()
                 {
                     Objeto = new Objeto()
                     {
-                        IdUsuario = AccountFacade.GetLoggedInUser().IdUsuario,
+                        IdUsuario = usuarioLogado.IdUsuario,
                         Salt = Salt.GetSalt(),
                         NmObjeto = nmObjeto,
                         TxDescricao = txDescricao
@@ -102,7 +108,7 @@ namespace CoeusProject.Controllers
                 {
                     IdObjeto = artigo.IdObjeto,
                     Salt = Salt.GetSalt(),
-                    Usuarios = new List<Usuario> { AccountFacade.GetLoggedInUser(_context).Encrypt(_context) },
+                    Usuarios = new List<Usuario> { _context.Usuarios.Where(u=>u.IdUsuario == usuarioLogado.IdUsuario).FirstOrDefault() },
                     NmGrupo = nmObjeto
                 };
 
@@ -182,9 +188,26 @@ namespace CoeusProject.Controllers
 
         public ActionResult Delete(DataSourceRequest request, Artigo artigo)
         {
-            Objeto objeto = _context.Objetos.Where(o => o.IdObjeto == artigo.IdObjeto).FirstOrDefault();
+            Artigo artigoDel = _context.Artigos.Where(a => a.IdArtigo == artigo.IdArtigo).FirstOrDefault();
+            if (artigoDel == null) return new HttpStatusCodeResult(HttpStatusCode.Forbidden, "Artigo não encontrado");
 
-            _context.Artigos.Remove(_context.Artigos.Where(a => a.IdArtigo == artigo.IdArtigo).FirstOrDefault());
+            Objeto objeto = _context.Objetos.Include(o=>o.Temas).Where(o => o.IdObjeto == artigoDel.IdObjeto).FirstOrDefault();
+            if (objeto.Temas != null)
+            {
+                objeto.Temas.Clear();
+            }
+
+            Grupo grupo = _context.Grupos.Include(g=>g.Usuarios).Where(g => g.IdObjeto != null && g.IdObjeto == objeto.IdObjeto).FirstOrDefault();
+            if(grupo != null)
+            {
+                if (grupo.Usuarios != null)
+                {
+                    grupo.Usuarios.Clear();
+                }
+                _context.Grupos.Remove(grupo);
+            }
+
+            _context.Artigos.Remove(artigoDel);
             _context.Objetos.Remove(objeto);
 
             _context.SaveChanges();
@@ -194,7 +217,7 @@ namespace CoeusProject.Controllers
 
         public ActionResult Avaliacao(Int32 idArtigo, Int32 noAvaliacao)
         {
-            Artigo artigo = _context.Artigos.Where(a => a.IdArtigo == idArtigo).Include(a=>a.Objeto).FirstOrDefault();
+            Artigo artigo = _context.Artigos.Where(a => a.IdArtigo == idArtigo).Include(a => a.Objeto).FirstOrDefault();
             if (artigo == null) return new HttpStatusCodeResult(HttpStatusCode.OK);
 
             Objeto objeto = artigo.Objeto;
@@ -220,6 +243,12 @@ namespace CoeusProject.Controllers
             _context.SaveChanges();
 
             return new HttpStatusCodeResult(HttpStatusCode.OK);
+        }
+
+        public ActionResult GetObjetoPopup()
+        {
+            ViewBag.TpObjeto = "Artigo";
+            return View("~/Views/Shared/_ObjetoPopupPartial.cshtml");
         }
 
         protected override void Dispose(bool disposing)

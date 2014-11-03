@@ -13,7 +13,7 @@ namespace CoeusProject.Controllers
     {
         CoeusProjectContext _context = new CoeusProjectContext();
 
-        [OutputCache(Duration=0)]
+        //[OutputCache(Duration=0)]
         public ActionResult GetInteressePartial()
         {
             return View("_InteressePartial", DateTime.Now.Ticks);
@@ -47,7 +47,7 @@ namespace CoeusProject.Controllers
 
         public ActionResult AddInteresse(String NmInteresse)
         {
-            if (_context.Temas.Where(t => t.NmTema == NmInteresse).Count() == 0)
+            if (!String.IsNullOrEmpty(NmInteresse) && _context.Temas.Where(t => t.NmTema == NmInteresse).Count() == 0)
             {
                 _context.Temas.Add(new Tema { NmTema = NmInteresse});
                 _context.SaveChanges();

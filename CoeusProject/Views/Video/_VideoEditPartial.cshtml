@@ -28,7 +28,7 @@
         $('#wndVideoEdit').data('kendoWindow').center().open();
     }
 
-    function btnSalvarVideo_Click(e) {
+    function btnSalvarObjeto_Click(e) {
         var idVideoEdit = parseInt($('#idVideoEdit').val());
 
         function VideoEditPartial_Close() {
@@ -41,15 +41,15 @@
         if (idVideoEdit) {
             $.ajaxPost('@Url.Action("Edit","Video")', {
                 idVideo: idVideoEdit,
-                nmObjeto: $('#txNomeObjeto').val(),
+                nmObjeto: $('#txNomeObjetoVideo').val(),
                 txUrl: $('#TxUrl').val() + extension,
                 txUrlPoster: $('#TxUrlPoster').val() + extensionPoster,
                 tags: interesses
             }, null, VideoEditPartial_Close);
         } else {
             $.ajaxPost('@Url.Action("Create","Video")', {
-                nmObjeto: $('#txNomeObjeto').val(),
-                txDescricao: $('#txDescricaoObjeto').val(),
+                nmObjeto: $('#txNomeObjetoVideo').val(),
+                txDescricao: $('#txDescricaoObjetoVideo').val(),
                 txUrl: $('#TxUrl').val() + extension,
                 txUrlPoster: $('#TxUrlPoster').val() + extensionPoster,
                 tags: interesses
@@ -91,6 +91,9 @@
     }
 
     $(document).ready(function () {
+        if ($('#divVideoPopup').length > 0) { $('#divVideoPopup').html(''); }
+        $('#divVideoPopup').load('@Url.Action("GetObjetoPopup", "Video")');
+
         $('#btnCancelarEditVideo').kendoTooltip({
             position: 'bottom',
             content: 'Cancelar'
@@ -173,22 +176,7 @@
 </div>
 
 @{Html.Kendo().Window().Name("wndVideoEdit")
-    .Content(@<text>
-        Nome do Vídeo:
-        @(Html.TextBox("txNomeObjeto", "", new { @class = "k-textbox" }))
-
-        Descrição:
-        @(Html.TextBox("txDescricaoObjeto", "", new { @class = "k-textbox" }))
-
-        <div id="divInteressesVideo">
-        </div>
-
-        @(Html.Kendo().Button().Name("btnSalvarVideo")
-            .Content("Salvar")
-            .HtmlAttributes(new { @type = "button" })
-            .Events(e => e.Click("btnSalvarVideo_Click"))
-        )
-    </text>)
+    .Content("<div id='divVideoPopup'></div>")
     .Visible(false)
     .Title("Edição")
     .Modal(true)

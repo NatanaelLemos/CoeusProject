@@ -45,6 +45,7 @@ namespace CoeusProject.Models
                 Int32 vlTotalAvaliacao = 0;
                 foreach (Avaliacao av in this.Avaliacoes)
                 {
+                    if (av == null) continue;
                     vlTotalAvaliacao += av.NoAvaliacao;
                     idx++;
                 }

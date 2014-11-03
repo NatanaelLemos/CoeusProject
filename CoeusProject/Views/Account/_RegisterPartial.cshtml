@@ -100,7 +100,7 @@
 
         <div style="height:60px; max-height: 100px">
             @Html.Label("Foto", new { @class = "labelInline" })
-            <div style="display:inline-block; overflow: hidden; width: 250px; padding: 0 0 0 85px">
+            <div style="overflow: hidden; padding: 0 0 0 85px">
                 @(Html.Kendo().Upload()
                     .Name("file")
                     .Multiple(false)
@@ -115,7 +115,6 @@
                         .Upload("Foto_Upload")
                         .Success("Foto_Success")
                     )
-                    .HtmlAttributes(new { style = "height: 0; width: 0;" })
                 )
             </div>
         </div>

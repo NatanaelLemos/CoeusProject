@@ -169,7 +169,7 @@ namespace CoeusProject.Controllers
             {
                 try
                 {
-                    Usuario usuarioEdit = _context.Usuarios.Where(u => u.IdUsuario == usuario.IdUsuario).FirstOrDefault().Decrypt();
+                    Usuario usuarioEdit = _context.Usuarios.Include(u=>u.Temas).Where(u => u.IdUsuario == usuario.IdUsuario).FirstOrDefault().Decrypt();
                     usuarioEdit.TxEmail = usuario.TxEmail;
                     usuarioEdit.NmPessoa = usuario.NmPessoa;
                     usuarioEdit.SnPessoa = usuario.SnPessoa;
@@ -177,7 +177,10 @@ namespace CoeusProject.Controllers
 
                     if (interesses != null && interesses.Count() > 0)
                     {
-                        usuarioEdit.Temas = new List<Tema>();
+                        if(usuarioEdit.Temas == null) usuarioEdit.Temas = new List<Tema>();
+
+                        usuarioEdit.Temas.Clear();
+
                         foreach (InteresseVM interesse in interesses)
                         {
                             usuarioEdit.Temas.Add(_context.Temas.Where(t => t.NmTema == interesse.NmInteresse).FirstOrDefault());

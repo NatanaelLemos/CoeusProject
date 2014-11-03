@@ -65,13 +65,13 @@
     }
 
     function btnEditArtigo_Click(e) {
-        $('#txNomeObjeto').val($('#hidNmObjeto').val());
-        $('#txDescricaoObjeto').val($('#hidTxDescricao').val());
+        $('#txNomeObjetoArtigo').val($('#hidNmObjeto').val());
+        $('#txDescricaoObjetoArtigo').val($('#hidTxDescricao').val());
 
         $('#wndArtigoEdit').data('kendoWindow').center().open();
     }
 
-    function btnSalvarArtigo_Click(e) {
+    function btnSalvarObjeto_Click(e) {
         var idArtigoEdit = parseInt($('#idArtigoEdit').val());
 
         function ArtigoEditPartial_Close() {
@@ -84,15 +84,15 @@
         if (idArtigoEdit) {
             $.ajaxPost('@Url.Action("Edit", "Artigo")', {
                 idArtigo: idArtigoEdit,
-                nmObjeto: $('#txNomeObjeto').val(),
-                txDescricao: $('#txDescricaoObjeto').val(),
+                nmObjeto: $('#txNomeObjetoArtigo').val(),
+                txDescricao: $('#txDescricaoObjetoArtigo').val(),
                 txArtigo: $('#artigoEditor').data('kendoEditor').value(),
                 tags: interesses
             }, null, ArtigoEditPartial_Close);
         } else {
             $.ajaxPost('@Url.Action("Create", "Artigo")', {
-                nmObjeto: $('#txNomeObjeto').val(),
-                txDescricao: $('#txDescricaoObjeto').val(),
+                nmObjeto: $('#txNomeObjetoArtigo').val(),
+                txDescricao: $('#txDescricaoObjetoArtigo').val(),
                 txArtigo: $('#artigoEditor').data('kendoEditor').value(),
                 tags: interesses
             }, null, ArtigoEditPartial_Close);
@@ -101,6 +101,9 @@
 
     var showingFollowMenu;
     $(document).ready(function () {
+        if ($('#divArtigoPopup').length > 0) { $('#divArtigoPopup').html('');}
+        $('#divArtigoPopup').load('@Url.Action("GetObjetoPopup", "Artigo")');
+
         showingFollowMenu = false;
         $('#btnCancelarEditArtigo').kendoTooltip({
             position: 'bottom',
@@ -143,8 +146,6 @@
         });
 
         </text>}}}
-
-        $('#divInteressesArtigo').load('@Url.Action("GetInteressePartial", "Interesse")');
     });
 
     function divFollowCreator_Click() {
@@ -173,8 +174,6 @@
 else
 {
     @:<h3 style="margin: 3px 0 0 0; position: absolute; top: 20px; left: 0">@Model.Objeto.NmObjeto</h3>
-
-
 
 
     <span id="spnCreator" style="position: absolute; top: 5px; right: 0; height:44px; width:200px"></span>
@@ -260,22 +259,7 @@ else
     }}
 </div>
 
-@{Html.Kendo().Window().Name("wndArtigoEdit").Content(@<text>
-        Nome do Artigo:
-        @(Html.TextBox("txNomeObjeto", "", new { @class = "k-textbox" }))
-
-        Descrição:
-        @(Html.TextBox("txDescricaoObjeto", "", new { @class = "k-textbox" }))
-
-        <div id="divInteressesArtigo">
-        </div>
-
-        @(Html.Kendo().Button().Name("btnSalvarArtigo")
-                .Content("Salvar")
-                .HtmlAttributes(new { @type = "button" })
-                .Events(e => e.Click("btnSalvarArtigo_Click"))
-        )
-</text>)
+@{Html.Kendo().Window().Name("wndArtigoEdit").Content("<div id='divArtigoPopup'></div>")
     .Visible(false)
     .Title("Edição")
     .Modal(true)
