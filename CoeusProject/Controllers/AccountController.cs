@@ -57,11 +57,6 @@ namespace CoeusProject.Controllers
             return Content(Url.Action("Index", "Home"));
         }
 
-        public ActionResult Teste(Int32 IdTeste)
-        {
-            return View();
-        }
-
         public ActionResult Register()
         {
             Usuario usuario = AccountFacade.GetLoggedInUser();

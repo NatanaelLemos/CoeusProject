@@ -173,10 +173,10 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
-    <Compile Include="CoeusProjectContext.Designer.cs">
+    <Compile Include="Diagrams\ClassDiagram.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>CoeusProjectContext.edmx</DependentUpon>
+      <DependentUpon>ClassDiagram.edmx</DependentUpon>
     </Compile>
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ArtigoController.cs" />
@@ -1258,10 +1258,27 @@
     <Content Include="Content\font\vjs.woff" />
     <Content Include="Content\SourceCodePro-Bold.ttf" />
     <Content Include="Content\SourceCodePro-Regular.ttf" />
-    <EntityDeploy Include="CoeusProjectContext.edmx">
+    <EntityDeploy Include="Diagrams\ClassDiagram.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>CoeusProjectContext.Designer.cs</LastGenOutput>
+      <LastGenOutput>ClassDiagram.Designer.cs</LastGenOutput>
     </EntityDeploy>
+    <Content Include="Diagrams\SequenceDiagrams\AccountController_Edit.sequencediagram" />
+    <Content Include="Diagrams\SequenceDiagrams\AccountController_Login.sequencediagram" />
+    <Content Include="Diagrams\SequenceDiagrams\AccountController_Logoff.sequencediagram" />
+    <Content Include="Diagrams\SequenceDiagrams\AccountController_Register.sequencediagram" />
+    <Content Include="Diagrams\SequenceDiagrams\ArtigoController_Avaliacao.sequencediagram" />
+    <Content Include="Diagrams\SequenceDiagrams\ArtigoController_Create.sequencediagram" />
+    <Content Include="Diagrams\SequenceDiagrams\ArtigoController_Delete.sequencediagram" />
+    <Content Include="Diagrams\SequenceDiagrams\ArtigoController_Edit.sequencediagram" />
+    <Content Include="Diagrams\SequenceDiagrams\ArtigoController_GetArtigos.sequencediagram" />
+    <Content Include="Diagrams\SequenceDiagrams\GrupoController_Create.sequencediagram" />
+    <Content Include="Diagrams\SequenceDiagrams\GrupoController_Edit.sequencediagram" />
+    <Content Include="Diagrams\SequenceDiagrams\HomeController_GetObjetos.sequencediagram" />
+    <Content Include="Diagrams\SequenceDiagrams\MessageController_GetGrupoMessages.sequencediagram" />
+    <Content Include="Diagrams\SequenceDiagrams\MessageController_SendMessage.sequencediagram" />
+    <Content Include="Diagrams\SequenceDiagrams\SeguidorController_Follow.sequencediagram" />
+    <Content Include="Diagrams\SequenceDiagrams\SeguidorController_GetFollowers.sequencediagram" />
+    <Content Include="Diagrams\SequenceDiagrams\SeguidorController_GetFollowing.sequencediagram" />
     <None Include="Properties\PublishProfiles\Chimera Publish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -1800,6 +1817,57 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Diagrams\SequenceDiagrams\AccountController_Edit.sequencediagram.layout">
+      <DependentUpon>AccountController_Edit.sequencediagram</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Diagrams\SequenceDiagrams\AccountController_Login.sequencediagram.layout">
+      <DependentUpon>AccountController_Login.sequencediagram</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Diagrams\SequenceDiagrams\AccountController_Logoff.sequencediagram.layout">
+      <DependentUpon>AccountController_Logoff.sequencediagram</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Diagrams\SequenceDiagrams\AccountController_Register.sequencediagram.layout">
+      <DependentUpon>AccountController_Register.sequencediagram</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Diagrams\SequenceDiagrams\ArtigoController_Avaliacao.sequencediagram.layout">
+      <DependentUpon>ArtigoController_Avaliacao.sequencediagram</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Diagrams\SequenceDiagrams\ArtigoController_Create.sequencediagram.layout">
+      <DependentUpon>ArtigoController_Create.sequencediagram</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Diagrams\SequenceDiagrams\ArtigoController_Delete.sequencediagram.layout">
+      <DependentUpon>ArtigoController_Delete.sequencediagram</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Diagrams\SequenceDiagrams\ArtigoController_Edit.sequencediagram.layout">
+      <DependentUpon>ArtigoController_Edit.sequencediagram</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Diagrams\SequenceDiagrams\ArtigoController_GetArtigos.sequencediagram.layout">
+      <DependentUpon>ArtigoController_GetArtigos.sequencediagram</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Diagrams\SequenceDiagrams\GrupoController_Create.sequencediagram.layout">
+      <DependentUpon>GrupoController_Create.sequencediagram</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Diagrams\SequenceDiagrams\GrupoController_Edit.sequencediagram.layout">
+      <DependentUpon>GrupoController_Edit.sequencediagram</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Diagrams\SequenceDiagrams\HomeController_GetObjetos.sequencediagram.layout">
+      <DependentUpon>HomeController_GetObjetos.sequencediagram</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Diagrams\SequenceDiagrams\MessageController_GetGrupoMessages.sequencediagram.layout">
+      <DependentUpon>MessageController_GetGrupoMessages.sequencediagram</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Diagrams\SequenceDiagrams\MessageController_SendMessage.sequencediagram.layout">
+      <DependentUpon>MessageController_SendMessage.sequencediagram</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Diagrams\SequenceDiagrams\SeguidorController_Follow.sequencediagram.layout">
+      <DependentUpon>SeguidorController_Follow.sequencediagram</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Diagrams\SequenceDiagrams\SeguidorController_GetFollowers.sequencediagram.layout">
+      <DependentUpon>SeguidorController_GetFollowers.sequencediagram</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Diagrams\SequenceDiagrams\SeguidorController_GetFollowing.sequencediagram.layout">
+      <DependentUpon>SeguidorController_GetFollowing.sequencediagram</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201411022158376_InitialMigration.resx">
       <DependentUpon>201411022158376_InitialMigration.cs</DependentUpon>
     </EmbeddedResource>

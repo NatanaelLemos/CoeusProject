@@ -29,7 +29,7 @@ namespace CoeusProject.Controllers
             return View("_ArtigosLeftPartial", usuarioDono);
         }
 
-        private JsonResult GetAjaxArtigos(DataSourceRequest request, Int32 idUsuario)
+        private JsonResult GetArtigos(DataSourceRequest request, Int32 idUsuario)
         {
             IQueryable<Artigo> artigos = _context.Artigos.Include(a => a.Objeto)
                                                         .Include(a => a.Objeto.Avaliacoes)
@@ -57,7 +57,7 @@ namespace CoeusProject.Controllers
 
         public ActionResult AjaxReadArtigos(DataSourceRequest request, Int32 idUsuario)
         {
-            return GetAjaxArtigos(request, idUsuario);
+            return GetArtigos(request, idUsuario);
         }
 
         [OutputCache(Duration = 0, NoStore = true)]
@@ -212,7 +212,7 @@ namespace CoeusProject.Controllers
 
             _context.SaveChanges();
 
-            return GetAjaxArtigos(request, AccountFacade.GetLoggedInUser().IdUsuario);
+            return GetArtigos(request, AccountFacade.GetLoggedInUser().IdUsuario);
         }
 
         public ActionResult Avaliacao(Int32 idArtigo, Int32 noAvaliacao)
