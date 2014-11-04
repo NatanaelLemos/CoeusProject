@@ -21,6 +21,7 @@
           <Property Name="TxDescricao" Type="String" MaxLength="2048" FixedLength="false" Unicode="true" />
           <Property Name="IdUsuario" Type="Int32" Nullable="false" />
           <Property Name="IdSalt" Type="Int32" Nullable="false" />
+          <Property Name="QtAcessos" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Avaliacoes" Relationship="Self.Avaliacao_Objeto" FromRole="Avaliacao_Objeto_Target" ToRole="Avaliacao_Objeto_Source" />
           <NavigationProperty Name="Salt" Relationship="Self.Objeto_Salt" FromRole="Objeto_Salt_Source" ToRole="Objeto_Salt_Target" />
           <NavigationProperty Name="Temas" Relationship="Self.Tema_Objetos" FromRole="Tema_Objetos_Target" ToRole="Tema_Objetos_Source" />
@@ -53,6 +54,7 @@
           <NavigationProperty Name="Mensagens" Relationship="Self.Mensagem_Usuario" FromRole="Mensagem_Usuario_Target" ToRole="Mensagem_Usuario_Source" />
           <NavigationProperty Name="Objetos" Relationship="Self.Objeto_Usuario" FromRole="Objeto_Usuario_Target" ToRole="Objeto_Usuario_Source" />
           <NavigationProperty Name="Salt" Relationship="Self.Usuario_Salt" FromRole="Usuario_Salt_Source" ToRole="Usuario_Salt_Target" />
+          <NavigationProperty Name="Seguidores" Relationship="Self.Usuario_Seguidores" FromRole="Usuario_Seguidores_Source" ToRole="Usuario_Seguidores_Target" />
           <NavigationProperty Name="Temas" Relationship="Self.Tema_Usuarios" FromRole="Tema_Usuarios_Target" ToRole="Tema_Usuarios_Source" />
         </EntityType>
         <EntityType Name="Grupo" customannotation:ClrType="CoeusProject.Models.Grupo, CoeusProject, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
@@ -208,6 +210,10 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="Usuario_Seguidores">
+          <End Role="Usuario_Seguidores_Source" Type="Self.Usuario" Multiplicity="0..1" />
+          <End Role="Usuario_Seguidores_Target" Type="Self.Usuario" Multiplicity="*" />
+        </Association>
         <Association Name="Tema_Objetos">
           <End Role="Tema_Objetos_Source" Type="Self.Tema" Multiplicity="*" />
           <End Role="Tema_Objetos_Target" Type="Self.Objeto" Multiplicity="*" />
@@ -338,6 +344,10 @@
             <End Role="Usuario_Salt_Source" EntitySet="Usuarios" />
             <End Role="Usuario_Salt_Target" EntitySet="Salt" />
           </AssociationSet>
+          <AssociationSet Name="Usuario_Seguidores" Association="Self.Usuario_Seguidores">
+            <End Role="Usuario_Seguidores_Source" EntitySet="Usuarios" />
+            <End Role="Usuario_Seguidores_Target" EntitySet="Usuarios" />
+          </AssociationSet>
           <AssociationSet Name="Tema_Objetos" Association="Self.Tema_Objetos">
             <End Role="Tema_Objetos_Source" EntitySet="Temas" />
             <End Role="Tema_Objetos_Target" EntitySet="Objetos" />
@@ -393,6 +403,7 @@
                 <ScalarProperty Name="TxDescricao" ColumnName="TxDescricao" />
                 <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
                 <ScalarProperty Name="IdSalt" ColumnName="IdSalt" />
+                <ScalarProperty Name="QtAcessos" ColumnName="QtAcessos" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -491,6 +502,15 @@
               <ScalarProperty Name="IdUsuario" ColumnName="Usuario_IdUsuario" />
             </EndProperty>
           </AssociationSetMapping>
+          <AssociationSetMapping Name="Usuario_Seguidores" TypeName="CoeusProject.Models.Usuario_Seguidores" StoreEntitySet="Usuario">
+            <EndProperty Name="Usuario_Seguidores_Source">
+              <ScalarProperty Name="IdUsuario" ColumnName="Usuario_IdUsuario" />
+            </EndProperty>
+            <EndProperty Name="Usuario_Seguidores_Target">
+              <ScalarProperty Name="IdUsuario" ColumnName="IdUsuario" />
+            </EndProperty>
+            <Condition IsNull="false" ColumnName="Usuario_IdUsuario" />
+          </AssociationSetMapping>
           <AssociationSetMapping Name="Tema_Objetos" TypeName="CoeusProject.Models.Tema_Objetos" StoreEntitySet="TemaObjeto">
             <EndProperty Name="Tema_Objetos_Source">
               <ScalarProperty Name="IdTema" ColumnName="Tema_IdTema" />
@@ -529,6 +549,7 @@
           <Property Name="TxDescricao" Type="nvarchar" MaxLength="2048" Nullable="true" />
           <Property Name="IdUsuario" Type="int" customannotation:Index="{ Name: IX_IdUsuario, Order: 0 }" Nullable="false" />
           <Property Name="IdSalt" Type="int" customannotation:Index="{ Name: IX_IdSalt, Order: 0 }" Nullable="false" />
+          <Property Name="QtAcessos" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Avaliacao">
           <Key>
@@ -550,6 +571,7 @@
           <Property Name="SnPessoa" Type="nvarchar" MaxLength="1024" Nullable="false" />
           <Property Name="NmFoto" Type="nvarchar" MaxLength="100" Nullable="true" />
           <Property Name="IdSalt" Type="int" customannotation:Index="{ Name: IX_IdSalt, Order: 0 }" Nullable="false" />
+          <Property Name="Usuario_IdUsuario" Type="int" customannotation:Index="{ Name: IX_Usuario_IdUsuario, Order: 0 }" Nullable="true" />
         </EntityType>
         <EntityType Name="Grupo">
           <Key>
@@ -738,6 +760,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="Usuario_Seguidores">
+          <End Role="Usuario" Type="Self.Usuario" Multiplicity="0..1" />
+          <End Role="UsuarioSelf" Type="Self.Usuario" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Usuario">
+              <PropertyRef Name="IdUsuario" />
+            </Principal>
+            <Dependent Role="UsuarioSelf">
+              <PropertyRef Name="Usuario_IdUsuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="Tema_Objetos_Source">
           <End Role="Tema" Type="Self.Tema" Multiplicity="1" />
           <End Role="TemaObjeto" Type="Self.TemaObjeto" Multiplicity="*" />
@@ -915,6 +949,10 @@
             <End Role="Salt" EntitySet="Salt" />
             <End Role="Usuario" EntitySet="Usuario" />
           </AssociationSet>
+          <AssociationSet Name="Usuario_Seguidores" Association="Self.Usuario_Seguidores">
+            <End Role="Usuario" EntitySet="Usuario" />
+            <End Role="UsuarioSelf" EntitySet="Usuario" />
+          </AssociationSet>
           <AssociationSet Name="Tema_Objetos_Source" Association="Self.Tema_Objetos_Source">
             <End Role="Tema" EntitySet="Tema" />
             <End Role="TemaObjeto" EntitySet="TemaObjeto" />
@@ -974,30 +1012,34 @@
       </DesignerInfoPropertySet>
     </Options>
     <Diagrams >
-      <Diagram DiagramId="2c2363e1e6544554bfaf7a57d2052bb2" Name="Diagram1">
-        <EntityTypeShape EntityType="CoeusProject.Models.Artigo" Width="1.5" PointX="6.25" PointY="7.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="CoeusProject.Models.Objeto" Width="1.5" PointX="3.75" PointY="5.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="CoeusProject.Models.Avaliacao" Width="1.5" PointX="0.75" PointY="7.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="CoeusProject.Models.Usuario" Width="1.5" PointX="0.75" PointY="0.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="CoeusProject.Models.Grupo" Width="1.5" PointX="7" PointY="1.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="CoeusProject.Models.Mensagem" Width="1.5" PointX="3.625" PointY="0.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="CoeusProject.Models.Salt" Width="1.5" PointX="4.375" PointY="3.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="CoeusProject.Models.Tema" Width="1.5" PointX="1.625" PointY="5.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="CoeusProject.Models.Imagem" Width="1.5" PointX="8.625" PointY="7.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="CoeusProject.Models.Sequence" Width="1.5" PointX="8.5" PointY="5.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="CoeusProject.Models.Video" Width="1.5" PointX="6.25" PointY="5" IsExpanded="true" />
+      <Diagram DiagramId="d1ae89f63af949f680d0b29ea4996a00" Name="Diagram1" ZoomLevel="88">
+        <EntityTypeShape EntityType="CoeusProject.Models.Artigo" Width="1.5" PointX="8.125" PointY="7.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="CoeusProject.Models.Objeto" Width="1.5" PointX="5.125" PointY="6.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="CoeusProject.Models.Avaliacao" Width="1.5" PointX="2.75" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CoeusProject.Models.Usuario" Width="1.5" PointX="0.75" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="CoeusProject.Models.Grupo" Width="1.5" PointX="7" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CoeusProject.Models.Mensagem" Width="1.5" PointX="3.5" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CoeusProject.Models.Salt" Width="1.5" PointX="4.625" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CoeusProject.Models.Tema" Width="1.5" PointX="1.75" PointY="7.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="CoeusProject.Models.Imagem" Width="1.5" PointX="8.25" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CoeusProject.Models.Sequence" Width="1.5" PointX="9" PointY="3.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="CoeusProject.Models.Video" Width="1.5" PointX="7.125" PointY="9.375" IsExpanded="true" />
         <AssociationConnector Association="CoeusProject.Models.Avaliacao_Objeto" ManuallyRouted="false" />
         <AssociationConnector Association="CoeusProject.Models.Mensagem_Grupo" ManuallyRouted="false" />
         <AssociationConnector Association="CoeusProject.Models.Mensagem_Usuario" ManuallyRouted="false" />
         <AssociationConnector Association="CoeusProject.Models.Grupo_Objeto" ManuallyRouted="false" />
-        <AssociationConnector Association="CoeusProject.Models.Grupo_Salt" ManuallyRouted="false" />
-        <AssociationConnector Association="CoeusProject.Models.Grupo_Usuarios" ManuallyRouted="false" />
+        <AssociationConnector Association="CoeusProject.Models.Grupo_Salt" ManuallyRouted="false" >
+        </AssociationConnector>
+        <AssociationConnector Association="CoeusProject.Models.Grupo_Usuarios" ManuallyRouted="false" >
+        </AssociationConnector>
         <AssociationConnector Association="CoeusProject.Models.Usuario_Salt" ManuallyRouted="false" />
+        <AssociationConnector Association="CoeusProject.Models.Usuario_Seguidores" ManuallyRouted="false" />
         <AssociationConnector Association="CoeusProject.Models.Tema_Objetos" ManuallyRouted="false" />
         <AssociationConnector Association="CoeusProject.Models.Tema_Usuarios" ManuallyRouted="false" />
         <AssociationConnector Association="CoeusProject.Models.Avaliacao_Usuario" ManuallyRouted="false" />
         <AssociationConnector Association="CoeusProject.Models.Objeto_Salt" ManuallyRouted="false" />
-        <AssociationConnector Association="CoeusProject.Models.Objeto_Usuario" ManuallyRouted="false" />
+        <AssociationConnector Association="CoeusProject.Models.Objeto_Usuario" ManuallyRouted="false" >
+        </AssociationConnector>
         <AssociationConnector Association="CoeusProject.Models.Artigo_Objeto" ManuallyRouted="false" />
         <AssociationConnector Association="CoeusProject.Models.Imagem_Artigo" ManuallyRouted="false" />
         <AssociationConnector Association="CoeusProject.Models.Video_Objeto" ManuallyRouted="false" />

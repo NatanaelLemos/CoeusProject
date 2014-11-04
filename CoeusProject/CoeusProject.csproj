@@ -1256,12 +1256,12 @@
     <Content Include="Content\font\vjs.eot" />
     <Content Include="Content\font\vjs.ttf" />
     <Content Include="Content\font\vjs.woff" />
+    <Content Include="Content\SourceCodePro-Bold.ttf" />
+    <Content Include="Content\SourceCodePro-Regular.ttf" />
     <EntityDeploy Include="CoeusProjectContext.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>CoeusProjectContext.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="Content\SourceCodePro-Bold.ttf" />
-    <Content Include="Content\SourceCodePro-Regular.ttf" />
     <None Include="Properties\PublishProfiles\Chimera Publish.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
