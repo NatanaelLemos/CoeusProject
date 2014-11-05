@@ -1,12 +1,12 @@
 ﻿/*#region Font Declaration*/
 @font-face {
     font-family: "KoiosFont";
-    src: url("SourceCodePro-Regular.ttf") format('opentype');
+    src: url("ComicNeue-Regular.ttf") format('opentype');
 }
 
 @font-face {
     font-family: "KoiosFontBold";
-    src: url("SourceCodePro-Bold.ttf") format('opentype');
+    src: url("ComicNeue-Bold.ttf") format('opentype');
 }
 /*#endregion*/
 
