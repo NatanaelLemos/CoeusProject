@@ -84,6 +84,12 @@ namespace CoeusProject.Controllers
             return View("_AllContent", objetos);
         }
 
+        [AllowAnonymous]
+        public ActionResult Presentation()
+        {
+            return View();
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

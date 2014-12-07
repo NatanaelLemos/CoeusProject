@@ -1280,6 +1280,7 @@
     <Content Include="Content\ComicNeue-Bold.ttf" />
     <Content Include="Content\ComicNeue-Regular.ttf" />
     <None Include="Properties\PublishProfiles\Chimera Publish.pubxml" />
+    <None Include="Properties\PublishProfiles\coeusproject.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -1765,6 +1766,8 @@
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\video.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="User_Data\presentation.mp4" />
+    <Content Include="User_Data\presentationPoster.jpg" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1804,10 +1807,10 @@
     <Content Include="Views\Account\_RegisterPartial.cshtml" />
     <Content Include="Views\Seguidor\_SeguidorPartial.cshtml" />
     <Content Include="Views\Shared\_ObjetoPopupPartial.cshtml" />
+    <Content Include="Views\Home\Presentation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="User_Data\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

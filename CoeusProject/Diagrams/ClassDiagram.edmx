@@ -1013,17 +1013,17 @@
     </Options>
     <Diagrams >
       <Diagram DiagramId="d1ae89f63af949f680d0b29ea4996a00" Name="Diagram1" ZoomLevel="88">
-        <EntityTypeShape EntityType="CoeusProject.Models.Artigo" Width="1.5" PointX="8.125" PointY="7.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="CoeusProject.Models.Objeto" Width="1.5" PointX="5.125" PointY="6.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="CoeusProject.Models.Avaliacao" Width="1.5" PointX="2.75" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CoeusProject.Models.Artigo" Width="1.5" PointX="6.25" PointY="7.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="CoeusProject.Models.Objeto" Width="1.5" PointX="4.125" PointY="6.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="CoeusProject.Models.Avaliacao" Width="1.5" PointX="2.25" PointY="5.125" IsExpanded="true" />
         <EntityTypeShape EntityType="CoeusProject.Models.Usuario" Width="1.5" PointX="0.75" PointY="1.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="CoeusProject.Models.Grupo" Width="1.5" PointX="7" PointY="0.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="CoeusProject.Models.Mensagem" Width="1.5" PointX="3.5" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="CoeusProject.Models.Salt" Width="1.5" PointX="4.625" PointY="3.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="CoeusProject.Models.Tema" Width="1.5" PointX="1.75" PointY="7.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="CoeusProject.Models.Imagem" Width="1.5" PointX="8.25" PointY="4.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="CoeusProject.Models.Sequence" Width="1.5" PointX="9" PointY="3.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="CoeusProject.Models.Video" Width="1.5" PointX="7.125" PointY="9.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="CoeusProject.Models.Grupo" Width="1.5" PointX="4.75" PointY="0.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="CoeusProject.Models.Mensagem" Width="1.5" PointX="2.75" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CoeusProject.Models.Salt" Width="1.5" PointX="4.125" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CoeusProject.Models.Tema" Width="1.5" PointX="0.5" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CoeusProject.Models.Imagem" Width="1.5" PointX="6.25" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="CoeusProject.Models.Sequence" Width="1.5" PointX="6.375" PointY="3.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="CoeusProject.Models.Video" Width="1.5" PointX="2.25" PointY="8.125" IsExpanded="true" />
         <AssociationConnector Association="CoeusProject.Models.Avaliacao_Objeto" ManuallyRouted="false" />
         <AssociationConnector Association="CoeusProject.Models.Mensagem_Grupo" ManuallyRouted="false" />
         <AssociationConnector Association="CoeusProject.Models.Mensagem_Usuario" ManuallyRouted="false" />
@@ -1038,7 +1038,12 @@
         <AssociationConnector Association="CoeusProject.Models.Tema_Usuarios" ManuallyRouted="false" />
         <AssociationConnector Association="CoeusProject.Models.Avaliacao_Usuario" ManuallyRouted="false" />
         <AssociationConnector Association="CoeusProject.Models.Objeto_Salt" ManuallyRouted="false" />
-        <AssociationConnector Association="CoeusProject.Models.Objeto_Usuario" ManuallyRouted="false" >
+        <AssociationConnector Association="CoeusProject.Models.Objeto_Usuario" ManuallyRouted="true" >
+          <ConnectorPoint PointX="4.468748" PointY="6.25" />
+          <ConnectorPoint PointX="4.468748" PointY="5.57540243577543" />
+          <ConnectorPoint PointX="3.875" PointY="5.57540243577543" />
+          <ConnectorPoint PointX="3.875" PointY="4.4113935626257561" />
+          <ConnectorPoint PointX="2.25" PointY="4.4113935626257561" />
         </AssociationConnector>
         <AssociationConnector Association="CoeusProject.Models.Artigo_Objeto" ManuallyRouted="false" />
         <AssociationConnector Association="CoeusProject.Models.Imagem_Artigo" ManuallyRouted="false" />

@@ -14,3 +14,30 @@
         .DataSource(d => d.Custom())
     )
 </div>
+
+<script>
+    $(document).ready(function () {
+        $("#followGrid").on("dblclick", "tr.k-state-selected", function () {
+            var grid = $("#followGrid").data("kendoGrid");
+            var selectedItem = grid.dataItem(grid.select());
+            var idUsuarioFollow = selectedItem.IdUsuario;
+
+            var kendoWaitWindow = kendoWait();
+            var loaded = false;
+
+            bindCenterPartial('@Url.Action("GetMainArtigos", "Artigo")', { idUsuario: idUsuarioFollow }, function () {
+                if (loaded) {
+                    kendoWaitWindow.close();
+                }
+                loaded = true;
+            });
+
+            bindLeftPartial('@Url.Action("GetLeftDivArtigos","Artigo")', { idUsuario: idUsuarioFollow }, function () {
+                if (loaded) {
+                    kendoWaitWindow.close();
+                }
+                loaded = true;
+            });
+        });
+    })
+</script>

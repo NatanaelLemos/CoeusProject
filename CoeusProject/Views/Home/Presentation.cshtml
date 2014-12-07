@@ -1,0 +1,18 @@
+﻿@using Kendo.Mvc.UI
+@{
+    Layout = null;
+    ViewBag.Title = "Presentation";
+}
+
+<link href="~/Content/video-js.css" rel="stylesheet" />
+<script src="~/Scripts/video.js"></script>
+
+<div style="position: absolute; top: 80px; left: 10%">
+    <video id="vidVideo" class="video-js vjs-default-skin" controls preload="none" width="512" height="384"
+           poster="~/User_Data/presentationPoster.jpg"
+           data-setup="{}">
+        <source src="~/User_Data/presentation.mp4" type='video/mp4' />
+
+        <p class="vjs-no-js">Para assistir à este vídeo, habilite a execução de JavaScript e considere atualizar seu web browser para um <a href="http://videojs.com/html5-video-support/" target="_blank">que suporte vídeos HTML5</a></p>
+    </video>
+</div>
