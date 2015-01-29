@@ -34,6 +34,11 @@ namespace CoeusProject.Models
 
         public int QtAcessos { get; set; }
 
+        public UInt32 QtImproprio { get; set; }
+
+        public UInt32 QtPlagio { get; set; }
+
+
         [NotMapped]
         public Decimal VlMediaAvaliacao
         {
